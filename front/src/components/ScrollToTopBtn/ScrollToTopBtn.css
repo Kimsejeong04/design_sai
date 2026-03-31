@@ -1,0 +1,28 @@
+/* ScrollToTopButton.css */
+.scroll-to-top {
+    position: fixed; /* 화면에 고정 */
+    bottom: 30px; /* 화면 하단에 20px 정도 띄움 */
+    right: 30px; /* 화면 오른쪽에 20px 정도 띄움 */
+    background-color: #799fc4; /* hover 시 색상 변경 */
+    color: #fff;
+    border: none;
+    width: 60px; /* 고정된 너비 */
+    height: 60px; /* 고정된 높이 */
+    border-radius: 50%; /* 원형 버튼 */
+    font-size: 24px; /* 글자 크기 */
+    display: flex; /* 가운데 정렬을 위해 flex 사용 */
+    justify-content: center; /* 수평 가운데 */
+    align-items: center; /* 수직 가운데 */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    transition: background-color 0.3s ease; /* hover 효과 */
+    font-weight: bold;
+  }
+  
+  .scroll-to-top:hover {
+    background-color: #fff; /* 예쁜 배경색 */
+    color: #799fc4; /* 텍스트 색상 */
+    font-weight: bold;
+  }
+  

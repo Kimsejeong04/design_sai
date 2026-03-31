@@ -1,0 +1,137 @@
+.contract-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb; /* gray-200 */
+    background-color: #fff;
+    transition: background-color 0.2s ease;
+    width : 100%; /*5/24 수정 */
+  }
+  
+  .contract-item:hover {
+    background-color: #f9fafb; /* gray-50 */
+  }
+
+  .contract-item.active {
+    border-left: 4px solid #FFD700; /* 중요한 계약에 대해 왼쪽에 강조선 추가 */
+    background-color: #fef9e9; /* 배경색을 연한 노란색으로 변경 */
+  }
+  
+  .contract-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  /* ContractItem.css */
+  
+  .contract-star {
+    cursor: pointer;
+  }
+  
+  .star-icon {
+    color: #d3d3d3; /* 연한 회색, startoff 기본 색 */
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .star-icon.active {
+    color: #FFD700; /* 노란색 별 */
+    transform: scale(1.2); /* 별의 크기 살짝 키우기 */
+    transition: transform 0.3s ease;
+  }
+  
+  .contract-text {
+    display: grid; /* 그리드 레이아웃으로 변경 */
+    grid-template-columns: 1fr 1fr; /* 2개의 열을 생성 */
+    gap: 16px; /* title과 preview 간의 간격을 좀 더 넓게 */
+    align-items: start; /* 세로 정렬 */
+  }
+  
+  .contract-title {
+    font-size: 20px; /* 기존 14px → 16px */
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    font-weight: bold;
+    margin-bottom: 0;
+    white-space: nowrap; /* 제목이 줄바꿈되지 않게 */
+  }
+  
+  .contract-preview {
+    font-size: 16px; /* 글씨 크기 키우기 (기존 14px → 16px) */
+    color: #6b7280;
+    margin: 0;
+    white-space: nowrap; /* 내용이 한 줄로 나오도록 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* overflow된 텍스트에 ... 처리 */
+    max-width: 240px; /* 길이를 조금 더 늘림 */
+    justify-self: start; /* preview의 시작점이 title의 시작점과 맞도록 조정 */
+  }
+  
+  .contract-right {
+    text-align: right;
+    min-width: 90px;
+  }
+  
+  .contract-status {
+    font-size: 13px; /* 기존 11px → 13px */
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    display: inline-block;
+  }
+  
+  .contract-status.진행중 {
+    background-color: #dbeafe; /* blue-100 */
+    color: #2563eb; /* blue-600 */
+  }
+  
+  .contract-status.완료 {
+    background-color: #d1fae5; /* green-100 */
+    color: #10b981; /* green-600 */
+  }
+  
+  .contract-status.해지 {
+    background-color: #fee2e2; /* red-100 */
+    color: #ef4444; /* red-600 */
+  }
+
+    .contract-status.배송중 {
+    background-color: #efda8d; /* red-100 */
+    color: #000000; /* red-600 */
+  }
+
+    .contract-status.대기중 {
+    background-color: #a7a7a7; /* red-100 */
+    color: #ffffff; /* red-600 */
+  }
+
+ .contract-status.디자인하기 {
+    background-color: #dbeafe; /* blue-100 */
+    color: #2563eb; /* blue-600 */
+  }
+   .contract-status.본뜨기 {
+    background-color: #d1fae5; /* green-100 */
+    color: #10b981; /* green-600 */
+  }
+  
+ .contract-status.마감하기 {
+    background-color: #fee2e2; /* red-100 */
+    color: #ef4444; /* red-600 */
+  }
+
+
+    .contract-status.포장하기 {
+    background-color: #a7a7a7; /* red-100 */
+    color: #ffffff; /* red-600 */
+  }
+
+  
+  .contract-date {
+    font-size: 12px; /* 기존 11px → 12px */
+    color: #9ca3af;
+    margin-top: 4px;
+  }
+  

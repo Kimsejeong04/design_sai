@@ -1,0 +1,118 @@
+/* 사이드바 기본 스타일 */
+.sidebar {
+  width: 16rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-right: 1px solid #e5e7eb;
+  height: 100vh;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  position: relative; /* 슬라이드 효과 적용을 위한 설정 */
+  transition: transform 0.3s ease; /* 슬라이드 효과 */
+}
+
+/* 사이드바 헤더 */
+.sidebar h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* 사이드바 리스트 스타일 */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar li a {
+  display: flex;
+  align-items: center;
+  color: #4b5563; /* 기본 텍스트 색상 */
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s; /* 배경색과 텍스트 색상 변화 */
+  padding: 0.5rem;
+  border-radius: 8px; /* 배경색이 적용될 영역을 둥글게 */
+}
+
+/* hover 상태에서 배경색 변경 */
+.sidebar li a:hover {
+  background-color: #f3f4f6; /* hover 시 배경색을 밝게 변경 */
+  color: #1f2937; /* hover 시 텍스트 색상도 변경 */
+}
+
+/* active 상태에서 스타일 변경 */
+.sidebar li.active a {
+  color: #1f2937; /* 활성화된 텍스트 색상 */
+  font-weight: bold;
+}
+
+/* 아이콘과 텍스트 간의 간격 조정 */
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* 아이콘과 텍스트 간 간격을 넓힘 */
+  flex-grow: 1; /* 텍스트가 가능한 공간을 채우도록 */
+}
+
+/* 사이드바 아이콘 스타일 */
+.sidebar-icon {
+  font-size: 1.25rem;
+  color: #6b7280; /* 기본 아이콘 색상 */
+  line-height: 1; /* 아이콘의 수직 정렬을 맞춰줌 */
+}
+
+/* 활성화된 항목의 아이콘 색상 */
+.sidebar li.active a .sidebar-icon {
+  color: #799FC4; /* 선택된 상태에서 아이콘 색상 */
+}
+
+/* 뱃지 스타일 */
+.badge {
+  background-color: #3b82f6;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* 뱃지를 고정 위치에 */
+.sidebar-link-with-badge {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* 활성화된 항목에 슬라이드 효과 추가 */
+.sidebar li.active a {
+  position: relative;
+  z-index: 1; /* 활성화된 항목을 위로 올리기 */
+}
+
+/* 선택된 항목에 슬라이드 효과 적용 */
+.sidebar li.active a::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #799FC4;
+  border-radius: 50%;
+}
+
+/* 선택된 항목의 슬라이드 애니메이션을 주는 스타일 */
+.sidebar li.active a {
+  transition: transform 0.3s ease-in-out; /* 슬라이드 애니메이션 */
+  transform: translateX(10px); /* 10px 정도 오른쪽으로 슬라이드 */
+}

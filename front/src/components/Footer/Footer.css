@@ -1,0 +1,120 @@
+.footer-container {
+    background-color: #f9fafa;
+    padding: 40px 80px; /* 좌우 여백만 유지 */
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    width: 100%;    
+    box-sizing: border-box;
+
+    max-width: 1200px;       /* 너무 넓어지지 않게 제한 */
+    margin: 0 auto;          /* 가운데 정렬 */
+  }
+  
+  
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    gap: 40px;
+    align-items: flex-start; /* 위쪽 기준으로 정렬 */
+  }
+  
+  .footer-buttons {
+    flex: 1 1 300px;       /* 최소 300px, 유동적으로 늘어남 */
+    max-width: 400px;      /* 너무 넓어지지 않게 제한 */
+  }
+  
+  .footer-button {
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 8px;
+    padding: 10px 20px;
+    border: 1.5px solid #cfd4d7;
+    border-radius: 8px;
+    background-color: white;
+    color: #4A6171;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-button:hover {
+    background-color: #e3e8ea;
+    color: #000;
+  }
+  
+  .footer-time {
+    margin-top: 10px;
+    color: #666;
+    font-size: 13px;
+  }
+  
+  .footer-notice {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #D4DAE6;
+    border-radius: 8px;
+    color: #799FC4;
+    font-size: 13px;
+  }
+  
+  .footer-notice-icon {
+    margin-right: 6px;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 40px;
+    flex: 2 1 600px;       /* 넓게 퍼지도록 설정 */
+    flex-wrap: wrap;
+    justify-content: space-between; /* 링크들도 좌우로 골고루 퍼지게 */
+  }
+  
+  .footer-links h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #4A6171;
+  }
+  
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 8px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #111;
+  }
+  
+  .footer-bottom {
+    font-size: 12px;
+    color: #888;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+  }
+  
+  .footer-bottom p {
+    margin: 10px 0;
+  }
+  
+  .copyright {
+    margin-top: 20px;
+    color: #aaa;
+    font-size: 12px;
+    text-align: center;
+  }
+  

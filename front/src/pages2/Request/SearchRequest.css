@@ -1,0 +1,11 @@
+.searchrequest-container {
+  width : 650px;
+  margin : 30px;
+  padding : 20px;
+  
+}
+.search-input {
+  border-radius: 30px !important; 
+  border: solid 2px rgb(128, 161, 190) !important;
+  padding: 20px !important;
+}

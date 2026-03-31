@@ -1,0 +1,26 @@
+[
+  {
+    "contractId": 1,
+    "contractTitle": "디자인 프로젝트 A",
+    "step": 0,
+    "dueDate": "2025-07-01",
+    "starredStatus": 0,
+    "contractContent": "첫 번째 디자인 계약 진행 중입니다."
+  },
+  {
+    "contractId": 2,
+    "contractTitle": "패션 콜라보 B",
+    "step": 2,
+    "dueDate": "2025-07-15",
+    "starredStatus": 1,
+    "contractContent": "샘플 제작이 완료되어 배송 준비 중입니다."
+  },
+  {
+    "contractId": 3,
+    "contractTitle": "한정판 의류 C",
+    "step": 3,
+    "dueDate": "2025-08-01",
+    "starredStatus": 0,
+    "contractContent": "배송이 완료되었습니다."
+  }
+]

@@ -1,0 +1,36 @@
+.message-container {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 2px solid #799FC4;
+  border-top: 2px solid #799FC4;
+  height: 3em;
+
+}
+
+
+.contract-title {
+  font-size: 20px;
+  flex: 0.5;
+  font-weight: bold;
+}
+
+.design-name {
+  font-size: 20px;
+  flex: 0.5;
+  font-weight: bold;
+}
+
+.contract-detail {
+  font-size: 20px;
+  flex: 0.5;
+  font-weight: bold;
+}
+
+.contract-date {
+  font-size: 12px;
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}

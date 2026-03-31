@@ -1,0 +1,105 @@
+.design-container {
+  display: flex;
+  align-items: flex-start; /* 위쪽 정렬 */
+  padding: 1.25rem;  /* 20px */
+}
+
+.design-step {
+  font-size: 0.8125rem;  /* 13px */
+  line-height: 1.5; /* 줄 간격 조절 */
+  word-break: keep-all; /* 줄바꿈 최소화 */
+  margin-top: -1.25rem;  /* -20px */
+  margin-left: 0.8125rem;  /* 13px */
+}
+
+.design-step div {
+  font-weight: bolder;
+  font-size: 0.875rem;  /* 14px */
+}
+
+.design-step h2 {
+  font-size: 0.875rem;  /* 14px */
+}
+
+.header h1 {
+  color: white;
+  font-size: 1.5rem;  /* 24px */
+}
+
+.step-list {
+  margin-top: 1.25rem; /* 20px */
+  margin-bottom: 0.9375rem; /* 15px */
+  line-height: 1.6; /* 줄 간격 증가 */
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 1.5rem; /* 24px */
+  width: 100%; /* 전체 너비 사용 */
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;  /* 16px */
+  padding: 0.3125rem 0.625rem; /* 5px 10px */
+  background-color: #799fc4;
+  border: none;
+  border-radius: 0.3125rem; /* 5px */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-links button {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;  /* 16px */
+  padding: 0.3125rem 0.625rem; /* 5px 10px */
+  background-color: #799fc4;
+  border: none;
+  border-radius: 0.3125rem; /* 5px */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-links button:hover,
+.nav-links a:hover {
+  background-color: #5d8cb1;
+}
+
+.layout1 {
+  display: flex; /* 가로 정렬 */
+  width: 100%;
+}
+
+.layout1 .sidebar {
+  margin-right: auto;
+}
+
+.layout1 .content1 {
+  margin-left: 0.9375rem;  /* 15px */
+  margin-right: 0.9375rem;  /* 15px */
+  margin-top: 1.125rem;  /* 18px */
+  margin-bottom: 2.0625rem;  /* 33px */
+  padding-bottom: 0;
+  padding-right: 9.375rem;  /* 150px */
+  padding-left: -3.125rem;  /* -50px */
+  background: #fff;
+  border-radius: 0.625rem;  /* 10px */
+  width: 60%;
+  height: auto; /* 또는 min-height: 600px; */
+  padding-bottom: 5rem;
+}
+
+.content1 h3 {
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #799FC4;
+  font-size: 1.5625rem;  /* 25px */
+}
+
+.content1 hr {
+  border: 0; /* 기본 테두리 제거 */
+  border-top: 0.03125rem solid #799FC4;  /* 0.5px */
+}

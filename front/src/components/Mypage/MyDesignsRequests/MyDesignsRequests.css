@@ -1,0 +1,194 @@
+/* 탭 버튼 */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 1.3rem;
+  background-color: #f2f2f2;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background-color: #eaeaea;
+}
+
+.tab-button.active {
+  border-bottom: 3px solid #799fc4;
+  font-weight: bold;
+  font-size: 1.4rem;
+  background-color: #799fc4;
+}
+
+/* 드롭다운 */
+.dropdown {
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+select:focus {
+  border-color: #799fc4;
+  outline: none;
+}
+
+/* 카드 스타일 */
+
+
+.card {
+  width: 220px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+/*.card-image-top {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}*/
+.card-image {
+  width: 100%;
+  height: auto;
+}
+
+/* 리스트형 의뢰서 카드 */
+.order-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 위로 정렬해서 텍스트와 버튼이 겹치지 않도록 */
+  align-items: center; 
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+  cursor: default;
+  min-height: 30px; /* 높이 조정 */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.order-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.order-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+  padding-right: 36px; /* 아이콘 안 겹치게 오른쪽 여백 */
+}
+
+/* 삭제 버튼 - 휴지통 아이콘 */
+.delete-btn {
+  position: absolute;
+  top: 20px;
+  right: 14px;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: red;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+
+}
+
+
+/* 모달 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 80%;
+  text-align: left;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.modal-date {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.modal-details p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #34312E;
+}

@@ -1,0 +1,61 @@
+.loginWrapper{
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+
+.mainbarooo{
+    all : unset;
+    display: flex;
+    color:#4A6171;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px 30px;
+    width:380px;
+    font-weight : bold;
+    justify-content: flex-start;
+  }
+  
+  .mainbarooo2 {
+    all: unset;
+    display: flex;
+    justify-content: center; /* 버튼 안 텍스트를 가운데 정렬 */
+    align-items: center;
+    color: #4A6171;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px 30px;
+    width: 380px;
+    font-weight: bold;
+  }
+  
+  .check-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 8px;
+    
+  }
+  
+  .Logo-Img {
+    display: block;
+    margin: 0 auto; 
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100px; 
+    height: auto;
+  }
+  
+  .divmmm{
+    padding: 30px;
+    border: 0.5px solid #bbbaba;
+    font-weight: bold;
+    width: 500px;
+    margin : 0 auto;
+  }
+
+.divmmm p{
+  font-size : 10px;
+  
+}

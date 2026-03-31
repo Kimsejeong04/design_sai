@@ -1,0 +1,26 @@
+.clientrequest-header {
+  background-color: #fff;
+  flex-direction: column;
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center; /* align-items: center 대신 stretch로 변경 */
+  gap: 20px;
+  box-sizing: border-box;
+  width : 100%;
+}
+
+.clientrequest-titlecontainer {
+  display: flex;
+  width: 1200px;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.cientrequest-titlecontainer2 {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: flex-end;
+  width: 1200px;
+}

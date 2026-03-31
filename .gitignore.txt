@@ -1,0 +1,16 @@
+# node
+node_modules/
+build/
+
+# spring
+target/
+*.log
+
+# eclipse
+.metadata
+.settings
+.project
+.classpath
+
+# env
+.env 

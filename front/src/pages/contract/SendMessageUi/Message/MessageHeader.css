@@ -1,0 +1,20 @@
+.MessageHeader {
+  display : flex;
+  padding : 20px;
+  align-items: center;
+}
+
+.Headercontainer1 {
+  display: flex;
+  justify-content: flex-start;
+  flex:0.5;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.Headercontainer2 {
+  display: flex;
+  justify-content: flex-end;
+  flex:1;
+
+}

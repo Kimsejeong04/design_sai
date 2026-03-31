@@ -1,0 +1,110 @@
+.mypage-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .mypage-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: #f7f8fa;
+  }
+
+  .mypage-sidebar {
+    width: 240px;
+    min-width: 200px;
+  }
+  
+  /* 본문 내부 헤더 */
+.mypage-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.mypage-header .breadcrumb {
+  font-size: 0.9rem;
+  color: #94a3b8; /* 회색 */
+  margin-bottom: 0.5rem;
+}
+
+.mypage-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b; /* 진한 그레이 네이비 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mypage-header p {
+  font-size: 1rem;
+  color: #475569;
+  margin-top: 0.5rem;
+}
+
+  .flex {
+    display: flex;
+    flex-direction: row; /* ← 명시적으로 설정 */
+  }
+
+  .flex-1 {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 10px;
+    margin: 0.7rem 0.7rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  /* 콘텐츠 내부 헤더 (제목 + 경로) */
+.mypage-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.mypage-header .breadcrumb {
+  font-size: 0.9rem;
+  color: #94a3b8; /* 연한 회색 */
+  margin-bottom: 0.5rem;
+}
+
+.mypage-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b; /* 다크 네이비 그레이 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mypage-header p {
+  font-size: 1rem;
+  color: #475569;
+  margin-top: 0.5rem;
+}
+
+/* 콘텐츠 내부 요소 spacing 예시 */
+.mypage-section {
+  margin-bottom: 2.5rem;
+}
+
+/* 반응형 대응 (선택 사항) */
+@media screen and (max-width: 768px) {
+  .mypage-layout {
+    flex-direction: column;
+  }
+
+  .mypage-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .flex-1 {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
+

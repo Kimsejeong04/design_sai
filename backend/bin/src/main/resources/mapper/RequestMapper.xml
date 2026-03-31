@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Loginpj.mapper.RequestMapper">
+
+  <resultMap id="RequestResultMap" type="com.example.Loginpj.model.Request">
+    <id property="requestId" column="request_id" />
+    <result property="title" column="title" />
+    <result property="categoryTags" column="category_tags" />
+    <result property="style" column="style" />
+    <result property="amount" column="amount" />
+    <result property="deadline" column="deadline" />
+    <result property="description" column="description" />
+    <result property="image1Url" column="image1_url" />
+    <result property="image2Url" column="image2_url" />
+    <result property="image3Url" column="image3_url" />
+  </resultMap>
+
+  <select id="findAll" resultMap="RequestResultMap">
+    SELECT * FROM request ORDER BY request_id
+  </select>
+
+  <select id="findById" parameterType="long" resultMap="RequestResultMap">
+    SELECT * FROM request WHERE request_id = #{requestId}
+  </select>
+
+  <insert id="insert" parameterType="com.example.Loginpj.model.Request" useGeneratedKeys="false">
+    INSERT INTO request (
+      request_id, title, category_tags, style, amount, deadline, description, image1_url, image2_url, image3_url
+    )
+    VALUES (
+      request_seq.nextval, #{title}, #{categoryTags}, #{style}, #{amount}, #{deadline}, #{description}, #{image1Url}, #{image2Url}, #{image3Url}
+    )
+  </insert>
+
+  <update id="update" parameterType="com.example.Loginpj.model.Request">
+    UPDATE request
+    SET
+      title = #{title},
+      category_tags = #{categoryTags},
+      style = #{style},
+      amount = #{amount},
+      deadline = #{deadline},
+      description = #{description},
+      image1_url = #{image1Url},
+      image2_url = #{image2Url},
+      image3_url = #{image3Url}
+    WHERE request_id = #{requestId}
+  </update>
+
+  <delete id="deleteById" parameterType="long">
+    DELETE FROM request WHERE request_id = #{requestId}
+  </delete>
+
+</mapper>

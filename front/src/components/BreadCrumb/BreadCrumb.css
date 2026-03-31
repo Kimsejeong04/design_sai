@@ -1,0 +1,9 @@
+.breadcrumb {
+  font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-top: 5px;
+}
+
+.breadcrumb .active {
+  font-weight: bold;
+}

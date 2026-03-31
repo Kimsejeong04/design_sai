@@ -1,0 +1,261 @@
+.final-container {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fafafa;
+  color: #333;
+  min-height: 100vh;
+  padding: 1.25rem;
+  box-sizing: border-box;
+}
+
+.layout1 {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.content1 {
+  flex-grow: 1;
+  background: #fff;
+  border-radius: 0.625rem;
+  padding: 1.5625rem 1.875rem;
+  box-shadow: 0 0 0.75rem rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 0.625rem;
+  color: #4a6171;
+}
+
+hr {
+  border: none;
+  height: 0.0625rem;
+  background-color: #ddd;
+  margin-bottom: 1.5625rem;
+}
+
+.summary-section {
+  height: 100%; /* 예: 화면 높이의 60% 이상 안 커지도록 */
+  
+}
+
+.summary-item {
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9375rem;
+  font-size: 1.1rem;
+  margin-top : 20px;
+      overflow: auto
+}
+
+.label {
+    flex-shrink: 0; /* 항상 보이도록 고정 */
+
+  font-weight: 600;
+  min-width: 8.75rem;
+  color: #4a6171;
+}
+
+.value {
+  flex-grow: 1;
+  color: #555;
+}
+
+.colors-list {
+  display: flex;
+  gap: 0.9375rem;
+  flex-wrap: wrap;
+}
+
+.color-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: #444;
+}
+
+.color-circle {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 0.0625rem solid #ccc;
+}
+
+.design-name-input input {
+  flex-grow: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.1rem;
+  border: 0.09375rem solid #bbb;
+  border-radius: 0.375rem;
+  transition: border-color 0.3s ease;
+}
+
+.design-name-input input:focus {
+  outline: none;
+  border-color: #0099ff;
+  box-shadow: 0 0 0.5rem rgba(0,153,255,0.4);
+}
+
+.footer {
+  
+  text-align: right;
+}
+
+.submit-btn {
+  background-color: #9bb5c8;
+  color: white;
+  padding: 0.75rem 1.625rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:disabled {
+  background-color: #a0cfff;
+  cursor: not-allowed;
+}
+
+.submit-btn:not(:disabled):hover {
+  background-color: #007acc;
+}
+
+/* 반응형 */
+@media (max-width: 45rem) {
+  .layout1 {
+    flex-direction: column;
+  }
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .label {
+    min-width: auto;
+    margin-bottom: 0.375rem;
+  }
+}
+
+.fabric-item1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.625rem;
+  min-width: 21.875rem;
+  max-width: 20rem;
+  box-sizing: border-box;
+}
+
+.fabric-list .fabric-item1 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9375rem;
+}
+
+.fabric-list .value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  justify-content: flex-start;
+  height : 300px;
+}
+
+.fabric-img {
+  width: 50%;
+  height: auto;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.fabric-info {
+  font-size: 1rem;
+  color: #444;
+  margin-left: 0.5rem;
+}
+
+.fabric-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.pdf-btn {
+  margin-left: 0.75rem;
+  background-color: #9bb5c8;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-btn:hover {
+  background-color: #007acc;
+}
+
+.finalconfirmation-category-image {
+  display : flex;
+  gap : 1.25rem;
+
+}
+
+.size-values {
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  
+}
+
+.size-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+
+.size-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 20px;
+  
+}
+
+.size-item:last-child {
+  border-bottom: none;
+}
+
+.size-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.size-value {
+  font-weight: 600;
+  color: #0077cc;
+}
+
+.list-value {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: flex-start;
+    height: 300px;
+    overflow-y: auto;
+}
+.summary-item.note-input {
+margin-top : 10px;
+}

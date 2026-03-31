@@ -1,0 +1,123 @@
+.progress-container {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-title {
+  width: auto;
+  font-size: 24px;
+  font-weight: bold;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.progress-content {
+  display: flex;
+  width: 100%;
+}
+
+.progress-contract {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.contract-with-images {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-image-container {
+  
+  width: 100%; /* ContractItem 너비와 동일 */
+  display: flex;
+  flex-direction: column;
+  
+}
+.status-images {
+  display: flex;
+  width: 100%;               /* 부모 카드 너비에 딱 맞춤 */
+  align-items: center;       /* 세로 중앙 정렬 */
+  gap: 12px;                 /* 이미지 사이 간격 */
+  padding: 8px 0;            /* 위아래 여백 */
+  height : 200px;
+}
+
+/* WebKit 브라우저(Chrome, Safari)용 스크롤바 스타일 */
+.status-images::-webkit-scrollbar {
+  height: 6px;               /* 스크롤바 두께 */
+}
+.status-images::-webkit-scrollbar-track {
+  background: transparent;
+}
+.status-images::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+/* 스크롤 가능한 영역 양 끝에 그라디언트 페이드 추가 (선택) */
+.status-images::before,
+.status-images::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.status-images::before {
+  left: 0;
+  background: linear-gradient(to right, #f5f8fa 0%, transparent 100%);
+}
+.status-images::after {
+  right: 0;
+  background: linear-gradient(to left, #f5f8fa 0%, transparent 100%);
+}
+
+
+.status-image {
+  flex: 1; /* 각 이미지가 동일한 너비 차지 */
+  max-width: calc(100% / 4);
+  height: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  margin: 0 5px; /* 이미지 간 간격 */
+}
+
+.status-image.active {
+  opacity: 1;
+  border: solid 5px #007bff;;
+  border-radius: 4px ;
+
+  
+}
+
+.status-image.inactive {
+  opacity: 0.4;
+  filter: grayscale(50%);
+  
+}
+
+.progress-text-container {
+  display: flex;
+  
+}
+.status-item {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  padding: 10px;
+  gap: 15px;
+  
+}
+

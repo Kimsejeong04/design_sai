@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=42dot+Sans:wght@300..800&family=Do+Hyeon&family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.sidebar {
+  padding: 0.9375rem; /* 15px */
+  margin: 0.625rem; /* 10px */
+  width: 15.625rem; /* 250px */
+  height: 95rem; /* 1300px (원하는 길이로 조절) */
+  background-color: white;
+  border-radius: 0.625rem; /* 10px */
+  margin-top: 0.625rem; /* 10px */
+}
+
+.sidebar h3 {
+  font-size: 1.25rem; /* 20px */
+  white-space: nowrap;
+  font-family: 'Do Hyeon', sans-serif;
+  color: #799FC4;
+  letter-spacing: 0.03125rem; /* 0.5px */
+}
+
+.sidebar ul {
+  list-style: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-left: 0.3125rem; /* 5px */
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  margin: 0.625rem 0; /* 10px 0 */
+  font-weight: 400;
+  font-size: 1.25rem; /* 20px */
+  color: #9DBBD5;
+  margin-top: 1.5625rem; /* 25px */
+  margin-bottom: 1.875rem; /* 30px */
+  margin-top: 0.625rem; /* 10px - 중복되므로 필요한 값으로 조정 */
+}
+
+.sidebar ul li .step-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; /* 40px */
+  height: 2.5rem; /* 40px */
+  border-radius: 50%;
+  background-color: transparent;
+  font-size: 1.125rem; /* 18px */
+  font-weight: bold;
+  box-shadow: 0 0 0 0.08125rem #9DBBD5; /* 1.3px */
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  margin-bottom: 0.625rem; /* 10px */
+}
+
+.sidebar .active .step-circle {
+  background-color: #9DBBD5;
+  color: white;
+}
+
+.sidebar .active {
+  font-weight: bold;
+  color: #9DBBD5;
+}
+
+.sidebar hr {
+  margin-bottom: 0.625rem; /* 10px */
+}

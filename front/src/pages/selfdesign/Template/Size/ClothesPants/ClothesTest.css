@@ -1,0 +1,16 @@
+.size-spec-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+}
+.size-spec-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right : 10px;
+  
+}

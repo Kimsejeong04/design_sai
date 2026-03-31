@@ -1,0 +1,180 @@
+/* 기본 폰트 설정 */
+.body {
+  font-family: 'Pretendard';
+  src: url('/src/fonts/Pretendard/woff2/Pretendard-ExtraBold.woff2') format('woff2');
+}
+
+/* 네비게이션 바 */
+.navbar {
+  background-color: #9dbbd5;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 메뉴바 */
+.nav-menu {
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar,
+.nav-menu {
+  overflow: visible; 
+  position: relative; 
+}
+
+/* 전체 메뉴 버튼 */
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 1.25rem;
+  transition: color 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.menu-btn:hover {
+  color: yellow;
+}
+
+/* 기본 메뉴 */
+.nav-links {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5rem !important;
+  margin-top: 1rem;
+  letter-spacing: 0.05em;
+  align-items: center;
+  font-size: 1.1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.nav-links a {
+  white-space: nowrap;
+}
+
+/* 드롭다운 전체 구조 */
+.dropdown {
+  position: relative;
+}
+
+.dropdown a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.25rem !important;
+  font-weight: bold;
+  padding: 0.25rem 1rem; 
+  display: inline-block;
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%; 
+  transform: translateX(-50%); 
+  min-width: 220px;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  border-radius: 6px;
+}
+
+.dropdown-menu a {
+  color: #34312E;
+  text-decoration: none;
+  padding: 0.6rem 0.4rem;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #9dbbd5; 
+  color: white;         
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+/* 드롭다운 호버 시 메뉴 표시 */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+/* 전체 메뉴 드롭다운 컨테이너 (햄버거 메뉴 눌렀을 때) */
+.dropdown-container {
+  position: absolute;
+  top: 100%;
+  left: 50%; /* 화면의 가운데 정렬 시작 */
+  transform: translateX(-45%); /* 정확히 가운데로 맞춤 */
+  background-color: #9dbbd5;
+  width: 900px; /* 원하는 너비 */
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  border-top: 2px solid #fff;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 12px 12px;
+}
+
+.dropdown-section h3 {
+  font-size: 1.25rem;
+  color: #34312E;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown-section a {
+  display: block;
+  text-decoration: none;
+  color: #34312E;
+  padding: 0.4rem 0;
+  font-size: 1.1rem;
+}
+
+.dropdown-section a:hover {
+  background-color: #f2f2f2;
+  padding-left: 0.5rem;
+  border-radius: 4px;
+}
+
+.dropdown-menu a,
+.dropdown-section a {
+  color: #34312E;
+  text-decoration: none;
+  padding: 0.6rem 0.4rem;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.dropdown-menu a:focus,
+.dropdown-section a:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 1200px) {
+  .nav-links a {
+    font-size: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .nav-links a {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .nav-links a {
+    font-size: 0.8rem !important;
+  }
+}

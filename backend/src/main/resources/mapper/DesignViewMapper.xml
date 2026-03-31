@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Loginpj.mapper.DesignViewMapper">
+
+<select id="getDesignsByUser" parameterType="String" resultType="com.example.Loginpj.model.UserDesign">
+  SELECT
+    design_id AS "designId",
+    USERNAME AS "username",
+    clothing_type AS "clothingType",
+    fabric AS "fabricJson",
+    sizee AS "size",
+    design_name AS "designName",
+    colors AS "colorsJson",
+    created_at AS "createdAt",
+    category AS "category"
+  FROM user_design
+  WHERE USERNAME = #{username}
+</select>
+
+</mapper>

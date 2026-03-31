@@ -1,0 +1,116 @@
+/* DesignerSidebar.module.css */
+
+.container {
+  width: 15.625rem; /* 250px */
+  height: 80%; /* 사이드바 높이 */
+  background-color: #fff;
+  padding: 1.5rem; 
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: 1.25rem;
+  margin: 2.0rem; /* 화면 모서리와 여유 주기 */
+}
+
+.title {
+  text-align: center;
+  font-size: 1.82rem;
+  margin-bottom: 1.25rem;
+  color: #799FC4;
+  font-weight: bold;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  margin: 0.625rem 0;
+  position: relative;
+}
+
+.link {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  display: block;
+  padding: 0.75rem; /* 12px로 살짝 늘림 */
+  border-radius: 0.25rem;
+  font-size: 1.2rem; /* 기존에는 기본 브라우저 폰트크기, 지금 18px 정도 */
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #799FC4;
+}
+
+.active {
+  color: #799FC4;
+  font-weight: bold;
+  position: relative;
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  left: -0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.375rem;
+  height: 0.375rem;
+  background-color: #799FC4;
+  border-radius: 50%;
+}
+
+/* 서브메뉴 스타일 */
+
+.subMenu {
+  list-style: none;
+  padding-left: 1.875rem;
+  margin-top: 0.3125rem;
+}
+
+.subMenu li {
+  margin: 0.375rem 0;
+}
+
+.styles.subMenu {
+  background-color: #f0f0f0;
+  border-radius: 0.25rem;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.subLink {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  display: block;
+  padding: 0.45rem 0.2rem; 
+  border-radius: 0.25rem;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.subLink:hover {
+  color: #799FC4;
+  background-color: #f0f0f0;
+}
+
+.subActive {
+  color: #799FC4;
+  font-weight: 600;
+  position: relative;
+}
+
+.subActive::before {
+  content: "";
+  position: absolute;
+  left: -0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.3125rem;
+  height: 0.3125rem;
+  background-color: #799FC4;
+  border-radius: 50%;
+}

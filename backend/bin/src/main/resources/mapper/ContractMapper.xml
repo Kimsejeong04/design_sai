@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Loginpj.mapper.ContractMapper">
+
+  <select id="selectAllContracts" resultType="com.example.Loginpj.model.Contract">
+    SELECT 
+      contract_id AS contractId,
+      request_id AS requestId,
+      designer_id AS designerId,
+      TO_CHAR(due_date, 'YYYY-MM-DD') AS dueDate,
+      request_fee AS requestFee,
+      status,
+      client_id AS clientId,
+      contract_title AS contractTitle,
+      starred_status AS starredStatus,
+      contract_content AS contractContent
+    FROM contracts
+  </select>
+
+  <select id="selectContractById" resultType="com.example.Loginpj.model.Contract">
+    SELECT 
+      contract_id AS contractId,
+      request_id AS requestId,
+      designer_id AS designerId,
+      TO_CHAR(due_date, 'YYYY-MM-DD') AS dueDate,
+      request_fee AS requestFee,
+      status,
+      client_id AS clientId,
+      contract_title AS contractTitle,
+      starred_status AS starredStatus,
+      contract_content AS contractContent
+    FROM contracts
+    WHERE contract_id = #{id}
+  </select>
+
+  <update id="updateStarStatus">
+    UPDATE contracts
+    SET starred_status = #{starredStatus}
+    WHERE contract_id = #{id}
+  </update>
+
+  <insert id="insertContract" parameterType="com.example.Loginpj.model.Contract">
+    INSERT INTO contracts (
+      contract_id,
+      request_id,
+      designer_id,
+      due_date,
+      request_fee,
+      status,
+      client_id,
+      contract_title,
+      starred_status,
+      contract_content
+    ) VALUES (
+      CONTRACT_SEQ.NEXTVAL,
+      REQUEST_SEQ.NEXTVAL,
+      #{designerId},
+      SYSDATE,
+      #{requestFee},
+      #{status},
+      #{clientId},
+      #{contractTitle},
+      #{starredStatus},
+      #{contractContent, jdbcType=CLOB}
+    )
+  </insert>
+
+  <select id="selectContractsByDesigner" resultType="com.example.Loginpj.model.Contract">
+    SELECT * FROM contracts WHERE designer_id = #{designerId}
+  </select>
+
+  <update id="updateContractStatus">
+    UPDATE contracts
+    SET status = #{status}
+    WHERE contract_id = #{contractId}
+  </update>
+
+</mapper>
+

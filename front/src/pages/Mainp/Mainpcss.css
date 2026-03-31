@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+
+  }
+
+  .copylight {
+    font-weight: 200;
+    margin-top: -60px;
+  }
+
+  .divmcover{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+
+    /* 배경 그라데이션 추가 */
+    background: linear-gradient(150deg, #FAFAFB, #FAFAFB, #FAFAFB, #9dbbd5);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover; 
+  }
+
+  .divm{
+    margin:10px;
+    border-radius: 25px;
+    padding: 2.5em;
+    box-shadow: 0 20px 30px -25px rgba(0, 0, 0, 0.4);
+    display: inline;
+    align-items: center;
+    text-align: center;
+
+    /*justify-content:space-around;*/
+    background-color: #799FC4;
+    width: 400px;
+    height: 300px;
+  }
+  .divm2{
+    display: block;
+
+  }
+  .mainbaro{
+    border-radius: 50px;
+    color:#fff;
+    background-color: #4A6171;
+    border:none;
+    padding: 10px 30px;
+    margin-top:40px;
+  }
+  .mainbaro2{
+    border-radius: 10px;
+    color:#34312E;
+    background-color: #9DBBD5;
+    border:none;
+    padding: 10px 30px;
+    margin-top:40px;
+    margin:20px;
+    width:200px;
+    height: 55px;
+    font-size: 18px;
+    box-shadow: 0 10px 40px -25px rgba(0, 0, 0, 1.0);
+    white-space: nowrap;
+  }
+
+  .mainbaro2:hover{
+        background-color:black;
+
+  }
+
+  .divm-wrapper {
+    margin-top: 5px;
+    display: flex; 
+    justify-content: center;
+    gap: 20px; 
+}
+
+.extra-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 40px auto;
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+}
+
+.MainLogo{
+    background-color: #FAFAFB;
+    text-align: center;
+}

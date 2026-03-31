@@ -1,0 +1,37 @@
+.table-container2 {
+  display: flex;
+}
+
+.left-section {
+  display: flex;
+}
+.controll-container {
+  flex-direction: column;
+  width : 200px;
+  gap: 30px;
+  padding : 20px;
+}
+
+.sizespec-table2 {
+  width : 400px;
+}
+
+.size-controller-row2{
+  width : 100%;
+  margin : 20px;
+  border-radius : 10px;
+  border:none;
+  padding : 10px;
+  background-color: #9DBBD5;
+  box-shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.7);
+  color:white;
+}
+
+.size-right-section{
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+}
+.sizespec-table{
+  width : 100%;
+}

@@ -1,0 +1,166 @@
+.favorites-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: "Pretendard", sans-serif;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #799FC4;
+  }
+  
+  .top-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }  
+  
+  .top-bar input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .checkbox-all {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .count {
+    font-size: 14px;
+    color: #666;
+    margin-left: auto;
+  }
+  
+  button {
+    background-color: #9dbbd5;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  button:hover {
+    background-color: #799fc4;
+  }
+  
+  .designer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .designer-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    transition: box-shadow 0.2s;
+  }
+  
+  .designer-card:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .designer-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .info h4 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .info p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .heart-checkbox {
+    cursor: pointer;
+    font-size: 22px;
+    margin-right: 10px;
+    user-select: none;
+  }
+  
+  .top-bar select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+   
+  .top-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .top-row select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .search-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 500px;
+    height: 25px;
+  }
+  
+  .search-input input {
+    width: 100%;
+    height: 100%;  /* 부모 높이와 맞추기 */
+    padding: 0.6rem 0.8rem 0.6rem 3rem; /* ← 왼쪽 여백 더 확보! */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }  
+
+  .search-input input:focus {
+    outline: none;
+    border-color: #799fc4;
+    box-shadow: 0 0 0 2px rgba(121, 159, 196, 0.2); /* 부드러운 포커스 효과 */
+  }  
+  
+  .search-icon {
+    position: absolute;
+    left: 8px;
+    color: #888;
+    font-size: 14px;
+    pointer-events: none;
+  }
+  

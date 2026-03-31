@@ -1,0 +1,31 @@
+
+.fabric-item {
+  /* 기존 스타일 유지 */
+  background-color: white !important;
+  width: 9.375rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+  margin: 0.625rem;
+  transition: background-color 0.3s ease;
+
+  /* 세로 정렬 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 가로 중앙 정렬 */
+  gap: 0.5rem; /* 아이템 간 간격 */
+  
+}
+
+
+.fabric-item.selected {
+  background-color: #74a3c7 !important; /* 선택되었을 때 배경색 변경 */
+  color: white; /* 글씨색 변경 (가독성) */
+}
+
+.fabric-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 비율을 유지하며 잘 맞춰줌 */
+}

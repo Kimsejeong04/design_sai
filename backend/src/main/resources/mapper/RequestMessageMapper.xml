@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Loginpj.mapper.RequestMessageMapper">
+
+    <resultMap id="RequestMessageResultMap" type="com.example.Loginpj.model.RequestMessage">
+        <id property="id" column="id"/>
+        <result property="contractId" column="contract_id"/>
+        <result property="clientId" column="client_id"/>
+        <result property="designerId" column="designer_id"/>
+        <result property="content" column="content"/>
+        <result property="sentTime" column="sent_time"/>
+        <result property="isRead" column="is_read"/>
+        <result property="contractTitle" column="contract_title"/> 
+    </resultMap>
+
+    <select id="getMessagesByClientId" resultMap="RequestMessageResultMap">
+        SELECT 
+            m.id,
+            m.contract_id,
+            m.client_id,
+            m.designer_id,           
+            m.content,
+            m.sent_time,
+            m.is_read,
+            c.contract_title AS contract_title
+        FROM request_messages m
+        JOIN contracts c ON m.contract_id = c.contract_id
+        WHERE m.client_id = #{clientId}
+        ORDER BY m.sent_time DESC
+    </select>
+
+    <insert id="insertMessageByContract">
+        INSERT INTO request_messages (
+            contract_id,
+            client_id,
+            designer_id,
+            content,
+            sent_time,
+            is_read
+        ) VALUES (
+            #{contractId},
+            #{clientId},
+            (SELECT designer_id FROM contracts WHERE contract_id = #{contractId}),
+            #{content},
+            SYSDATE,
+            'N'
+        )
+    </insert>
+    
+    <select id="getMessageById" resultMap="RequestMessageResultMap">
+        SELECT 
+            m.id,
+            m.contract_id,
+            m.client_id,
+            m.designer_id,
+            m.content,
+            m.sent_time,
+            m.is_read,
+            c.contract_title AS contract_title
+        FROM request_messages m
+        LEFT JOIN contracts c ON m.contract_id = c.contract_id
+        WHERE m.id = #{id}
+    </select>
+
+</mapper>

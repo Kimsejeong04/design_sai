@@ -1,0 +1,18 @@
+.custom-block-picker div[style*="height: 110px"] {
+  display: none !important;
+}
+
+/* 1) BlockPicker 기본 입력 필드 숨기기 */
+.custom-block-picker input[spellcheck="false"][value^="#"] {
+  display: none !important;
+}
+
+
+
+/* 2) 라벨 스타일 (선택 사항) */
+.color-label {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}

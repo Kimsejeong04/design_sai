@@ -1,0 +1,169 @@
+body {
+  font-size: 16px; /* 기본 글씨 크기 설정 */
+}
+
+.table-container{
+  display: flex;
+  
+}
+
+.imgContainer {
+position: relative; /* 내부의 .controller-rowA~I를 절대 배치할 수 있도록 함 */
+ /* 필요하면 좌우 여백 조정 */
+ 
+
+}
+
+.table-container img {
+margin-left: 50px;
+margin-right: 100px;
+}
+
+.sizespec-table {
+  width: 600px;
+  height: 500px;
+  border-collapse: separate; /* 셀 간 간격을 두기 위해 separate로 설정 */
+  border-spacing: 2px; /* 셀들 사이에 2px 간격 추가 */
+  text-align: center;
+  font-size: 16px;
+  table-layout: fixed; /* 열 너비 고정 */
+}
+
+.sizespec-table th, .sizespec-table td {
+  padding: 10px;
+  font-size: 1rem;
+  width: 1.875rem;
+  border: none; /* 테두리 선 제거 */
+  border-radius: 7px; /* 각 셀의 모서리를 둥글게 */
+}
+
+/* 헤더 스타일 */
+.sizespec-table th {
+  background-color: #555;
+  color: white;
+  font-weight: bold;
+}
+
+/* 강조된 행 (A~D) */
+.sizespec-table .highlight td {
+  background-color: #fffae5;
+  font-weight: bold;
+}
+
+/* 일반 행 */
+.sizespec-table .normal td {
+  background-color: #f7f7f7;
+}
+
+/* 비활성화된 행 */
+.sizespec-table .disabled td {
+  background-color: #eee;
+  color: gray;
+}
+
+/* 병합된 셀 스타일 */
+.sizespec-table .merged-cell {
+  text-align: center;
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+.sizespec-table .category {
+  text-align: center;
+}
+.sizespec-table .category-cell {
+  width: 30%; /* 좌측 열의 너비를 30%로 설정 (3:7 비율) */
+}
+
+.sizespec-table .sizes-cell {
+  width: 70%; /* 우측 열의 너비를 70%로 설정 (3:7 비율) */
+}
+
+/* 모든 td에 대해 글자색을 검은색으로 지정 */
+.sizespec-table td {
+color: #000 !important; /* 검은색 */
+font-size: 0.9rem;
+}
+
+/* .category 클래스를 가진 td에도 검은색 적용 (중복 선언 시 !important로 우선순위 설정 가능) */
+.sizespec-table td.category {
+color: #000;
+}
+
+/* 기본 헤더 셀 스타일 (선택 안 된 상태) */
+.sizespec-table th {
+background-color: #ddd;  /* 기본 배경색 (연한 회색) */
+color: black;
+font-weight: bold;
+cursor: pointer;
+}
+
+/* 선택된 헤더 셀에 적용될 스타일 (active 클래스가 붙은 경우) */
+.sizespec-table th.active {
+background-color: #87CEEB;  /* 하늘색 */
+color: black;
+}
+
+.controller-rowA, .controller-rowB, .controller-rowC,
+.controller-rowD, .controller-rowE, .controller-rowF,
+.controller-rowG, .controller-rowH, .controller-rowI {
+position: absolute;     /* 절대 배치 */
+border-radius: 10px;
+color: white;
+background-color: #9DBBD5;
+padding: 10px;
+margin: 10px;           /* absolute에서는 margin 대신 top/left가 더 중요 */
+font-size: 18px;
+/* width는 항목마다 다르게 지정 가능 */
+}
+
+.controller-rowA {
+
+right: 18em;
+top: 25em;
+width: 120px;
+}
+
+.controller-rowB {
+top: 15em;
+right: 12em;
+width: 135px;
+}
+
+.controller-rowC {
+
+right: 17em;
+width: 135px;
+}
+
+.controller-rowD {
+top: 170px;
+right: 5em;
+width: 135px;
+}
+
+.controller-rowE {
+top: 100px;
+right: 12em;
+width: 135px;
+}
+
+
+
+.controller-rowG {
+top: 190px;
+right: 22em;
+width: 150px;
+}
+
+.controller-rowH {
+top: 370px;
+right:  30em;
+width: 150px;
+}
+
+.controller-rowI {
+top: 180px;
+right: 32em;
+width: 150px;
+}

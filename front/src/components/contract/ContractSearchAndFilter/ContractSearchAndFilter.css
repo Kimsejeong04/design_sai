@@ -1,0 +1,57 @@
+/* 기본 레이아웃 및 간격 설정 */
+.search-filter-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0; /* 간격 없애기 */
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+  
+  /* 검색 입력 필드 */
+  .search-input {
+    padding: 0.75rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0; 
+    border: 1px solid #e2e8f0; 
+    background-color: #f9fafb; 
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 40rem; 
+    height: 3rem; /* 높이 유지 */
+    box-sizing: border-box; /* padding을 포함한 총 크기 계산 */
+    transition: all 0.2s ease;
+  }
+  
+  /* 검색창 포커스 시 */
+  .search-input:focus {
+    outline: none;
+    border-color: #BFD7EE;
+    box-shadow: 0 0 0 2px #BFD7EE;
+  }
+  
+  /* 드롭다운 필터 */
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem 0 0 0.375rem ; 
+    border: 1px solid #e2e8f0;
+    background-color: #f9fafb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    min-width: 10rem; /* 필터 드롭다운의 최소 너비 설정 */
+    height: 3rem; /* 높이 동일하게 설정 */
+    box-sizing: border-box; /* padding을 포함한 총 크기 계산 */
+  }
+  
+  /* 드롭다운 필터에 포커스 시 스타일 */
+  .filter-select:focus {
+    outline: none;
+    border-color: #BFD7EE;
+    box-shadow: 0 0 0 2px #BFD7EE;
+  }
+  
+  /* 선택된 옵션에 대한 스타일 */
+  option {
+    padding: 0.5rem;
+  }
+  

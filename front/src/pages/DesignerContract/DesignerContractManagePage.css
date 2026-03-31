@@ -1,0 +1,32 @@
+.page-wrapper {
+  display: flex;
+  align-items: flex-start;  /* 사이드바와 콘텐츠를 위쪽 정렬 */
+  min-height: 100vh;        /* 최소 화면 높이만 맞춰줌 */
+}
+
+.sidebar {
+  width: 240px;
+  min-width: 200px;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* height를 제거해서 내용에 따라 자동으로 늘어나도록 함 */
+}
+
+.page-header {
+  font-size: 27px;
+  margin-bottom: 40px; /* 제목과 아래 요소 간격 추가 */
+  color: #799fc4;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #E6E6E6; /* 선 색상 */
+  margin: 30px 0; /* 구분선 위 아래 간격 추가 */
+}

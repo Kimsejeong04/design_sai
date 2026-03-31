@@ -1,0 +1,54 @@
+/* ChatRoom.css */
+
+.message { 
+  margin: 5px;
+  max-width: 70%;
+  position: relative;
+}
+
+/* 텍스트 채팅 */
+.message.chat {
+  width : 600px;
+  background-color: #e8f5ff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  
+}
+
+/* 이미지 채팅 */
+.message.image {
+  background-color: #e8f5ff;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* 파일 채팅 */
+.message.file {
+  background-color: #e8f5ff;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* 리치 컴포넌트 메시지 */
+.message.sent {
+  background-color: #f8f8f8;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* 시간 텍스트 */
+.message .time {
+  display: block;
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 4px;
+}
+
+.message.sent2 {
+  width : 600px;
+  background-color: #e8f5ff;
+
+  padding: 8px 12px;
+  border-radius: 5px;
+  
+}

@@ -1,0 +1,20 @@
+{
+  "title": "이미지 업로드 테스트",
+  "categoryTags": "패션,캐주얼,여성",
+  "style": "미니멀",
+  "amount": "12312",
+  "deadline": "2025-06-14",
+  "description": "심플한 디자인의 여성 캐주얼 의류 요청",
+
+  "selectedItem": { 
+    "designId": 1,
+    "designName": "심플 원피스",
+    "clothingType": "원피스",
+    "imageUrl": "/image/image.png",
+    "category": "template"
+  },
+
+  "image1Url": ["/image/size.png"],
+  "image2Url": "http://localhost:8081/files/view/image2.jpg",
+  "image3Url": ""
+}

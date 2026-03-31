@@ -1,0 +1,9 @@
+@import url('./fonts/Pretendard/pretendard.css'); /* Pretendard 불러오기 */
+
+body {
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  letter-spacing: 0.06em;
+  color: #34312E; /*기본 글자색*/
+  background-color: #FAFAFC; /* 페이지 배경 */
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Loginpj.mapper.FavoriteMapper">
+
+  <insert id="insertFavorite" parameterType="com.example.Loginpj.model.Favorite">
+   INSERT INTO favorite (designer_id, request_id)
+   VALUES (#{designerId}, #{requestId})
+</insert>
+
+  <select id="getFavoritesByDesignerId" resultType="com.example.Loginpj.model.Request" parameterType="string">
+	  SELECT
+	      r.REQUEST_ID AS requestId,
+	      r.TITLE AS title,
+	      r.CATEGORY_TAGS AS categoryTags,
+	      r.STYLE AS style,
+	      r.AMOUNT AS amount,
+	      r.DEADLINE AS deadline,
+	      r.DESCRIPTION AS description,
+	      r.IMAGE1_URL AS image1Url,
+	      r.IMAGE2_URL AS image2Url,
+	      r.IMAGE3_URL AS image3Url
+	  FROM favorite f
+	  JOIN request r ON f.request_id = r.REQUEST_ID
+	  JOIN user_info u ON f.designer_id = u.USERNAME
+	  WHERE u.USERNAME = #{designerId}
+	</select>
+
+  <delete id="deleteFavorite" parameterType="map">
+    DELETE FROM favorite
+    WHERE designer_id = #{designerId} AND request_id = #{requestId}
+  </delete>
+
+</mapper>

@@ -1,0 +1,95 @@
+.dmyinfo-container {
+  max-width: 56.25rem; /* 900px */
+  margin: 0 auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 0.625rem; /* 10px */
+}
+
+.tab-menu {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-menu button {
+  padding: 0.625rem 1.25rem; /* 10px 20px */
+  border: none;
+  background: #eee;
+  border-radius: 0.375rem; /* 6px */
+  cursor: pointer;
+}
+
+.tab-menu button.active {
+  background-color: #799FC4;
+  color: white;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* 가로 정렬용: label + input + button 등 한 줄로 */
+.input-group.horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.0625rem; /* 1px */
+}
+
+/* 가운데 정렬용 (라디오버튼 등) */
+.input-group.center {
+  align-items: center;
+}
+
+.input-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  min-width: 5rem; /* 80px */
+}
+
+/* horizontal 구조일 때 label은 왼쪽, input은 오른쪽에 오도록 조정 */
+.input-group.horizontal .input-label {
+  margin-bottom: 0; /* flex-row일 땐 margin 제거 */
+  margin-right: 0.5rem; /* 8px */
+}
+
+.input-group.horizontal > *:not(:last-child) {
+  margin-right: 0.5rem; /* 8px */
+}
+
+.input-group.center .input-label {
+  align-self: flex-start;
+  margin-top: 0.25rem; /* 4px */
+}
+
+/* 라디오 버튼 그룹 */
+.radio-group {
+  display: flex;
+  gap: 1rem; /* 16px */
+  margin-bottom: 0.5rem;
+}
+
+/* 서브 버튼 (수정, 재인증) */
+.sub-button {
+  padding: 0.5rem 0.75rem; /* 8px 12px */
+  background-color: #ddd;
+  border: none;
+  border-radius: 0.375rem; /* 6px */
+  cursor: pointer;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  min-width: 3.75rem; /* 60px */
+  text-align: center;
+}
+
+/* input 길이 조정 */
+.input-field.short {
+  width: 95%;
+}

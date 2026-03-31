@@ -1,0 +1,167 @@
+.contract-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contract-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  justify-content: space-between;
+
+  max-width: 1000px; /* 원하는 최대 너비 */
+  width: 90%;
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+.status {
+  width: 90px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.3rem !important;
+}
+
+.ongoing {
+  background:#A7C7E7;
+  color: #2F80ED !important;
+}
+
+.completed {
+  background: #a0f0d1; 
+  color: #27AE60 !important; 
+}
+
+.unsent {
+  background: #FCE4B7; 
+  color: #F2994A !important;
+}
+
+.unsent-cancelled {
+  background: #f7a5a5; 
+  color: #EB5757 !important;
+}
+
+.needs-modification {
+  background: #d9b8f0;
+  color: #BB6BD9 !important;
+}
+
+.cancel-request {
+  background: #d76a6a; 
+  color: #C0392B !important;
+}
+
+.cancelled {
+  background: #c2c9ca;
+  color: #95A5A6 !important;
+}
+
+
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  background: #eee;
+  border-radius: 50%;
+  margin: 0 20px;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* 세로로 배치 */
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+
+.client-name {
+  font-weight: bold;
+}
+
+.content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 2000px;
+}
+
+.dates {
+  display: flex;
+  gap: 12px;
+}
+
+.date, .period, .amount {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.date span, .period span, .amount span {
+  font-weight: bold;
+}
+
+.action-button {
+  display: flex;
+  gap: 8px; /* 버튼 간 간격을 줄 수 있도록 설정 */
+}
+
+.action-button button {
+  padding: 8px 16px;
+  background: #9DBBD5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: inline-block;
+  white-space: nowrap; /* 버튼 텍스트가 길어질 때 줄바꿈 방지 */
+}
+
+.action-button button:hover {
+  background: #0056b3;
+}
+
+
+/* 상태 드롭다운 및 저장 */
+.status-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.status-edit select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background-color: #f9f9f9;
+}
+
+.status-edit button {
+  padding: 6px 12px;
+  background-color: #799FC4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.status-edit button:hover {
+  background-color: #5a84ad;
+}

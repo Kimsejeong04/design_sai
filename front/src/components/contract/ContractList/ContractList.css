@@ -1,0 +1,9 @@
+.no-contracts-message {
+    color: black; /* 빨간색 */
+    font-size: 1.4rem; /* 좀 더 큰 글씨 */
+    font-weight: bold; /* 두껍게 */
+    text-align: center; /* 가운데 정렬 */
+    margin-top: 20px; /* 위쪽 여백 추가 */
+    padding: 20px;
+  }
+  

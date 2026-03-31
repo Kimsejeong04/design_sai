@@ -1,0 +1,20 @@
+.mypage-container {
+    display: flex;
+    justify-content: flex-start; /* 좌측 정렬, 필요에 따라 center로 설정 가능 */
+    align-items: flex-start; /* 상단 정렬, 필요에 따라 center로 설정 가능 */
+    gap: 10px;
+  }
+  
+  .mypage-sidebar {
+    flex: 0 0 250px; /* 사이드바 너비 고정 */
+  }
+  
+  .mypage-content {
+    flex: 1; /* 나머지 공간을 모두 차지 */
+    background-color: #fff;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  

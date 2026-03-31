@@ -1,0 +1,35 @@
+/* 툴바 전체 */
+#toolbar {
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+}
+
+/* 에디터 영역 */
+.ql-container {
+  border-radius: 0 0 8px 8px;
+  min-height: 200px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* select(제목) 박스 폭과 폰트 정리 */
+.ql-header {
+  width: 80px;
+  font-weight: bold;
+}
+.ql-header option {
+  font-weight: normal;
+}
+
+.editor-container {
+  width : 100%;
+  height : 500px;
+}
+.quill {
+  height : 300px;
+}

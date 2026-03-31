@@ -1,0 +1,125 @@
+/* DeliveryCard.css */
+
+.delivery-card {
+  background-color: #fff;
+  border-radius: 16px;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin-bottom: 24px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.delivery-date {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #444;
+}
+
+.delivery-body {
+  display: flex;
+  justify-content: flex-start; /* space-between → flex-start 변경 */
+  gap: 24px; /* 좌우 섹션 사이 간격 */
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.left-section {
+  width: 100%;
+  max-width: 800px; /* 최대 너비 지정해서 너무 넓어지지 않게 */
+}
+
+.status {
+  color: #3b82f6;
+  font-weight: 650;
+  margin-bottom: 12px;
+  font-size: 20px;
+  white-space: nowrap;  
+  margin-right: 20px;
+}
+
+.info-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: fit-content; /* 내용 크기에 맞춰 가로 크기 조절 */
+  max-width: 100%;   /* 너무 커지는 것 방지 */
+}
+
+.preview-image {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.info-text {
+  flex: 1;
+  min-width: 0;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 위쪽 정렬 */
+  gap: 8px; /* 항목 간 간격 */
+  padding-left: 8px; /* 이미지와 글자 사이 약간 여백 */
+}
+
+.info-text p {
+  margin: 0;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.4;
+}
+
+.customer-name {
+  font-size: 14px;   
+  color: #555;
+}
+
+.order-title {
+  font-size: 19px;   
+  font-weight: 600;  
+  color: #333;
+}
+
+.right-section {
+  width: 180px; /* 버튼 영역 고정 너비 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.action-btn {
+  width: 130px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: #799fc4;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.action-btn:hover {
+  background-color: #5f86b2;
+}
+
+.report-btn {
+  background-color: #ffe4e6;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.report-btn:hover {
+  background-color: #fecaca;
+}

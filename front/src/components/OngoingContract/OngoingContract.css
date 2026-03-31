@@ -1,0 +1,52 @@
+.GoingContent {
+    width: 21.7rem;      /* 347px → 약 21.7rem */
+    height: 15.5rem;     /* 248px → 약 15.5rem */
+    border: 0.125rem solid #9ABCD4; /* 2px */
+    margin: 1.875rem;    /* 30px → 약 1.875rem */
+    border-radius: 0.3125rem; /* 5px */
+    box-shadow: 0rem 0.125rem 0.125rem rgba(0, 0, 0, 0.2); /* 2px */
+    background-color: #fff;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.GoingContent:hover {
+    box-shadow: 0rem 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    transform: translateY(-0.25rem); /* 약간 떠오르는 효과 */
+}
+
+.GoingContent-title {
+    font-family: 'DoHyeon';
+    font-weight: bold; /* 추가 */
+    font-size: 1.2rem;  /* 적당히 크게 조정 */
+    margin-top: 2.2rem; /* 35px → 약 2.2rem */
+}
+
+.GoingContent-text {
+  max-height: 4.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  white-space: normal;
+  min-height: 80px;
+}
+
+.GoingContent-text.no-preview {
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.GoingContent-text span {
+    font-family: 'Noto Sans KR';
+    font-size: 1.0rem; /* 조금 작게 */
+    color: #666666;     /* 연한 회색 */
+    line-height: 1.5;
+}
+
+.GoingContent-btn {
+    width: 18.875rem;  /* 302px */
+    height: 2.5rem;    /* 35px */
+    font-size: 1rem;
+}
