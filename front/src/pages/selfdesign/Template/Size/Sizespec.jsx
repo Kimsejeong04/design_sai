@@ -3,7 +3,7 @@ import "./Sizespeccss.css";
 import { SizeController, SizeControllerRow } from "../../../../components";
 import ClothesTest from "./ClothesPants/ClothesTest";
 import "./Sizespec.css"
-function Sizespec({ selectedSize, setSelectedSize = () => {} }) {
+function Sizespec({ selectedSize, setSelectedSize = () => {}, clothingType}) {
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
   // ClothesTest 상태 정의
@@ -178,6 +178,7 @@ function Sizespec({ selectedSize, setSelectedSize = () => {} }) {
   return (
     <div className="table-container">
       <ClothesTest
+        clothingType={clothingType}
         neckY={neckY}
         setNeckY={setNeckY}
         neckXOffset={neckXOffset}

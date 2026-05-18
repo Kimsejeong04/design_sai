@@ -15,7 +15,8 @@
     design_name AS "designName",
     colors AS "colorsJson",
     created_at AS "createdAt",
-    category AS "category"
+    category AS "category",
+    design_image_url AS "designImageUrl"
   FROM user_design
   WHERE USERNAME = #{username}
 </select>

@@ -21,7 +21,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
-    User findById(String id);
+    User findByUsername(String username);
     void insertUser(User user);
+	User findByTel(String tel);
+	//Object findByUsername(String username);
     
 }

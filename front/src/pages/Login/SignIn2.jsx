@@ -44,6 +44,31 @@ export default function SignIn2() {
           return;
         }*/
     
+        if (!email.trim()){
+          setMessage("이메일이 입력되지 않았습니다.")
+          return;
+        }
+
+        if (!name.trim()){
+          setMessage("이름이 입력되지 않았습니다.")
+          return;
+        }
+
+        if (!tel.trim()){
+          setMessage("전화번호가 입력되지 않았습니다.")
+          return;
+        }
+
+        if (!birthdate.trim()){
+          setMessage("생년월일이 입력되지 않았습니다.")
+          return;
+        }
+
+        if (!gender.trim()){
+          setMessage("성별이 입력되지 않았습니다.")
+          return;
+        }
+
         if (password !== confirmPasswd) {
           setMessage("비밀번호가 일치하지 않습니다.");
           return;

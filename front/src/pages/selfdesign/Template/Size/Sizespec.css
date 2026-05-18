@@ -1,11 +1,9 @@
 .table-container {
   display: flex;
-  gap: 24px;
   justify-content: center;
 }
 .table-container2 {
   display: flex;
   gap: 24px;
-
 }
 
