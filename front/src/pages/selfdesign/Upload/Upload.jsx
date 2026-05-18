@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../CosMain/CosMainCss.css";
+/*import "../../CosMain/CosMainCss.css";*/
 import "./Upload.css";
 import { Edit } from "./UploadClick"; // Edit 컴포넌트 불러오기
 import Canvas from "../../../components/Canvas/Canvas";
@@ -156,13 +156,15 @@ export default function Upload({ onUploadSuccess }) {
                             <button className="uploadButton" onClick={() => {document.getElementById(`upload-${file.id}`).click(); setSelectedImage(file.image);}}>
                               파일 선택
                             </button>
-                            <div>
-                              {/*<input type="file" onChange={handleFileChange} />*/}
-                              <button onClick={() => {handleUpload2()}} >이미지 업로드</button>
-                            </div>
                             {/* 그림판 버튼 추가 */}
                             <button className="canvasButton" onClick={() => setShowCanvas(true)}>
                               그림판
+                            </button>
+                            <button 
+                              className="uploadMainButton"
+                              onClick={() => handleUpload2()}
+                            >
+                              이미지 업로드
                             </button>
                           </div>
                         </div>

@@ -19,7 +19,7 @@
 }
 
 .navbar {
-  background-color: #ffffff;
+  background-color: #FAFAFC;  /*내비게이션바 배경색 #fff->#FAFAFC 바꿈! (5/18~)*/
   border-bottom: 1px solid #e8e8e8;
   position: relative;
   z-index: 200;
