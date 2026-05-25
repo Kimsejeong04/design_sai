@@ -1,56 +1,79 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 페이지 이동을 위한 훅
 /*import "../../CosMain/CosMainCss.css";*/
 import "./Upload.css";
-import { Edit } from "./UploadClick"; // Edit 컴포넌트 불러오기
+import { Edit } from "./UploadClick"; 
 import Canvas from "../../../components/Canvas/Canvas";
 import { uploadImage } from "../../../services/api";
 
-
-
-
 export default function Upload({ onUploadSuccess }) {
+  const navigate = useNavigate(); 
+
+  // 파일 박스 상태 관리 (각 박스마다 독립적인 데이터 유지)
   const [fileBoxes, setFileBoxes] = useState([
-    { id: 1, fileName: "파일을 올려주세요", showEdit: false, image: null }
+    { id: 1, fileName: "파일을 올려주세요", showEdit: false, image: null, rawFile: null }
   ]);
-  const [imageData, setImageData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isComposing, setIsComposing] = useState(false);
-  const [showCanvas, setShowCanvas] = useState(false); // 그림판 팝업 상태 관리
-  const [file, setFile] = useState(null);
-  const [images, setImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  
+  // 모달(팝업) 상태 관리
+  const [activeCanvasBoxId, setActiveCanvasBoxId] = useState(null); // 그림판 팝업용 ID
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);  // 업로드 성공 팝업용
 
+  const activeBox = fileBoxes.find(box => box.id === activeCanvasBoxId);
+
+  // 그림판 이미지 저장 처리
   const handleImageSave = (dataURL) => {
-    setImageData(dataURL);  // 상위 컴포넌트의 상태에 저장
+    if (!activeCanvasBoxId) return;
+
+    // Base64를 File 객체로 변환 (서버 전송용)
+    const convertDataURLToFile = (dataurl, filename) => {
+      let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+    };
+
+    const generatedFile = convertDataURLToFile(dataURL, `canvas_design_${activeCanvasBoxId}.png`);
+
+    setFileBoxes(prevBoxes =>
+      prevBoxes.map(box =>
+        box.id === activeCanvasBoxId
+          ? { ...box, image: dataURL, rawFile: generatedFile, showEdit: true }
+          : box
+      )
+    );
   };
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-  const handleImageClick = (file) => {
-    setSelectedImage(file.image); // 선택한 파일의 이미지 데이터를 저장
-  };
-  const handleUpload2 = async () => {
-    if (!file) {
-      alert("파일을 선택하세요!");
+
+  // 백엔드 업로드 실행
+  const handleUploadToServer = async (box) => {
+    if (!box.rawFile) {
+      alert("파일을 선택하거나 그림판으로 먼저 작업해주세요!");
       return;
     }
 
     try {
-      await uploadImage(file);
-      alert("이미지 업로드 성공!");
-      // onUploadSuccess(); // 업로드 후 목록 갱신 이거 실패하는것같아서 주석처리함요
+      await uploadImage(box.rawFile);
+      // 업로드 성공 시 alert 대신 팝업 상태를 true로 변경
+      setShowSuccessPopup(true); 
+      
+      if (typeof onUploadSuccess === "function") {
+        onUploadSuccess(); 
+      }
     } catch (error) {
       alert("이미지 업로드 실패!");
     }
   };
   
-  // FileBox를 최대 3개까지만 생성하도록 제한
+  // 파일 박스 추가 (최대 3개 제한)
   const addFileBox = () => {
     if (fileBoxes.length < 3) {
       setFileBoxes(prevBoxes => [
         ...prevBoxes, 
-        { id: prevBoxes.length + 1, fileName: "파일을 올려주세요", showEdit: false, image: null }
+        { id: Date.now(), fileName: "파일을 올려주세요", showEdit: false, image: null, rawFile: null }
       ]);
     } else {
       alert("최대 3개까지만 생성할 수 있습니다.");
@@ -69,7 +92,8 @@ export default function Upload({ onUploadSuccess }) {
     setFileBoxes(prevBoxes => prevBoxes.filter(file => file.id !== id));
   };
 
-  const handleUpload = (event, id) => {
+  // 파일 선택 처리
+  const handleFileChange = (event, id) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -78,11 +102,16 @@ export default function Upload({ onUploadSuccess }) {
         setFileBoxes(prevBoxes =>
           prevBoxes.map(fileBox =>
             fileBox.id === id
-              ? { ...fileBox, fileName: fileNameWithoutExt, image: reader.result, showEdit: true }
+              ? { 
+                  ...fileBox, 
+                  fileName: fileNameWithoutExt, 
+                  image: reader.result,     
+                  rawFile: file,            
+                  showEdit: true 
+                }
               : fileBox
           )
         );
-        setSelectedImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -138,55 +167,53 @@ export default function Upload({ onUploadSuccess }) {
                 <div className="FileUpload">
                   <h3>파일 목록</h3>
                   {filteredFiles.length > 0 ? (
-                    filteredFiles.map((file) => (
-                      <div key={file.id} className="FileBoxWrapper">
+                    filteredFiles.map((fileBox) => (
+                      <div key={fileBox.id} className="FileBoxWrapper">
                         <div className="FileBox">
-                          <div className="fileNameWrapper" style={{ width: "9.375rem" }}>  {/* fileNameWrapper의 폭을 줄임 */}
-                            <p className="fileName">{file.fileName}</p>
+                          <div className="fileNameWrapper" style={{ width: "9.375rem" }}>
+                            <p className="fileName">{fileBox.fileName}</p>
                           </div>
                           <div className="ButtonGroup">
-                            <button className="deleteButton" onClick={() => removeFileBox(file.id)}>삭제</button>
+                            <button className="deleteButton" onClick={() => removeFileBox(fileBox.id)}>삭제</button>
+                            
                             <input 
                               type="file" 
                               accept="image/*" 
                               style={{ display: "none" }} 
-                              id={`upload-${file.id}`}
-                              onChange={(event) => {handleUpload(event, file.id); handleFileChange(event);}}
+                              id={`upload-${fileBox.id}`}
+                              onChange={(event) => handleFileChange(event, fileBox.id)}
                             />
-                            <button className="uploadButton" onClick={() => {document.getElementById(`upload-${file.id}`).click(); setSelectedImage(file.image);}}>
+                            <button className="uploadButton" onClick={() => document.getElementById(`upload-${fileBox.id}`).click()}>
                               파일 선택
                             </button>
-                            {/* 그림판 버튼 추가 */}
-                            <button className="canvasButton" onClick={() => setShowCanvas(true)}>
+                            
+                            <button className="canvasButton" onClick={() => setActiveCanvasBoxId(fileBox.id)}>
                               그림판
                             </button>
+                            
                             <button 
                               className="uploadMainButton"
-                              onClick={() => handleUpload2()}
+                              onClick={() => handleUploadToServer(fileBox)}
                             >
                               이미지 업로드
                             </button>
                           </div>
                         </div>
-                        <Edit show={file.showEdit} toggleEdit={() => toggleEdit(file.id)} image={imageData ? imageData:file.image}  />
+                        <Edit show={fileBox.showEdit} toggleEdit={() => toggleEdit(fileBox.id)} image={fileBox.image}  />
                       </div>
                     ))
                   ) : (
                     <p>검색된 파일이 없습니다.</p>
                   )}
 
-                  {/*<div className="ButtonContainer">
-                    <button className="resetButton" onClick={() => setFileBoxes([])}>초기화</button>
-                    <button className="saveButton">저장</button>
-                  </div>*/}
                   <div className="createFile">
-                    {/*<button 
+                    <button 
                       className="createButton" 
                       onClick={addFileBox} 
                       disabled={fileBoxes.length >= 3}
                     >
                       +
-                    </button>*/}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -194,18 +221,40 @@ export default function Upload({ onUploadSuccess }) {
           </div>
         </div>
         
-        {/* 그림판 팝업 */}
-        {showCanvas && (
-          <div className="canvasPopup">
+        {/* 그림판 모달 팝업 */}
+        {activeCanvasBoxId !== null && (
+          <div className="canvasPopupOverlay">
             <div className="canvasPopupContent">
-              {/* canvas만 스크롤 되게 하고, 닫기 버튼은 항상 아래에 있게 */}
               <div className="canvasArea">
-                <Canvas backgroundImage={selectedImage} onSave={handleImageSave} />
+                <Canvas backgroundImage={activeBox?.image} onSave={handleImageSave} />
               </div>
-              <button className="closebtn" onClick={() => setShowCanvas(false)}>닫기</button>
+              <button className="closebtn" onClick={() => setActiveCanvasBoxId(null)}>닫기</button>
             </div>
           </div>
         )}
+
+        {/* 업로드 성공 선택형 팝업 */}
+        {showSuccessPopup && (
+          <div className="successPopupOverlay">
+            <div className="successPopupContent">
+              <h3>🎉 업로드 성공!</h3>
+              <p>이미지가 성공적으로 업로드되었습니다.<br />메인 페이지로 이동하시겠습니까?</p>
+              
+              <div className="successPopupButtons">
+                <button className="goMainBtn" onClick={() => navigate('/client/Cosmain')}>
+                  메인페이지로 이동
+                </button>
+                <button 
+                  className="stayBtn" 
+                  onClick={() => setShowSuccessPopup(false)} /* 팝업만 닫음 */
+                >
+                  현재 페이지에 머물기
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
