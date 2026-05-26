@@ -34,6 +34,8 @@ export default function ClothesTest({
       drawPants(ctx, canvas);
     } else if (safeType.includes('반팔') || safeType.includes('반바지') || safeType.includes('티셔츠')) {
       drawShortSleeve(ctx, canvas);
+      } else if (safeType.includes('집업') || safeType.includes('자켓')) {
+      drawShortCoat(ctx, canvas);
     } else if (safeType.includes('코트')) {
       drawCoat(ctx, canvas);
     } else if (safeType.includes('원피스')) {
@@ -224,6 +226,94 @@ export default function ClothesTest({
     ctx.restore();
   };
 
+  const drawShortCoat = (ctx, canvas) => {
+
+    const centerX = canvas.width / 2;  // 캔버스 가로 중앙 250 중앙에 오도록 배치 하는거
+    const currentCenterX = (100 + 200) / 2;  // 원래 중심 셔츠 중심(150) 
+    const offsetX = centerX - currentCenterX;  // ->100 픽셀 이동
+
+    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
+    const currentCenterY = (40 + bodyLength + 210) / 2; // 긴팔 상의의 세로 중앙 (목 파임 40 ~ 밑단 130)
+    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+
+    ctx.save(); 
+    ctx.translate(0, offsetY);
+    
+    const neckLeftX = 100 - shoulderOffset+ 38 - upperWidthOffset + offsetX;
+    
+    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; //x 가 커지고 y가 작아져야 대각선으로 줄어듬 
+
+    const sleeveLeftBase = { x: 60 + offsetX, y: 20 };
+    const sleeveRightBase = { x: 240 + offsetX, y: 20 };
+
+    const midLeftShoulder = {
+      x: (neckLeftX + shoulderLeftBase.x) / 2,
+      y: (50 + shoulderLeftBase.y) / 2,
+    };
+
+    // Normalize armLengthFactor to range [0, 1] to reduce growth rate
+    const interpFactor = Math.min(armLengthFactor / 7, 5) ;
+
+    const leftShoulder = {
+      x: shoulderLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor ),
+      y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor ),
+    };
+
+    const leftSleeve = {
+      x: sleeveLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor) ,
+      y: sleeveLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor) ,
+    };
+
+    const neckRightX = 200 + shoulderOffset-38 + upperWidthOffset + offsetX;
+    
+    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; //x 가 작아지고 y도 작아져야 대각선으로 줄어듬
+    
+
+    const midRightShoulder = {
+      x: (neckRightX + shoulderRightBase.x) / 2,
+      y: (50 + shoulderRightBase.y) / 2,
+    };
+
+    const rightShoulder = {
+      x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor ) ,
+      y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor )  ,
+    };
+
+    const rightSleeve = {
+      x: sleeveRightBase.x * interpFactor+ midRightShoulder.x * (1 - interpFactor),
+      y: sleeveRightBase.y * interpFactor+ midRightShoulder.y * (1 - interpFactor),
+    };
+
+    ctx.beginPath();
+    ctx.moveTo(neckLeftX, 50); 
+    ctx.lineTo(leftShoulder.x  , leftShoulder.y);
+    ctx.lineTo(leftShoulder.x + 20, leftShoulder.y + 15);
+
+    ctx.lineTo(100 - chestOffset+82 + offsetX, 50 + topBodyHeight + 30 );
+    ctx.lineTo(100 - lowerWidthOffset +90 + offsetX, bodyLength + 130);
+    ctx.lineTo(200 + lowerWidthOffset -90 + offsetX, bodyLength + 130);
+    ctx.lineTo(200 + chestOffset-82 + offsetX, 50 + topBodyHeight+ 30 );
+
+    ctx.lineTo(rightShoulder.x - 20, rightShoulder.y + 15);
+    ctx.lineTo(rightShoulder.x, rightShoulder.y);
+    ctx.lineTo(neckRightX, 50);
+
+    ctx.lineTo(170 + neckXOffset-20 + offsetX+20, 40);
+    ctx.quadraticCurveTo(150 + offsetX, neckY+82, 130 - neckXOffset + offsetX, 40);
+    ctx.lineTo(neckLeftX, 50);
+
+    ctx.closePath();
+
+    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(150 + offsetX, neckY + 51); // 목 한가운데서 시작
+    ctx.lineTo(150 + offsetX, centerY + 22);   
+    ctx.stroke();
+
+    applyPattern(ctx, canvas);
+    ctx.restore();
+  };
 
   // 5.4 추가
   const drawPants = (ctx, canvas) => {
@@ -266,8 +356,6 @@ export default function ClothesTest({
     const offsetX = centerX - currentCenterX;  
 
     const coatHemY = bodyLength + 220; 
-
-
     const centerY = canvas.height / 2; 
     const currentCenterY = (40 + coatHemY) / 2; 
     const offsetY = centerY - currentCenterY;
@@ -337,7 +425,7 @@ export default function ClothesTest({
 
     // 코트 한가운데 지퍼(절개선) 그리기
     ctx.beginPath();
-    ctx.moveTo(150 + offsetX, neckY + 50); // 목 한가운데서 시작
+    ctx.moveTo(150 + offsetX, neckY + 51); // 목 한가운데서 시작
     ctx.lineTo(150 + offsetX, coatHemY);   
     ctx.stroke();
 

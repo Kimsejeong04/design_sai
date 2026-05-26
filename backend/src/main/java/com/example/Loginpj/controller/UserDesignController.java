@@ -101,7 +101,7 @@ public class UserDesignController {
         }
     }
 
-    @GetMapping("/{id}") // 이 경로는 username 대신 id로 되어 있어서 혼란을 줄 수 있습니다.
+    @GetMapping("/{id}") 
     public ResponseEntity<List<UserDesign>> getUserDesigns(@PathVariable String id) {
         List<UserDesign> designs = userDesignService.getUserDesignsById(id);
         return ResponseEntity.ok(designs);

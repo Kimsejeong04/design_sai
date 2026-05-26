@@ -25,6 +25,10 @@ public class UserDesign {
     private Date createdAt;
     private String category;
     
+    private String blendRatio;
+    private String pattern;
+    private String note;
+    
     private String designImageUrl;
 
     // 실제로 프론트에서 사용할 List 형태의 getter
@@ -135,6 +139,30 @@ public class UserDesign {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+    public String getBlendRatio() {
+    	return blendRatio;
+    }
+    
+    public void setBlendRatio(String blendRatio) {
+    	this.blendRatio = blendRatio;
+    }
+    
+    public String getPattern() {
+    	return pattern;
+    }
+    
+    public void setPattern(String pattern) {
+    	this.pattern = pattern;
+    }
+    
+    public String getNote() {
+    	return note;
+    }
+    
+    public void setNote(String note) {
+    	this.note = note;
     }
 
     // 서버 -> 프론트로 데이터 보낼 때 (목록 불러오기)

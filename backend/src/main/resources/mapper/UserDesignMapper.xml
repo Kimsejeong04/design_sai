@@ -16,6 +16,9 @@
     <result property="colorsJson" column="colors"/>
     <result property="createdAt" column="created_at"/>
     <result property="category" column="category"/>
+    <result property="blendRatio" column="blend_Ratio"/>
+    <result property="pattern" column="pattern"/>
+    <result property="note" column="note"/>
    	<result property="designImageUrl" column="design_image_Url"/> 
   </resultMap>
 
@@ -32,7 +35,7 @@
   </selectKey>
   INSERT INTO user_design (
     design_id, username, clothing_type, fabric, sizee,
-    design_name, colors, created_at, category, design_image_url
+    design_name, colors, created_at, category, blend_Ratio, pattern, note, design_image_url
   )
   VALUES (
     #{designId, jdbcType=NUMERIC},
@@ -44,6 +47,9 @@
     #{colorsInsertJson, jdbcType=CLOB},
     SYSDATE,
     #{category, jdbcType=VARCHAR},
+    #{blendRatio, jdbcType=VARCHAR},
+    #{pattern, jdbcType=VARCHAR},
+    #{note, jdbcType=VARCHAR},
     #{designImageUrl, jdbcType=VARCHAR}
   )
 </insert>

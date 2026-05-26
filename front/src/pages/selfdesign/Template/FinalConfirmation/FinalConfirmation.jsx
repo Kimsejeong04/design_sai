@@ -28,6 +28,8 @@ const FinalConfirmation = () => {
   const [selectedColors, setSelectedColors] = useState({});
   const [selectedSize, setSelectedSize] = useState("");
   const [designName, setDesignName] = useState("");
+  const [selectedRatios, setSelectedRatios] = useState({});
+  const [selectedPatterns, setSelectedPatterns] = useState({});
   const [loading, setLoading] = useState(false);
   const [note, setNote] = useState("");
 
@@ -78,16 +80,23 @@ const FinalConfirmation = () => {
       }
     }
 
-    const storedFabric =
-      sessionStorage.getItem("selectedFabric") || localStorage.getItem("selectedFabric");
-    const storedColors =
-      sessionStorage.getItem("selectedColors") || localStorage.getItem("selectedColors");
-    const storedSize =
-      sessionStorage.getItem("selectedSize") || localStorage.getItem("selectedSize");
-
+    const storedFabric = sessionStorage.getItem("selectedFabric") || localStorage.getItem("selectedFabric");
+    const storedColors = sessionStorage.getItem("selectedColors") || localStorage.getItem("selectedColors");
+    const storedSize = sessionStorage.getItem("selectedSize") || localStorage.getItem("selectedSize");
+    const storedRatios = sessionStorage.getItem("selectedRatios") || localStorage.getItem("selectedRatios");
+    const storedPattern = sessionStorage.getItem("selectedPatterns") || localStorage.getItem("selectedPatterns");
+    
     if (storedFabric) setSelectedFabric(JSON.parse(storedFabric) || []);
     if (storedColors) setSelectedColors(JSON.parse(storedColors) || {});
     if (storedSize) setSelectedSize(storedSize);
+    if (storedRatios) setSelectedRatios(JSON.parse(storedRatios) || {});
+
+    if (storedPattern) {
+      setSelectedPatterns(JSON.parse(storedPattern) || {});
+    } else {
+      setSelectedPatterns({}); // 저장된 패턴이 없으면 빈 객체 세팅
+    }
+    
   }, [username]);
 
   const handleSubmit = async () => {
@@ -106,14 +115,33 @@ const FinalConfirmation = () => {
 
     // 1. 캔버스 이미지 생성 및 base64 획득
     const canvas = await html2canvas(captureRef.current);
-    const imgData = canvas.toDataURL("image/png").replace(/\s/g, ""); // 🔧 이 부분
+    const imgData = canvas.toDataURL("image/png").replace(/\s/g, ""); 
 
     // 2. 색상 데이터 포맷팅
-    const formattedColors = Object.entries(selectedColors).map(([id, color]) => ({
-      id: String(id),
-      color: color,
-    }));
+    const formattedColors = selectedFabric.map((f) => {
+        const hexColor = selectedColors[f.id] || f.initialColor; 
+        const colorNameStr = getColorName(hexColor);     
+        
+        return {
+          id: String(f.id),           // 원단 고유 번호
+          fabricName: f.name,         // 원단 이름 (예: 린넨)
+          code: hexColor,             // 색상 코드
+          name: colorNameStr          // 색상 한글 이름 (백엔드에서 쓸 값!)
+        };
+      });
+
     const finalColor = formattedColors.length > 0 ? formattedColors[0].color : "#ffffff";
+
+    const blendRatioStr = selectedFabric.length > 0 
+        ? selectedFabric.map(f => `${f.name} ${selectedRatios[f.id] || 0}%`).join(", ")
+        : "0%";
+
+    const patternStr = selectedFabric.length > 0 
+        ? selectedFabric.map(f => {
+            const pName = selectedPatterns[f.id]?.name || "무지";
+            return `${f.name} ${pName}`; // 원단 이름과 패턴 이름을 합침
+          }).join(", ")
+        : "무지";
 
     // 3. 서버에 보낼 최종 데이터 객체
     const finalData = {
@@ -126,7 +154,9 @@ const FinalConfirmation = () => {
       ),
       size: selectedSize,
       category: "template",
-      note,
+      blendRatio: blendRatioStr,
+      pattern: patternStr,     
+      note: note,
       designImageUrl: imgData, // 캡처한 이미지 base64 넣기
     };
 
@@ -214,7 +244,8 @@ const FinalConfirmation = () => {
                       <img src={f.imageSrc} alt={f.name} className="fabric-img" />
                       <div className="fabric-info">
                         <div className="fabric-name">{f.name}</div>
-                        <div>혼합율: {f.mixingRatio || 0}%</div>
+                        <div>혼합율: {selectedRatios[f.id] || 0}%</div>
+                        <div>패턴: {selectedPatterns[f.id]?.name || "무지"}</div>
                         <div>
                           색상:{" "}
                           <ColorCircle
