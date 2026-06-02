@@ -14,6 +14,13 @@ export default function ClothesTest({
   topBodyHeight, setTopBodyHeight,
   resetValues,
   isPreview = false, // FinalConfirmation에서 호출될 때 입력 컨트롤 숨기기
+  
+  pantsLength, setPantsLength,
+  waistOffset, setWaistOffset,
+  hipOffset, setHipOffset,
+  thighOffset, setThighOffset,
+  hemOffset, setHemOffset,
+  crotchLength, setCrotchLength,
 }) {
   const canvasRef = useRef(null);
   
@@ -640,15 +647,16 @@ export default function ClothesTest({
   };
 
   return (
-    <div className="canvas-adjust" style={{ textAlign: 'center', }}>
+    <div className="canvas-adjust" style={{ textAlign: 'center' }}>
       <div className="size-spec-layout">
         <div className="size-spec-container">
           <canvas
             ref={canvasRef}
             width={350}
             height={350}
-           style={{ margin :"3px", width: "450px", height: "450px", display: "block", border: '2px solid #ccc' , borderRadius: '10px', backgroundColor: '#f9f9f9' }}
+            style={{ margin: "3px", width: "450px", height: "450px", display: "block", border: '2px solid #ccc', borderRadius: '10px', backgroundColor: '#f9f9f9' }}
           ></canvas>
+
           <div
             className="cliders-grid"
             style={{
@@ -659,198 +667,111 @@ export default function ClothesTest({
               justifyItems: 'center',
             }}
           >
-            <div style={{ marginTop: '1rem' }}>
-              <h4>목 파임 </h4>
-              <input
-                type="range"
-                min={18}
-                max={21}
-                step={0.25}
-                value={neckY}
-                onChange={(e) => setNeckY(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={18}
-                max={21}
-                step={0.25}
-                value={neckY}
-                onChange={handleInputChange(setNeckY, 50, 150)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+            {clothingType && clothingType.includes("바지") ? (
+              <>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>총 기장</h4>
+                  <input type="range" min={91} max={103} step={0.25} value={pantsLength} onChange={(e) => setPantsLength(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={91} max={103} step={0.25} value={pantsLength} onChange={handleInputChange(setPantsLength, 80, 120)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>목 너비</h4>
-              <input
-                type="range"
-                min={18}
-                max={24}
-                step={0.25}
-                value={neckXOffset}
-                onChange={(e) => setNeckXOffset(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={18}
-                max={24}
-                step={0.25}
-                value={neckXOffset}
-                onChange={handleInputChange(setNeckXOffset, -20, 15)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>허리 단면</h4>
+                  <input type="range" min={31} max={43} step={0.25} value={waistOffset} onChange={(e) => setWaistOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={31} max={43} step={0.25} value={waistOffset} onChange={handleInputChange(setWaistOffset, 20, 60)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>어깨 단면</h4>
-              <input
-                type="range"
-                min={38}
-                max={50}
-                step={0.25}
-                value={shoulderOffset}
-                onChange={(e) => setShoulderOffset(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={38}
-                max={50}
-                step={0.25}
-                value={shoulderOffset}
-                onChange={handleInputChange(setShoulderOffset, 0, 30)}
-                style={{ width: 70, marginLeft: 10 }}
-                
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>엉덩이 단면</h4>
+                  <input type="range" min={41} max={53} step={0.25} value={hipOffset} onChange={(e) => setHipOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={41} max={53} step={0.25} value={hipOffset} onChange={handleInputChange(setHipOffset, 30, 70)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>가슴 단면</h4>
-              <input
-                type="range"
-                min={82}
-                max={106}
-                step={0.25}
-                value={chestOffset}
-                onChange={(e) => setChestOffset(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={82}
-                max={105}
-                step={0.25}
-                value={chestOffset}
-                onChange={handleInputChange(setChestOffset, 0, 30)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>허벅지 단면</h4>
+                  <input type="range" min={24} max={36} step={0.25} value={thighOffset} onChange={(e) => setThighOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={24} max={36} step={0.25} value={thighOffset} onChange={handleInputChange(setThighOffset, 15, 50)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>총 기장</h4>
-              <input
-                type="range"
-                min={67}
-                max={77}
-                step={0.25}
-                value={bodyLength}
-                onChange={(e) => setBodyLength(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={67}
-                max={77}
-                step={0.25}
-                value={bodyLength}
-                onChange={handleInputChange(setBodyLength, 150, 400)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>밑위 길이</h4>
+                  <input type="range" min={23} max={29} step={0.25} value={crotchLength} onChange={(e) => setCrotchLength(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={23} max={29} step={0.25} value={crotchLength} onChange={handleInputChange(setCrotchLength, 15, 40)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>소매 기장</h4>
-              <input
-                type="range"
-                min={20}
-                max={26}
-                step={0.01}
-                value={armLengthFactor}
-                onChange={(e) => setArmLengthFactor(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={1}
-                max={5}
-                step={0.25}
-                value={armLengthFactor}
-                onChange={handleInputChange(setArmLengthFactor, 0, 5)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>밑단 단면</h4>
+                  <input type="range" min={18} max={24} step={0.25} value={hemOffset} onChange={(e) => setHemOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={18} max={24} step={0.25} value={hemOffset} onChange={handleInputChange(setHemOffset, 10, 35)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>목 파임</h4>
+                  <input type="range" min={18} max={21} step={0.25} value={neckY} onChange={(e) => setNeckY(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={18} max={21} step={0.25} value={neckY} onChange={handleInputChange(setNeckY, 50, 150)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>암홀(직선)</h4>
-              <input
-                type="range"
-                min={18}
-                max={30}
-                step={0.25}
-                value={topBodyHeight}
-                onChange={(e) => setTopBodyHeight(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={18}
-                max={30}
-                step={0.25}
-                value={topBodyHeight}
-                onChange={handleInputChange(setTopBodyHeight, 10, 100)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-            </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>목 너비</h4>
+                  <input type="range" min={18} max={24} step={0.25} value={neckXOffset} onChange={(e) => setNeckXOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={18} max={24} step={0.25} value={neckXOffset} onChange={handleInputChange(setNeckXOffset, -20, 15)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
 
-            <div style={{ marginTop: '1rem' }}>
-              <h4>밑단 단면</h4>
-              <input
-                type="range"
-                min={90}
-                max={114}
-                step={0.25}
-                value={lowerWidthOffset}
-                onChange={(e) => setLowerWidthOffset(Number(e.target.value))}
-                style={{ width: '80%' }}
-              />
-              <input
-                type="number"
-                min={90}
-                max={114}
-                step={0.25}
-                value={lowerWidthOffset}
-                onChange={handleInputChange(setLowerWidthOffset, 0, 50)}
-                style={{ width: 70, marginLeft: 10 }}
-              />
-             
-            </div>
-             <button
-                onClick={resetValues}
-                style={{
-                  marginTop: '2rem',
-                  backgroundColor: 'rgb(157, 187, 213)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '20px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  width: "100%",
-                }}
-              >
-                초기화
-              </button>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>어깨 단면</h4>
+                  <input type="range" min={38} max={50} step={0.25} value={shoulderOffset} onChange={(e) => setShoulderOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={38} max={50} step={0.25} value={shoulderOffset} onChange={handleInputChange(setShoulderOffset, 0, 30)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>가슴 단면</h4>
+                  <input type="range" min={82} max={106} step={0.25} value={chestOffset} onChange={(e) => setChestOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={82} max={105} step={0.25} value={chestOffset} onChange={handleInputChange(setChestOffset, 0, 30)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>총 기장</h4>
+                  <input type="range" min={67} max={77} step={0.25} value={bodyLength} onChange={(e) => setBodyLength(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={67} max={77} step={0.25} value={bodyLength} onChange={handleInputChange(setBodyLength, 150, 400)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>소매 기장</h4>
+                  <input type="range" min={20} max={26} step={0.01} value={armLengthFactor} onChange={(e) => setArmLengthFactor(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={1} max={5} step={0.25} value={armLengthFactor} onChange={handleInputChange(setArmLengthFactor, 0, 5)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>암홀(직선)</h4>
+                  <input type="range" min={18} max={30} step={0.25} value={topBodyHeight} onChange={(e) => setTopBodyHeight(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={18} max={30} step={0.25} value={topBodyHeight} onChange={handleInputChange(setTopBodyHeight, 10, 100)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>밑단 단면</h4>
+                  <input type="range" min={90} max={114} step={0.25} value={lowerWidthOffset} onChange={(e) => setLowerWidthOffset(Number(e.target.value))} style={{ width: '80%' }} />
+                  <input type="number" min={90} max={114} step={0.25} value={lowerWidthOffset} onChange={handleInputChange(setLowerWidthOffset, 0, 50)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+              </>
+            )}
+
+            {/* <button
+              onClick={resetValues}
+              style={{
+                marginTop: '2rem',
+                backgroundColor: 'rgb(157, 187, 213)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                width: "100%",
+              }}
+            >
+              초기화
+            </button> */}
           </div>
         </div>
       </div>

@@ -134,7 +134,7 @@
 // export default Size;
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Fabric/Fabric.css";
 import Sizespec from "./Sizespec";
@@ -142,9 +142,10 @@ import Sizespecbutton from "./Sizespecbutton";
 import { Sidebar, BreadCrumb } from "../../../../components";
 import axios from "axios";  // Axios 임포트
 
-const Size = () => {
+const Size = ({ resetValues }) => {
   const [selectedSize, setSelectedSize] = useState(null);
-  const [clothingName, setClothingName] = useState(""); // 🌟 1. 옷 이름을 담을 바구니 생성
+  const [clothingName, setClothingName] = useState(""); 
+  const sizespecRef = useRef(null);
   const navigate = useNavigate();
 
   // 🌟 2. 페이지가 열릴 때 1단계에서 고른 옷 정보를 가져오기
@@ -191,13 +192,19 @@ const Size = () => {
 
           {/* 🌟 3. 자식인 Sizespec에게 clothingType이라는 이름으로 옷 이름을 던져줍니다! */}
           <Sizespec 
+            ref={sizespecRef}
             selectedSize={selectedSize} 
             setSelectedSize={setSelectedSize} 
             clothingType={clothingName} 
           />
           
           <div className="footer button_size">
-            <Sizespecbutton label="초기화" onClick={() => setSelectedSize(null)} />
+            <Sizespecbutton label="초기화" onClick={() => {
+                if (sizespecRef.current) {
+                  sizespecRef.current.triggerReset(); 
+                }
+              }} 
+            />
             <Sizespecbutton label="이전" onClick={() => navigate(-1)} />
             <Sizespecbutton label="저장하기" onClick={handleSave} />
           </div>
