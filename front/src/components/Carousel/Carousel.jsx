@@ -1,77 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import './Carousel.css'; // 스타일 시트
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import './Carousel.css';
 
-const Carousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const features = [
+const features = [
   {
     title: '디자인 파일 업로드',
-    description: '나만의 디자인 파일을 업로드하여 옷을 디자인하세요.',
-    link: "/client/Upload",
+    subtitle: '내 아이디어를 현실로',
+    description: '나만의 디자인 파일을 업로드하고\n전문 디자이너와 함께 완성하세요.',
+    link: '/client/Upload',
     image: '/image/banner-design file.png',
-    backgroundColor: '#DAFFF1',
+    bg: 'linear-gradient(135deg, #c8fce8 0%, #a8f0d8 40%, #dafff1 100%)',
+    accent: '#2ec090',
+    badge: '🎨 직접 디자인',
+    btnColor: '#2ec090',
+    btnHover: '#1da878',
   },
   {
     title: '템플릿으로 디자인',
-    description: '사이트에서 제공하는 템플릿을 선택하여 쉽게 디자인하세요.',
+    subtitle: '10분이면 충분해요',
+    description: '다양한 템플릿 중 마음에 드는 걸 골라\n나만의 스타일로 커스텀하세요.',
     link: '/client/clothes',
     image: '/image/banner-templet.png',
-    backgroundColor: '#F3E7FF',
+    bg: 'linear-gradient(135deg, #ede0ff 0%, #d8c4ff 40%, #f3e7ff 100%)',
+    accent: '#8b5cf6',
+    badge: '✨ 쉽고 빠르게',
+    btnColor: '#8b5cf6',
+    btnHover: '#7c3aed',
   },
 ];
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % features.length);
-  };
+const Carousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused]         = useState(false);
+  const isAnimating                      = useRef(false);
+  const trackRef                         = useRef(null);
 
-  const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + features.length) % features.length
-    );
-  };
+  // ── 핵심: translateX 슬라이딩 ──────────────────────────────
+  const slideTo = useCallback((nextIndex) => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
 
-  // 점 클릭 시 해당 슬라이드로 이동하는 함수
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-  };
+    const track     = trackRef.current;
+    const direction = nextIndex > currentIndex ? -1 : 1;
 
-   // 자동 슬라이드 기능
-   useEffect(() => {
-    const intervalId = setInterval(nextSlide, 3000); // 3초마다 슬라이드 변경
+    // 1) transition 없이 시작 위치 세팅
+    track.style.transition = 'none';
+    track.style.transform  = `translateX(${direction * -100}%)`;
 
-    // 컴포넌트가 언마운트될 때 interval을 정리
-    return () => clearInterval(intervalId);
-  }, []);
+    // 2) 새 슬라이드 반영 후 → 제자리로 부드럽게 이동
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setCurrentIndex(nextIndex);
+        track.style.transition = 'transform 0.55s cubic-bezier(0.77, 0, 0.175, 1)';
+        track.style.transform  = 'translateX(0%)';
+
+        track.addEventListener('transitionend', () => {
+          isAnimating.current = false;
+        }, { once: true });
+      });
+    });
+  }, [currentIndex]);
+
+  const nextSlide = useCallback(() => {
+    slideTo((currentIndex + 1) % features.length);
+  }, [currentIndex, slideTo]);
+
+  const prevSlide = useCallback(() => {
+    slideTo((currentIndex - 1 + features.length) % features.length);
+  }, [currentIndex, slideTo]);
+
+  const goToSlide = useCallback((index) => {
+    if (index === currentIndex) return;
+    slideTo(index);
+  }, [currentIndex, slideTo]);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const id = setInterval(nextSlide, 4000);
+    return () => clearInterval(id);
+  }, [nextSlide, isPaused]);
+
+  const current = features[currentIndex];
 
   return (
-    <div className="carousel-container" style={{ backgroundColor: features[currentIndex].backgroundColor }}>
-      <div className="carousel">
-        <div className="carousel-item">
-          <img src={features[currentIndex].image} alt={features[currentIndex].title} />
-          <div className="carousel-content">
-            <h3>{features[currentIndex].title}</h3>
-            <p>{features[currentIndex].description}</p>
-            <a href={features[currentIndex].link} className="carousel-button">자세히 보기</a>
+    <div
+      className="cs-wrap"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="cs-bg" style={{ background: current.bg }} />
 
-            {/* 페이지네이션 점 */}
-            <div className="dots-container">
-              {features.map((_, index) => (
-                <span
-                  key={index}
-                  className={`dot ${index === currentIndex ? 'active' : ''}`}
-                  onClick={() => goToSlide(index)}
-                ></span>
-              ))}
-            </div>
+      <div className="cs-circle cs-circle-1" style={{ background: current.accent }} />
+      <div className="cs-circle cs-circle-2" style={{ background: current.accent }} />
+      <div className="cs-circle cs-circle-3" style={{ background: current.accent }} />
+
+      {/* 슬라이드 트랙 전체가 translateX로 이동 */}
+      <div className="cs-track" ref={trackRef}>
+        <div className="cs-content">
+          <div className="cs-badge" style={{ background: current.accent }}>
+            {current.badge}
           </div>
+          <div className="cs-subtitle">{current.subtitle}</div>
+          <h2 className="cs-title">{current.title}</h2>
+          <p className="cs-desc">{current.description}</p>
+          <a
+            href={current.link}
+            className="cs-btn"
+            style={{ background: current.btnColor }}
+            onMouseEnter={e => (e.currentTarget.style.background = current.btnHover)}
+            onMouseLeave={e => (e.currentTarget.style.background = current.btnColor)}
+          >
+            자세히 보기
+          </a>
+        </div>
+
+        <div className="cs-image">
+          <img src={current.image} alt={current.title} />
         </div>
       </div>
-      <button className="prev" onClick={prevSlide}>
-        &#10094;
-      </button>
-      <button className="next" onClick={nextSlide}>
-        &#10095;
-      </button>
+
+      <button className="cs-arrow cs-arrow-prev" onClick={prevSlide}>&#10094;</button>
+      <button className="cs-arrow cs-arrow-next" onClick={nextSlide}>&#10095;</button>
+
+      <div className="cs-dots">
+        {features.map((_, i) => (
+          <button
+            key={i}
+            className={`cs-dot ${i === currentIndex ? 'active' : ''}`}
+            onClick={() => goToSlide(i)}
+          />
+        ))}
+      </div>
+
+      {!isPaused && <div key={`progress-${currentIndex}`} className="cs-progress" />}
     </div>
   );
 };
