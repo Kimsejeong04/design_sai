@@ -2,43 +2,59 @@
 
 .RecommendedDesign-container {
     display: flex;
-    gap: 20px;
+    gap: 30px;
     overflow-x: auto;
-    padding: 20px;
-    scroll-snap-type: x mandatory; /* 스냅 효과 */
-    -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
-    scroll-behavior: smooth; /* 부드럽게 스크롤 */
+    
+    /* [핵심] 왼쪽 여백을 줘서 전체 영역을 오른쪽으로 밀어냅니다 */
+    /* 왼쪽 텍스트 크기에 맞춰 300px~400px 사이로 조절해 보세요! */
+    margin-left: 100px; 
+    
+    padding: 40px 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    
+    /* 스크롤바가 왼쪽 여백 끝까지 가지 않도록 설정 */
+    width: calc(100% - 350px);
 }
 
+/* 스크롤바 디자인 - 좀 더 연하고 깔끔하게 */
 .RecommendedDesign-container::-webkit-scrollbar {
-    height: 10px;
+    height: 6px;
 }
 
 .RecommendedDesign-container::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
 }
 
 .RecommDes {
     flex: 0 0 auto;
-    width: 362px;
-    height: 350px;
+    width: 400px;
+    height: 480px; /* 높이를 조금 더 여유 있게 조정 */
     display: flex;
     flex-direction: column;
-    background-color: #9ABCD4;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    background-color: #fff; /* 배경은 깔끔한 화이트로 추천 */
+    
+    /* 둥근 모서리: 50px은 너무 과해요! 20~24px 정도가 딱 예쁩니다 */
+    border-radius: 24px; 
+    
+    /* 그림자: 더 부드럽고 깊이감 있게 (그림판 느낌 탈출 핵심) */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.10, 0.5, 0.10, 1); /* 더 쫀득한 애니메이션 */
+    scroll-snap-align: center; /* 스크롤 시 가운데 딱 걸리게 */
 }
 
 .RecommDes:hover {
-    transform: translateY(-5px);
-    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.08);
+    /* 호버 시 위로 슥 올라가면서 그림자가 더 진해지는 효과 */
+    transform: translateY(-15px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .RecommDesImg {
-    flex: 1; /* 남은 공간 다 차지 */
+    flex: 1;
     overflow: hidden;
 }
 
@@ -47,24 +63,33 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s ease; /* 호버 시 이미지 확대 효과용 */
+}
+
+/* 호버 시 이미지 살짝 커지는 디테일 추가 */
+.RecommDes:hover .RecommDesImg img {
+    transform: scale(1.05);
 }
 
 .RecommDes2 {
-    padding: 15px 20px;
+    padding: 20px 25px;
     background-color: #fff;
-    height: 100px; /* 고정 높이 */
+    height: auto; /* 고정 높이 대신 내용에 맞게 */
+    min-height: 120px;
     box-sizing: border-box;
+    border-top: 1px solid #f0f0f0; /* 이미지와 텍스트 경계 구분 */
 }
-
 
 .RecommDes-title {
     font-weight: 800;
     margin: 0;
-    font-size: 18px;
+    font-size: 20px; /* 제목 크기 확대 */
+    color: #333;
 }
 
 .RecommDes-text {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
+    margin-top: 12px;
+    font-size: 15px;
+    color: #777;
+    line-height: 1.5;
 }
