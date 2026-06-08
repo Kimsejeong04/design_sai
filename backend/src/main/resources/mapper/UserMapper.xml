@@ -15,12 +15,18 @@
         <result property="gender" column="gender"/>
     </resultMap>
 
-    <select id="findById" resultMap="UserResultMap">
+    <select id="findByUsername" resultMap="UserResultMap">
         SELECT username, password, email, usertype, birthdate, tel, name, gender 
         FROM user_info 
         WHERE username = #{username, jdbcType=VARCHAR} 
     </select>
 
+    <select id="findByTel" resultMap="UserResultMap">
+        SELECT username, password, email, usertype, birthdate, tel, name, gender 
+        FROM user_info 
+        WHERE tel = #{tel, jdbcType=VARCHAR} 
+    </select>
+    
     <insert id="insertUser" parameterType="com.example.Loginpj.model.User">
         INSERT INTO user_info (username, password, email, usertype, birthdate, tel, name, gender)
         VALUES (#{username, jdbcType=VARCHAR}, #{password}, #{email}, #{usertype, jdbcType=VARCHAR}, #{birthdate}, #{tel}, #{name}, #{gender})

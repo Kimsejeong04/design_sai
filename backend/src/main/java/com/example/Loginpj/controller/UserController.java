@@ -56,13 +56,25 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody User user) {
         try {
             System.out.println("회원가입 요청 데이터: " + user);
-
+            
+            if(userService.isUsernameDuplicate(user.getUsername())) {
+            	return ResponseEntity.badRequest().body("{\"message\": \"아이디가 이미 존재합니다.\"}");
+            }
+            
+            if (userService.isTelDuplicate(user.getTel())) {
+                return ResponseEntity.badRequest().body("{\"message\": \"전화번호가 이미 존재합니다.\"}");
+            }
+            
+            if (!userService.isValidPassword(user.getPassword())) {
+                return ResponseEntity.badRequest().body("{\"message\": \"비밀번호는 8~16자의 영문, 숫자, 특수문자를 포함해야 합니다.\"}");
+            }
+            
             boolean isCreated = userService.createUser(user);
             if (isCreated) {
                 return ResponseEntity.ok().body("{\"message\": \"회원가입 성공!\"}");
             } else {
-                return ResponseEntity.badRequest().body("{\"message\": \"아이디가 이미 존재합니다.\"}");
-            }
+            	return ResponseEntity.status(500).body("{\"message\": \"회원가입 처리에 실패했습니다.\"}");
+            } 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("{\"message\": \"서버 오류가 발생했습니다.\"}");

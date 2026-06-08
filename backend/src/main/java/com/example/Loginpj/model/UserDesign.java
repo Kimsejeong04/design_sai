@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,7 +25,11 @@ public class UserDesign {
     private Date createdAt;
     private String category;
     
-    private String designImageBase64;
+    private String blendRatio;
+    private String pattern;
+    private String note;
+    
+    private String designImageUrl;
 
     // 실제로 프론트에서 사용할 List 형태의 getter
     @JsonIgnore
@@ -134,13 +140,41 @@ public class UserDesign {
     public void setCategory(String category) {
         this.category = category;
     }
-
-    public String getDesignImageBase64() {
-        return designImageBase64;
+    
+    public String getBlendRatio() {
+    	return blendRatio;
     }
     
-    public void setDesignImageBase64(String designImageBase64) {
-        this.designImageBase64 = designImageBase64;
+    public void setBlendRatio(String blendRatio) {
+    	this.blendRatio = blendRatio;
+    }
+    
+    public String getPattern() {
+    	return pattern;
+    }
+    
+    public void setPattern(String pattern) {
+    	this.pattern = pattern;
+    }
+    
+    public String getNote() {
+    	return note;
+    }
+    
+    public void setNote(String note) {
+    	this.note = note;
+    }
+
+    // 서버 -> 프론트로 데이터 보낼 때 (목록 불러오기)
+    @JsonGetter("designImageUrl")
+    public String getDesignImageUrl() {
+        return designImageUrl;
+    }
+
+    // 프론트 -> 서버로 데이터 받을 때 (저장하기)
+    @JsonSetter("designImageUrl")
+    public void setDesignImageUrl(String designImageUrl) {
+        this.designImageUrl = designImageUrl;
     }
     
     // 저장용 JSON 문자열 반환 (insert 시 사용)
