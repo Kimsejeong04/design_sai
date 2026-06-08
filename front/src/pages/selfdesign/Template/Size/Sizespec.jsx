@@ -134,7 +134,7 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize = () => {}, clothin
       if (row.key === "crotchLength") return { ...row, values: [crotchLength, ...row.values.slice(1)] };
       if (row.key === "hemOffset") return { ...row, values: [hemOffset, ...row.values.slice(1)] };
       return row;
-    });
+    }); 
     setRows(newRows);
   // ✨ 아래 괄호 안에도 바지 변수들을 싹 추가했습니다! ✨
   }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset, pantsLength, waistOffset, hipOffset, thighOffset, crotchLength, hemOffset]);
