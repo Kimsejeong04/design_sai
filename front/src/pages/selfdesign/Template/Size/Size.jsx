@@ -138,27 +138,37 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Fabric/Fabric.css";
 import Sizespec from "./Sizespec";
+import SizeBottom from "./SizeBottom"; 
+import SizeDress from "./SizeDress";
+import SizeSkirt from "./SizeSkirt";
 import Sizespecbutton from "./Sizespecbutton";
 import { Sidebar, BreadCrumb } from "../../../../components";
-import axios from "axios";  // Axios 임포트
+import axios from "axios";
+import SizeCoat from "./SizeCoat";
 
-const Size = ({ resetValues }) => {
+const Size = () => {
   const [selectedSize, setSelectedSize] = useState(null);
-  const [clothingName, setClothingName] = useState(""); 
-  const sizespecRef = useRef(null);
+  const [category, setCategory] = useState(null); // '상의', '바지' 등 카테고리 저장
+  
+  const [clothingName, setClothingName] = useState("");
   const navigate = useNavigate();
+  
+  // 하위 컴포넌트(Sizespec, SizeBottom)의 초기화 함수를 호출하기 위한 리모컨
+  const sizespecRef = useRef(null);
+  const sizeBottomRef = useRef(null);
+  const sizeDressRef = useRef(null);
+  const sizeSkirtRef = useRef(null);
+  const sizeCoatRef = useRef(null);
 
-  // 🌟 2. 페이지가 열릴 때 1단계에서 고른 옷 정보를 가져오기
   useEffect(() => {
     const storedClothing = localStorage.getItem("selectedClothing");
     if (storedClothing) {
       try {
         const clothing = JSON.parse(storedClothing);
-        // 고른 옷의 이름(예: '청바지', '슬랙스', '맨투맨')을 바구니에 담습니다.
-        // 데이터 구조에 따라 .name 또는 .label 등 이름이 다를 수 있으니 확인해 보세요!
-        setClothingName(clothing.name || clothing.label || ""); 
+        setCategory(clothing.category); // 예: "상의" 또는 "바지"
+        setClothingName(clothing.name || clothing.label || clothing.category || "");
       } catch (e) {
-        console.error("데이터 읽기 실패:", e);
+        console.error("selectedClothing 파싱 오류:", e);
       }
     }
   }, []);
@@ -166,15 +176,80 @@ const Size = ({ resetValues }) => {
   const handleSave = async () => {
     if (!selectedSize) {
       alert("사이즈를 선택하시오");
-    } else {
+      return;
+    }
+    try {
       sessionStorage.setItem("selectedSize", selectedSize);
-      try {
-        alert(`${selectedSize} 사이즈가 선택되었습니다.`);
-        navigate("/client/FinalConfirmation");
-      } catch (error) {
-        console.error("저장 실패:", error);
-        alert("저장에 실패했습니다.");
-      }
+      alert(`${selectedSize} 사이즈가 선택되었습니다.`);
+      navigate("/client/FinalConfirmation");
+    } catch (error) {
+      console.error("저장 실패:", error);
+      alert("저장에 실패했습니다.");
+    }
+  };
+
+  const renderSizeComponent = () => {
+    switch (category) {
+      case "상의": 
+        return (
+          <Sizespec 
+            ref={sizespecRef} // 초기화 리모컨 연결
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize} 
+            clothingType={clothingName}
+          />
+        );
+      case "바지":
+        return (
+          <SizeBottom
+            actionRef={sizeBottomRef} // 초기화 리모컨 연결
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+          />
+        );
+      case "아우터":
+        return (
+          <SizeCoat 
+            actionRef={sizeCoatRef} // 초기화 리모컨 연결
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            clothingType={clothingName} 
+          />
+        );
+      case "원피스":
+        return (
+          <SizeDress 
+            actionRef={sizeDressRef} 
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            clothingType={clothingName}
+            />
+        );
+      case "스커트":
+        return (
+          <SizeSkirt 
+            actionRef={sizeSkirtRef} 
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize} 
+            clothingType={clothingName}
+          />
+        );
+      default:
+        return <div>옷 종류를 선택해주세요. (현재 카테고리: {category})</div>;
+    }
+  };
+
+  const handleReset = () => {
+    if (category === "상의" && sizespecRef.current) {
+      sizespecRef.current.triggerReset();
+    } else if (category === "바지" && sizeBottomRef.current) {
+      sizeBottomRef.current.triggerReset();
+    }else if (category === "원피스" && sizeDressRef.current) {
+      sizeDressRef.current.triggerReset(); 
+    }else if (category === "스커트" && sizeSkirtRef.current) {
+      sizeSkirtRef.current.triggerReset(); 
+    }else if (category === "아우터" && sizeCoatRef.current) {
+      sizeCoatRef.current.triggerReset(); 
     }
   };
 
@@ -190,21 +265,12 @@ const Size = ({ resetValues }) => {
           <h3>3. 사이즈 스펙 입력</h3>
           <hr /><br /><br />
 
-          {/* 🌟 3. 자식인 Sizespec에게 clothingType이라는 이름으로 옷 이름을 던져줍니다! */}
-          <Sizespec 
-            ref={sizespecRef}
-            selectedSize={selectedSize} 
-            setSelectedSize={setSelectedSize} 
-            clothingType={clothingName} 
-          />
+          {/* 카테고리에 맞는 표와 캔버스 띄우기 */}
+          {renderSizeComponent()}
           
+          {/* 하단 공통 버튼 영역 */}
           <div className="footer button_size">
-            <Sizespecbutton label="초기화" onClick={() => {
-                if (sizespecRef.current) {
-                  sizespecRef.current.triggerReset(); 
-                }
-              }} 
-            />
+            <Sizespecbutton label="초기화" onClick={handleReset} />
             <Sizespecbutton label="이전" onClick={() => navigate(-1)} />
             <Sizespecbutton label="저장하기" onClick={handleSave} />
           </div>
