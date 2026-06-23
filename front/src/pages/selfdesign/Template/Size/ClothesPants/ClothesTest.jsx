@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import "./ClothesTest.css";
 
 export default function ClothesTest({
@@ -27,6 +27,17 @@ export default function ClothesTest({
 }) {
   const canvasRef = useRef(null);
   
+  const [shapeColor, setShapeColor] = useState('#87ceeb');
+  const [shapePattern, setShapePattern] = useState('무지');
+
+  useEffect(() => {
+    const storedColor = localStorage.getItem('fabricColor');
+    const storedPattern = localStorage.getItem('fabricPattern');
+    
+    if (storedColor) setShapeColor(storedColor);
+    if (storedPattern) setShapePattern(storedPattern);
+  }, []);
+
   const drawClothes = () => {  
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -129,8 +140,7 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-    applyPattern(ctx, canvas);
+    ctx.save(); ctx.fillStyle = shapeColor; ctx.fill(); ctx.restore(); ctx.stroke();    applyPattern(ctx, canvas);
     ctx.restore();
   };
 
@@ -196,8 +206,7 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-    applyPattern(ctx, canvas);
+    ctx.save(); ctx.fillStyle = shapeColor; ctx.fill(); ctx.restore(); ctx.stroke();    applyPattern(ctx, canvas);
     ctx.restore();
   };
 
@@ -254,7 +263,7 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save(); ctx.fillStyle = 'shapeColor'; ctx.fill(); ctx.restore(); ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(150 + offsetX, neckY + 51); 
@@ -276,7 +285,7 @@ export default function ClothesTest({
 
     const centerY = canvas.height / 2; 
     const currentCenterY = (100 + length) / 2; 
-    const offsetY = centerY - currentCenterY; 
+    const offsetY = centerY - currentCenterY + 13.5; 
 
     ctx.save(); 
     ctx.translate(0, offsetY);
@@ -291,7 +300,10 @@ export default function ClothesTest({
     ctx.lineTo(150 - hem + offsetX, length); 
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
+    ctx.fill(); 
+    ctx.stroke();
     applyPattern(ctx, canvas);
     ctx.restore();
   };
@@ -368,10 +380,11 @@ export default function ClothesTest({
     ctx.closePath();
 
     ctx.save(); 
-    ctx.fillStyle = '#87ceeb'; 
-    ctx.fill(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';    ctx.fill(); 
     ctx.restore(); 
     ctx.stroke();
+
+    applyPattern(ctx, canvas);
 
     const vNeckBottomY = neckY + 51;
 
@@ -380,7 +393,6 @@ export default function ClothesTest({
     ctx.lineTo(150 + offsetX, coatHemY + 4); 
     ctx.stroke();
 
-    applyPattern(ctx, canvas);
     ctx.restore();
   };
   
@@ -417,7 +429,7 @@ export default function ClothesTest({
 
     const centerY = canvas.height / 2;
     const currentCenterY = (50 + dressHemY) / 2;
-    const offsetY = centerY - currentCenterY;
+    const offsetY = centerY - currentCenterY - 9;
 
     ctx.save();
     ctx.translate(0, offsetY);
@@ -441,7 +453,11 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
+    
+    ctx.fill();
+    ctx.stroke();
     applyPattern(ctx, canvas);
     ctx.restore();
   };
@@ -462,7 +478,11 @@ export default function ClothesTest({
 
     const centerY = canvas.height / 2;
     const currentCenterY = (topY + bottomY) / 2;
-    const offsetY = centerY - currentCenterY;
+    //const offsetY = centerY - currentCenterY - 20;
+
+    const offsetY = isMini
+      ? centerY - currentCenterY - 20
+      : centerY - currentCenterY + 10;
 
     ctx.save();
     ctx.translate(0, offsetY);
@@ -500,10 +520,8 @@ export default function ClothesTest({
     ctx.closePath();
 
     ctx.save();
-    ctx.fillStyle = "#87ceeb";
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
     ctx.fill();
-    ctx.restore();
-
     ctx.stroke();
 
     applyPattern(ctx, canvas);
@@ -515,7 +533,7 @@ export default function ClothesTest({
   const drawShoes = (ctx, canvas, type) => {
     const centerX = canvas.width / 2;
     ctx.save();
-    ctx.fillStyle = '#87ceeb';
+    ctx.fillStyle = 'shapeColor';
 
     const drawShoe = (x, isHighTop) => {
       ctx.beginPath();
@@ -538,7 +556,7 @@ export default function ClothesTest({
   const drawBag = (ctx, canvas, type) => {
     const centerX = canvas.width / 2;
     ctx.save();
-    ctx.fillStyle = '#87ceeb';
+    ctx.fillStyle = 'shapeColor';
 
     if (type.includes('백팩')) {
       ctx.beginPath();
@@ -565,18 +583,59 @@ export default function ClothesTest({
   };
 
   const applyPattern = (ctx, canvas) => {
+    if (!shapePattern || shapePattern === '무지') return; 
+
     ctx.save();
-    ctx.clip();
-    const dotSpacing = 20;
-    const dotRadius = 3;
-    ctx.fillStyle = 'black';
-    for (let y = 0; y < canvas.height; y += dotSpacing) {
-      for (let x = 0; x < canvas.width; x += dotSpacing) {
+    ctx.clip(); 
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+    
+    const startX = -canvas.width;
+    const endX = canvas.width * 2;
+    const startY = -canvas.height;
+    const endY = canvas.height * 2;
+
+    if (shapePattern === '도트') {
+      const dotSpacing = 20;
+      const dotRadius = 3;
+      for (let y = startY; y < endY; y += dotSpacing) {
+        for (let x = startX; x < endX; x += dotSpacing) {
+          ctx.beginPath();
+          ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    } 
+    else if (shapePattern === '스트라이프') {
+      const stripeSpacing = 15;
+      ctx.lineWidth = 2;
+      for (let x = startX; x < endX; x += stripeSpacing) {
         ctx.beginPath();
-        ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+      }
+    } 
+    else if (shapePattern === '체크') {
+      const checkSpacing = 20;
+      ctx.lineWidth = 1.5;
+      // 세로줄
+      for (let x = startX; x < endX; x += checkSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+      }
+      // 가로줄
+      for (let y = startY; y < endY; y += checkSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(startX, y);
+        ctx.lineTo(endX, y);
+        ctx.stroke();
       }
     }
+
     ctx.restore();
   };
 
@@ -586,7 +645,7 @@ export default function ClothesTest({
     clothingType, 
     neckY, neckXOffset, shoulderOffset, chestOffset, bodyLength, armLengthFactor, topBodyHeight, lowerWidthOffset,
     pantsLength, waistOffset, hipOffset, thighOffset, hemOffset, crotchLength,
-    waistWidth
+    waistWidth, shapeColor, shapePattern,
   ]);
   
   const handleInputChange = (setter, min, max) => (e) => {
@@ -755,12 +814,6 @@ export default function ClothesTest({
                   <input type="range" min={82} max={106} step={0.25} value={chestOffset} onChange={(e) => setChestOffset(Number(e.target.value))} style={{ width: '80%' }} />
                   <input type="number" min={82} max={105} step={0.25} value={chestOffset} onChange={handleInputChange(setChestOffset, 0, 30)} style={{ width: 70, marginLeft: 10 }} />
                 </div>
-
-                {/* <div style={{ marginTop: '1rem' }}>
-                  <h4>허리 단면</h4>
-                  <input type="range" min={60} max={90} step={0.25} value={waistWidth} onChange={(e) => setWaistWidth(Number(e.target.value))} style={{ width: '80%' }} />
-                  <input type="number" min={60} max={90} step={0.25} value={waistWidth} onChange={handleInputChange(setWaistWidth, 50, 150)} style={{ width: 70, marginLeft: 10 }} />
-                </div> */}
 
                 <div style={{ marginTop: '1rem' }}>
                   <h4>총 기장</h4>

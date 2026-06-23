@@ -259,6 +259,21 @@ const Fabric = () => {
     });
   };
 
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      const mainFabricId = selectedItems[0].id;
+      const mainColor = selectedColors[mainFabricId];
+      const mainPattern = selectedPatterns[mainFabricId]?.name || "무지";
+
+      if (mainColor) localStorage.setItem("fabricColor", mainColor);
+      localStorage.setItem("fabricPattern", mainPattern);
+    } else {
+      // 아무것도 안 골랐을 때의 기본값
+      localStorage.setItem("fabricColor", "#87ceeb");
+      localStorage.setItem("fabricPattern", "무지");
+    }
+  }, [selectedItems, selectedColors, selectedPatterns]);
+
   return (
     <div className="clothes-container">
       <div className="layout1">
