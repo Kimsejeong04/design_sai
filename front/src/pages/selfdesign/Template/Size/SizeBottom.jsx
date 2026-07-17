@@ -125,17 +125,18 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
 
   return (
     <div style={{justifyContent : "center"}} className="table-container2">
-      
-      <ClothesTest
-        clothingType="바지"
-        pantsLength={pantsLength} setPantsLength={setPantsLength}
-        waistOffset={waistOffset} setWaistOffset={setWaistOffset}
-        hipOffset={hipOffset} setHipOffset={setHipOffset}
-        thighOffset={thighOffset} setThighOffset={setThighOffset}
-        crotchLength={crotchLength} setCrotchLength={setCrotchLength}
-        hemOffset={hemOffset} setHemOffset={setHemOffset}
-        resetValues={resetValues}
-      />
+      <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
+        <ClothesTest
+          clothingType="바지"
+          pantsLength={pantsLength} setPantsLength={setPantsLength}
+          waistOffset={waistOffset} setWaistOffset={setWaistOffset}
+          hipOffset={hipOffset} setHipOffset={setHipOffset}
+          thighOffset={thighOffset} setThighOffset={setThighOffset}
+          crotchLength={crotchLength} setCrotchLength={setCrotchLength}
+          hemOffset={hemOffset} setHemOffset={setHemOffset}
+          resetValues={resetValues}
+        />
+      </div>
 
       <div className="size-right-section">
         <table className="sizespec-table">

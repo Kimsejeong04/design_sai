@@ -86,16 +86,18 @@ function SizeSkirt({ selectedSize, setSelectedSize, actionRef, clothingType}) {
 
   return (
     <div style={{justifyContent: "center"}} className="table-container2">
-      <ClothesTest
-        clothingType={clothingType || "스커트"}
-        bodyLength={bodyLength}
-        setBodyLength={setBodyLength}
-        waistOffset={waistOffset}
-        setWaistOffset={setWaistOffset}
-        lowerWidthOffset={lowerWidthOffset}
-        setLowerWidthOffset={setLowerWidthOffset}
-        resetValues={resetValues}
-       />
+      <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
+        <ClothesTest
+          clothingType={clothingType || "스커트"}
+          bodyLength={bodyLength}
+          setBodyLength={setBodyLength}
+          waistOffset={waistOffset}
+          setWaistOffset={setWaistOffset}
+          lowerWidthOffset={lowerWidthOffset}
+          setLowerWidthOffset={setLowerWidthOffset}
+          resetValues={resetValues}
+        />
+      </div>
 
       <div className="size-right-section">
         <table className="sizespec-table">

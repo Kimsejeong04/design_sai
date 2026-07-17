@@ -135,19 +135,20 @@ function SizeCoat({ selectedSize, setSelectedSize, actionRef, clothingType }) {
 
   return (
     <div style={{justifyContent : "center"}} className="table-container2">
-      
-      <ClothesTest
-        clothingType={clothingType || "아우터"}
-        bodyLength={bodyLength} setBodyLength={setBodyLength}
-        shoulderOffset={shoulderOffset} setShoulderOffset={setShoulderOffset}
-        chestOffset={chestOffset} setChestOffset={setChestOffset}
-        lowerWidthOffset={lowerWidthOffset} setLowerWidthOffset={setLowerWidthOffset}
-        armLengthFactor={armLengthFactor} setArmLengthFactor={setArmLengthFactor}
-        topBodyHeight={topBodyHeight} setTopBodyHeight={setTopBodyHeight}
-        neckY={neckY} setNeckY={setNeckY}
-        neckXOffset={neckXOffset} setNeckXOffset={setNeckXOffset}
-        resetValues={resetValues}
-      />
+      <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
+        <ClothesTest
+          clothingType={clothingType || "아우터"}
+          bodyLength={bodyLength} setBodyLength={setBodyLength}
+          shoulderOffset={shoulderOffset} setShoulderOffset={setShoulderOffset}
+          chestOffset={chestOffset} setChestOffset={setChestOffset}
+          lowerWidthOffset={lowerWidthOffset} setLowerWidthOffset={setLowerWidthOffset}
+          armLengthFactor={armLengthFactor} setArmLengthFactor={setArmLengthFactor}
+          topBodyHeight={topBodyHeight} setTopBodyHeight={setTopBodyHeight}
+          neckY={neckY} setNeckY={setNeckY}
+          neckXOffset={neckXOffset} setNeckXOffset={setNeckXOffset}
+          resetValues={resetValues}
+        />
+      </div>
 
       <div className="size-right-section">
         <table className="sizespec-table">

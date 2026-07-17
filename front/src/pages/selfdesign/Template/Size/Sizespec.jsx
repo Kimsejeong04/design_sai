@@ -150,19 +150,21 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
 
   return (
     <div className="table-container">
-      <ClothesTest
-        clothingType={clothingType}
-        neckY={neckY} setNeckY={setNeckY}
-        neckXOffset={neckXOffset} setNeckXOffset={setNeckXOffset}
-        shoulderOffset={shoulderOffset} setShoulderOffset={setShoulderOffset}
-        chestOffset={chestOffset} setChestOffset={setChestOffset}
-        bodyLength={bodyLength} setBodyLength={setBodyLength}
-        armLengthFactor={armLengthFactor} setArmLengthFactor={setArmLengthFactor}
-        upperWidthOffset={upperWidthOffset} setUpperWidthOffset={setUpperWidthOffset}
-        lowerWidthOffset={lowerWidthOffset} setLowerWidthOffset={setLowerWidthOffset}
-        topBodyHeight={topBodyHeight} setTopBodyHeight={setTopBodyHeight}
-        resetValues={resetValues}
-      />
+      <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
+        <ClothesTest
+          clothingType={clothingType}
+          neckY={neckY} setNeckY={setNeckY}
+          neckXOffset={neckXOffset} setNeckXOffset={setNeckXOffset}
+          shoulderOffset={shoulderOffset} setShoulderOffset={setShoulderOffset}
+          chestOffset={chestOffset} setChestOffset={setChestOffset}
+          bodyLength={bodyLength} setBodyLength={setBodyLength}
+          armLengthFactor={armLengthFactor} setArmLengthFactor={setArmLengthFactor}
+          upperWidthOffset={upperWidthOffset} setUpperWidthOffset={setUpperWidthOffset}
+          lowerWidthOffset={lowerWidthOffset} setLowerWidthOffset={setLowerWidthOffset}
+          topBodyHeight={topBodyHeight} setTopBodyHeight={setTopBodyHeight}
+          resetValues={resetValues}
+        />
+      </div>
 
       <table className="sizespec-table">
         <thead>

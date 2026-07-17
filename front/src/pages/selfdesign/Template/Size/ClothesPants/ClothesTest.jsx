@@ -286,7 +286,7 @@ export default function ClothesTest({
     const centerY = canvas.height / 2; 
     const currentCenterY = (100 + length) / 2; 
     const offsetY = centerY - currentCenterY + 13.5; 
-
+    //const offsetY = 50;
     ctx.save(); 
     ctx.translate(0, offsetY);
 
@@ -305,6 +305,7 @@ export default function ClothesTest({
     ctx.fill(); 
     ctx.stroke();
     applyPattern(ctx, canvas);
+    ctx.restore();
     ctx.restore();
   };
     
@@ -460,6 +461,7 @@ export default function ClothesTest({
     ctx.stroke();
     applyPattern(ctx, canvas);
     ctx.restore();
+    ctx.restore();
   };
 
 
@@ -526,6 +528,7 @@ export default function ClothesTest({
 
     applyPattern(ctx, canvas);
 
+    ctx.restore();
     ctx.restore();
   };
 
