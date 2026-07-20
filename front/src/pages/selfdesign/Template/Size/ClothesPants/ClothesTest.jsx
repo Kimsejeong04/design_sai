@@ -1,19 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import "./ClothesTest.css";
 
 export default function ClothesTest({
-  clothingType, //5.4 추가
+  clothingType, 
   neckY, setNeckY,
   neckXOffset, setNeckXOffset,
   shoulderOffset, setShoulderOffset,
   chestOffset, setChestOffset,
   bodyLength, setBodyLength,
-  armLengthFactor,setArmLengthFactor,
+  armLengthFactor, setArmLengthFactor,
   upperWidthOffset, 
   lowerWidthOffset, setLowerWidthOffset,
   topBodyHeight, setTopBodyHeight,
+
+  waistWidth, setWaistWidth,
+  
   resetValues,
-  isPreview = false, // FinalConfirmation에서 호출될 때 입력 컨트롤 숨기기
+  isPreview = false, 
   
   pantsLength, setPantsLength,
   waistOffset, setWaistOffset,
@@ -24,27 +27,36 @@ export default function ClothesTest({
 }) {
   const canvasRef = useRef(null);
   
-  const drawClothes = () => {  // 5.4 추가
-  const canvas = canvasRef.current;
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // 캔버스 초기화
-  
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 3;
+  const [shapeColor, setShapeColor] = useState('#87ceeb');
+  const [shapePattern, setShapePattern] = useState('무지');
 
-  // 선택된 옷 종류에 따라 다른 그리기 함수 호출
-  const safeType = clothingType || "";
-  //console.log("1단계에서 넘어온 옷 이름:", safeType);
+  useEffect(() => {
+    const storedColor = localStorage.getItem('fabricColor');
+    const storedPattern = localStorage.getItem('fabricPattern');
+    
+    if (storedColor) setShapeColor(storedColor);
+    if (storedPattern) setShapePattern(storedPattern);
+  }, []);
 
-  if (safeType.includes('바지') || safeType.includes('팬츠') || safeType.includes('슬랙스')) { 
+  const drawClothes = () => {  
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 3;
+
+    const safeType = typeof clothingType === 'string' ? clothingType : String(clothingType || "");
+
+    if (safeType.includes('바지') || safeType.includes('팬츠') || safeType.includes('슬랙스')) { 
       drawPants(ctx, canvas);
     } else if (safeType.includes('반팔') || safeType.includes('반바지') || safeType.includes('티셔츠')) {
       drawShortSleeve(ctx, canvas);
-      } else if (safeType.includes('집업') || safeType.includes('자켓')) {
-      drawShortCoat(ctx, canvas);
+    } else if (safeType.includes('자켓')) {
+      drawCoat(ctx, canvas, true); 
     } else if (safeType.includes('코트')) {
-      drawCoat(ctx, canvas);
+      drawCoat(ctx, canvas, false);
     } else if (safeType.includes('원피스')) {
       drawDress(ctx, canvas, safeType.includes('미니'));
     } else if (safeType.includes('스커트') || safeType.includes('치마')) {
@@ -57,71 +69,53 @@ export default function ClothesTest({
       drawLongSleeve(ctx, canvas); 
     }
 
-  if (!isPreview) {
-    const imageData = canvas.toDataURL('image/png');
-    try {
-      localStorage.setItem('shirtCanvasImage', imageData);
-    } catch (e) {
-      console.error('localStorage 저장 오류:', e);
+    if (!isPreview) {
+      const imageData = canvas.toDataURL('image/png');
+      try {
+        localStorage.setItem('shirtCanvasImage', imageData);
+      } catch (e) {
+        console.error('localStorage 저장 오류:', e);
+      }
     }
-  }
-};
-
-
+  };
 
   const drawLongSleeve = (ctx, canvas) => {
-
-    const centerX = canvas.width / 2;  // 캔버스 가로 중앙 250 중앙에 오도록 배치 하는거
-    const currentCenterX = (100 + 200) / 2;  // 원래 중심 셔츠 중심(150) 
-    const offsetX = centerX - currentCenterX;  // ->100 픽셀 이동
-
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (40 + bodyLength + 210) / 2; // 긴팔 상의의 세로 중앙 (목 파임 40 ~ 밑단 130)
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+    const centerX = canvas.width / 2;  
+    const currentCenterX = (100 + 200) / 2;  
+    const offsetX = centerX - currentCenterX;  
+    const centerY = canvas.height / 2; 
+    const currentCenterY = (40 + bodyLength + 210) / 2; 
+    const offsetY = centerY - currentCenterY; 
 
     ctx.save(); 
     ctx.translate(0, offsetY);
     
     const neckLeftX = 100 - shoulderOffset+ 38 - upperWidthOffset + offsetX;
-    
-    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; //x 가 커지고 y가 작아져야 대각선으로 줄어듬 
-
+    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; 
     const sleeveLeftBase = { x: 60 + offsetX, y: 20 };
     const sleeveRightBase = { x: 240 + offsetX, y: 20 };
 
-    const midLeftShoulder = {
-      x: (neckLeftX + shoulderLeftBase.x) / 2,
-      y: (50 + shoulderLeftBase.y) / 2,
-    };
-
-    // Normalize armLengthFactor to range [0, 1] to reduce growth rate
+    const midLeftShoulder = { x: (neckLeftX + shoulderLeftBase.x) / 2, y: (50 + shoulderLeftBase.y) / 2 };
     const interpFactor = Math.min(armLengthFactor / 7, 5) ;
 
     const leftShoulder = {
       x: shoulderLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor ),
       y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor ),
     };
-
     const leftSleeve = {
       x: sleeveLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor) ,
       y: sleeveLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor) ,
     };
 
     const neckRightX = 200 + shoulderOffset-38 + upperWidthOffset + offsetX;
+    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; 
     
-    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; //x 가 작아지고 y도 작아져야 대각선으로 줄어듬
-    
-
-    const midRightShoulder = {
-      x: (neckRightX + shoulderRightBase.x) / 2,
-      y: (50 + shoulderRightBase.y) / 2,
-    };
+    const midRightShoulder = { x: (neckRightX + shoulderRightBase.x) / 2, y: (50 + shoulderRightBase.y) / 2 };
 
     const rightShoulder = {
       x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor ) ,
       y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor )  ,
     };
-
     const rightSleeve = {
       x: sleeveRightBase.x * interpFactor+ midRightShoulder.x * (1 - interpFactor),
       y: sleeveRightBase.y * interpFactor+ midRightShoulder.y * (1 - interpFactor),
@@ -146,22 +140,17 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-
-    applyPattern(ctx, canvas);
+    ctx.save(); ctx.fillStyle = shapeColor; ctx.fill(); ctx.restore(); ctx.stroke();    applyPattern(ctx, canvas);
     ctx.restore();
   };
-
 
   const drawShortSleeve = (ctx, canvas) => {
     const centerX = canvas.width / 2;
     const currentCenterX = (100 + 200) / 2;
     const offsetX = centerX - currentCenterX;
-
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (40 + bodyLength + 210) / 2; // 긴팔 상의의 세로 중앙 (목 파임 40 ~ 밑단 130)
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+    const centerY = canvas.height / 2; 
+    const currentCenterY = (40 + bodyLength + 210) / 2; 
+    const offsetY = centerY - currentCenterY; 
 
     ctx.save(); 
     ctx.translate(0, offsetY);
@@ -172,18 +161,13 @@ export default function ClothesTest({
     const sleeveLeftBase = { x: 60 + offsetX, y: 20 };
     const sleeveRightBase = { x: 240 + offsetX, y: 20 };
 
-    const midLeftShoulder = {
-      x: (neckLeftX + shoulderLeftBase.x) / 2,
-      y: (50 + shoulderLeftBase.y) / 2,
-    };
-
+    const midLeftShoulder = { x: (neckLeftX + shoulderLeftBase.x) / 2, y: (50 + shoulderLeftBase.y) / 2 };
     const interpFactor = Math.min(armLengthFactor / 7, 5) * 0.12;
 
     const leftShoulder = {
       x: shoulderLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor),
       y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor),
     };
-
     const leftSleeve = {
       x: sleeveLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor),
       y: sleeveLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor),
@@ -192,16 +176,12 @@ export default function ClothesTest({
     const neckRightX = 200 + shoulderOffset - 38 + upperWidthOffset + offsetX;
     const shoulderRightBase = { x: 250 + offsetX, y: 110 };
 
-    const midRightShoulder = {
-      x: (neckRightX + shoulderRightBase.x) / 2,
-      y: (50 + shoulderRightBase.y) / 2,
-    };
+    const midRightShoulder = { x: (neckRightX + shoulderRightBase.x) / 2, y: (50 + shoulderRightBase.y) / 2 };
 
     const rightShoulder = {
       x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor),
       y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor),
     };
-
     const rightSleeve = {
       x: sleeveRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor),
       y: sleeveRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor),
@@ -226,39 +206,28 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-
-    applyPattern(ctx, canvas);
+    ctx.save(); ctx.fillStyle = shapeColor; ctx.fill(); ctx.restore(); ctx.stroke();    applyPattern(ctx, canvas);
     ctx.restore();
   };
 
   const drawShortCoat = (ctx, canvas) => {
-
-    const centerX = canvas.width / 2;  // 캔버스 가로 중앙 250 중앙에 오도록 배치 하는거
-    const currentCenterX = (100 + 200) / 2;  // 원래 중심 셔츠 중심(150) 
-    const offsetX = centerX - currentCenterX;  // ->100 픽셀 이동
-
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (40 + bodyLength + 210) / 2; // 긴팔 상의의 세로 중앙 (목 파임 40 ~ 밑단 130)
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+    const centerX = canvas.width / 2;  
+    const currentCenterX = (100 + 200) / 2;  
+    const offsetX = centerX - currentCenterX;  
+    const centerY = canvas.height / 2; 
+    const currentCenterY = (40 + bodyLength + 210) / 2; 
+    const offsetY = centerY - currentCenterY; 
 
     ctx.save(); 
     ctx.translate(0, offsetY);
     
     const neckLeftX = 100 - shoulderOffset+ 38 - upperWidthOffset + offsetX;
-    
-    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; //x 가 커지고 y가 작아져야 대각선으로 줄어듬 
+    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; 
 
     const sleeveLeftBase = { x: 60 + offsetX, y: 20 };
     const sleeveRightBase = { x: 240 + offsetX, y: 20 };
 
-    const midLeftShoulder = {
-      x: (neckLeftX + shoulderLeftBase.x) / 2,
-      y: (50 + shoulderLeftBase.y) / 2,
-    };
-
-    // Normalize armLengthFactor to range [0, 1] to reduce growth rate
+    const midLeftShoulder = { x: (neckLeftX + shoulderLeftBase.x) / 2, y: (50 + shoulderLeftBase.y) / 2 };
     const interpFactor = Math.min(armLengthFactor / 7, 5) ;
 
     const leftShoulder = {
@@ -266,29 +235,13 @@ export default function ClothesTest({
       y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor ),
     };
 
-    const leftSleeve = {
-      x: sleeveLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor) ,
-      y: sleeveLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor) ,
-    };
-
     const neckRightX = 200 + shoulderOffset-38 + upperWidthOffset + offsetX;
-    
-    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; //x 가 작아지고 y도 작아져야 대각선으로 줄어듬
-    
-
-    const midRightShoulder = {
-      x: (neckRightX + shoulderRightBase.x) / 2,
-      y: (50 + shoulderRightBase.y) / 2,
-    };
+    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; 
+    const midRightShoulder = { x: (neckRightX + shoulderRightBase.x) / 2, y: (50 + shoulderRightBase.y) / 2 };
 
     const rightShoulder = {
       x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor ) ,
       y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor )  ,
-    };
-
-    const rightSleeve = {
-      x: sleeveRightBase.x * interpFactor+ midRightShoulder.x * (1 - interpFactor),
-      y: sleeveRightBase.y * interpFactor+ midRightShoulder.y * (1 - interpFactor),
     };
 
     ctx.beginPath();
@@ -310,11 +263,10 @@ export default function ClothesTest({
     ctx.lineTo(neckLeftX, 50);
 
     ctx.closePath();
-
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save(); ctx.fillStyle = 'shapeColor'; ctx.fill(); ctx.restore(); ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(150 + offsetX, neckY + 51); // 목 한가운데서 시작
+    ctx.moveTo(150 + offsetX, neckY + 51); 
     ctx.lineTo(150 + offsetX, centerY + 22);   
     ctx.stroke();
 
@@ -322,283 +274,309 @@ export default function ClothesTest({
     ctx.restore();
   };
 
-  // 5.4 추가
   const drawPants = (ctx, canvas) => {
     const centerX = canvas.width / 2;
     const offsetX = centerX - 150;
 
-    // 슬라이더 값을 바지 비율에 맞게 변형
-    const waist = chestOffset * 0.8; // 가슴단면 슬라이더 -> 허리로 사용
-    const hem = lowerWidthOffset * 0.7; // 밑단 슬라이더 -> 바지 밑단으로 사용
-    const length = bodyLength * 2.5 + 100; // 총기장 슬라이더 -> 바지 기장
-    const crotchY = topBodyHeight * 2 + 100; // 암홀 슬라이더 -> 밑위(가랑이) 길이
+    const waist = (waistOffset || 35) * 1.8; 
+    const hem = (hemOffset || 20) * 3; 
+    const length = (pantsLength || 95) * 2.8; 
+    const crotchY = (crotchLength || 25) * 5 + 20;
 
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (100 + length) / 2; // 바지의 세로 중앙
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
-
+    const centerY = canvas.height / 2; 
+    const currentCenterY = (100 + length) / 2; 
+    const offsetY = centerY - currentCenterY + 13.5; 
+    //const offsetY = 50;
     ctx.save(); 
     ctx.translate(0, offsetY);
 
     ctx.beginPath();
-    ctx.moveTo(165 - waist + offsetX, 50); // 왼쪽 허리
-    ctx.lineTo(135 + waist + offsetX, 50); // 오른쪽 허리
-    ctx.lineTo(150 + hem + offsetX, length); // 오른쪽 바깥 밑단
-    ctx.lineTo(150 + hem - 40 + offsetX, length); // 오른쪽 안쪽 밑단
-    ctx.lineTo(150 + offsetX, crotchY); // 사타구니 (가랑이)
-    ctx.lineTo(150 - hem + 40 + offsetX, length); // 왼쪽 안쪽 밑단
-    ctx.lineTo(150 - hem + offsetX, length); // 왼쪽 바깥 밑단
+    ctx.moveTo(165 - waist + offsetX, 50); 
+    ctx.lineTo(135 + waist + offsetX, 50); 
+    ctx.lineTo(150 + hem + offsetX, length); 
+    ctx.lineTo(150 + hem - 40 + offsetX, length); 
+    ctx.lineTo(150 + offsetX, crotchY); 
+    ctx.lineTo(150 - hem + 40 + offsetX, length); 
+    ctx.lineTo(150 - hem + offsetX, length); 
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-
+    ctx.save(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
+    ctx.fill(); 
+    ctx.stroke();
     applyPattern(ctx, canvas);
+    ctx.restore();
     ctx.restore();
   };
     
-  
-  const drawCoat = (ctx, canvas) => {
+  const drawCoat = (ctx, canvas, isJacket) => {
     const centerX = canvas.width / 2;  
     const currentCenterX = (100 + 200) / 2;  
     const offsetX = centerX - currentCenterX;  
 
-    const coatHemY = bodyLength + 220; 
+    // 1. 세로(Y) 축 좌표 계산
+    const coatHemY = isJacket ? bodyLength + 100 : bodyLength + 220; // 밑단
+    const armpitY = 50 + topBodyHeight + 30; // 겨드랑이
+    const shoulderY = 75; 
+
+    // 캔버스 중앙 정렬용
     const centerY = canvas.height / 2; 
     const currentCenterY = (40 + coatHemY) / 2; 
     const offsetY = centerY - currentCenterY;
+    
     ctx.save(); 
     ctx.translate(0, offsetY); 
 
+    // 2. 가로(X) 축 좌표 계산
+    const neckLeftX = 95 - shoulderOffset + 38 + offsetX;
+    const neckRightX = 205 + shoulderOffset - 38 + offsetX;
 
-    const neckLeftX = 100 - shoulderOffset + 38 - upperWidthOffset + offsetX;
-    const shoulderLeftBase = { x: 50 + offsetX, y: 110 }; 
-    const sleeveLeftBase = { x: 60 + offsetX, y: 20 };
-    const sleeveRightBase = { x: 240 + offsetX, y: 20 };
+    const shoulderLeftX = neckLeftX - 28; 
+    const shoulderRightX = neckRightX + 28;
 
-    const midLeftShoulder = {
-      x: (neckLeftX + shoulderLeftBase.x) / 2,
-      y: (50 + shoulderLeftBase.y) / 2,
-    };
+    const chestLeftX = 110 - chestOffset + 86 + offsetX;
+    const chestRightX = 190 + chestOffset - 86 + offsetX;
 
-    const interpFactor = Math.min(armLengthFactor / 7, 5); // 긴 소매 유지!
+    const hemLeftX = isJacket ? 117 - lowerWidthOffset + 90 + offsetX : 95 - lowerWidthOffset + 95 + offsetX;
+    const hemRightX = isJacket ? 183 + lowerWidthOffset - 90 + offsetX : 205 + lowerWidthOffset - 95 + offsetX;
+    
+    //const hemLeftX = 95 - lowerWidthOffset + 95 + offsetX;
+    //const hemRightX = 205 + lowerWidthOffset - 95 + offsetX;
 
-    const leftShoulder = {
-      x: shoulderLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor),
-      y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor),
-    };
-    const leftSleeve = {
-      x: sleeveLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor),
-      y: sleeveLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor),
-    };
+    // 3. 소매 좌표 계산 
+    const sleeveLength = armLengthFactor * 7; 
+    const wristWidth = 30;  
 
-    const neckRightX = 200 + shoulderOffset - 38 + upperWidthOffset + offsetX;
-    const shoulderRightBase = { x: 250 + offsetX, y: 110 }; 
-    const midRightShoulder = {
-      x: (neckRightX + shoulderRightBase.x) / 2,
-      y: (50 + shoulderRightBase.y) / 2,
-    };
+    const sleeveLeftX = shoulderLeftX - 25;
+    const sleeveLeftY = shoulderY + sleeveLength;
 
-    const rightShoulder = {
-      x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor),
-      y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor),
-    };
-    const rightSleeve = {
-      x: sleeveRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor),
-      y: sleeveRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor),
-    };
+    const sleeveRightX = shoulderRightX + 25;
+    const sleeveRightY = shoulderY + sleeveLength;
 
-    // 코트 몸통 그리기
+    // 4. 코트 외곽선 그리기
     ctx.beginPath();
-    ctx.moveTo(neckLeftX, 50); 
-    ctx.lineTo(leftShoulder.x, leftShoulder.y);
-    ctx.lineTo(leftShoulder.x + 20, leftShoulder.y + 15);
     
-    // 겨드랑이 라인
-    ctx.lineTo(100 - chestOffset + 82 + offsetX, 50 + topBodyHeight + 30);
-    // 밑단 (coatHemY 사용해서 길게)
-    ctx.lineTo(85 - lowerWidthOffset + 90 + offsetX, coatHemY);
-    ctx.lineTo(215 + lowerWidthOffset - 90 + offsetX, coatHemY);
-    
-    ctx.lineTo(200 + chestOffset - 82 + offsetX, 50 + topBodyHeight + 30);
-    ctx.lineTo(rightShoulder.x - 20, rightShoulder.y + 15);
-    ctx.lineTo(rightShoulder.x, rightShoulder.y);
+    // --- 왼쪽 ---
+    ctx.moveTo(neckLeftX, 50);
+    ctx.lineTo(shoulderLeftX, shoulderY); 
+    ctx.lineTo(sleeveLeftX, sleeveLeftY); // 손목 바깥
+    ctx.lineTo(sleeveLeftX + wristWidth, sleeveLeftY); // 손목 안쪽
+    ctx.lineTo(chestLeftX, armpitY); // 겨드랑이
+
+    // --- 몸통 ---
+    ctx.lineTo(hemLeftX, coatHemY + 5); // 왼쪽 밑단
+    ctx.lineTo(hemRightX, coatHemY + 5); // 오른쪽 밑단
+
+    // --- 오른쪽 ---
+    ctx.lineTo(chestRightX, armpitY); // 겨드랑이
+    ctx.lineTo(sleeveRightX - wristWidth, sleeveRightY); // 손목 안쪽
+    ctx.lineTo(sleeveRightX, sleeveRightY); // 손목 바깥
+    ctx.lineTo(shoulderRightX, shoulderY); 
     ctx.lineTo(neckRightX, 50);
+
+    // --- 목 파임(뒷목) ---
     ctx.lineTo(170 + neckXOffset - 20 + offsetX + 20, 40);
     ctx.quadraticCurveTo(150 + offsetX, neckY + 82, 130 - neckXOffset + offsetX, 40);
     ctx.lineTo(neckLeftX, 50);
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
-
-    // 코트 한가운데 지퍼(절개선) 그리기
-    ctx.beginPath();
-    ctx.moveTo(150 + offsetX, neckY + 51); // 목 한가운데서 시작
-    ctx.lineTo(150 + offsetX, coatHemY);   
+    ctx.save(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';    ctx.fill(); 
+    ctx.restore(); 
     ctx.stroke();
 
     applyPattern(ctx, canvas);
+
+    const vNeckBottomY = neckY + 51;
+
+    ctx.beginPath();
+    ctx.moveTo(150 + offsetX, vNeckBottomY); 
+    ctx.lineTo(150 + offsetX, coatHemY + 4); 
+    ctx.stroke();
+
     ctx.restore();
   };
   
-
   const drawDress = (ctx, canvas, isMini) => {
     const centerX = canvas.width / 2;
-    const currentCenterX = (100 + 200) / 2;
-    const offsetX = centerX - currentCenterX;
+    const offsetX = centerX - 150;
 
-    const neckLeftX = 100 - shoulderOffset + 38 - upperWidthOffset + offsetX;
-    const shoulderLeftBase = { x: 50 + offsetX, y: 110 };
-    const midLeftShoulder = { x: (neckLeftX + shoulderLeftBase.x) / 2, y: (50 + shoulderLeftBase.y) / 2 };
-    
-    const interpFactor = 0.15; 
-
-    const leftShoulder = {
-      x: shoulderLeftBase.x * interpFactor + midLeftShoulder.x * (1 - interpFactor),
-      y: shoulderLeftBase.y * interpFactor + midLeftShoulder.y * (1 - interpFactor),
-    };
-
-    const neckRightX = 200 + shoulderOffset - 38 + upperWidthOffset + offsetX;
-    const shoulderRightBase = { x: 250 + offsetX, y: 110 };
-    const midRightShoulder = { x: (neckRightX + shoulderRightBase.x) / 2, y: (50 + shoulderRightBase.y) / 2 };
-
-    const rightShoulder = {
-      x: shoulderRightBase.x * interpFactor + midRightShoulder.x * (1 - interpFactor),
-      y: shoulderRightBase.y * interpFactor + midRightShoulder.y * (1 - interpFactor),
-    };
-
-    // 가슴, 허리, 밑단 계산
+    const neckLeftX = 100 - shoulderOffset + 38 - (upperWidthOffset || 0) + offsetX;
+    const neckRightX = 200 + shoulderOffset - 38 + (upperWidthOffset || 0) + offsetX;
     const chestLeft = 100 - chestOffset + 82 + offsetX;
     const chestRight = 200 + chestOffset - 82 + offsetX;
-    const armpitY = 50 + topBodyHeight + 30; // 겨드랑이 높이
-    
-    const waistY = armpitY + 40; 
-    const waistLeft = chestLeft + 15;  
-    const waistRight = chestRight - 15;
+    const armpitY = 50 + topBodyHeight + 30;
 
-    // 미니 원피스면 짧게, 롱이면 길게
-    const dressHemY = isMini ? bodyLength + 150 : bodyLength + 203; 
-    const hemLeft = 100 - lowerWidthOffset + 60 + offsetX; // 밑단은 넓게 쫙 펴지게
-    const hemRight = 200 + lowerWidthOffset - 60 + offsetX;
+    const shoulderLeftX = neckLeftX - 12; 
+    const shoulderRightX = neckRightX + 12;
+    const shoulderY = 75;
 
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (50 + dressHemY) / 2; // 원피스의 세로 중앙 (목 파임 50 ~ 밑단 dressHemY)
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+    const sleeveLeftX = shoulderLeftX - 8 - (armLengthFactor * 0.3); 
+    const sleeveLeftY = shoulderY + 12 + (armLengthFactor * 0.4); 
 
-    ctx.save(); 
+    const sleeveRightX = shoulderRightX + 8 + (armLengthFactor * 0.3);
+    const sleeveRightY = shoulderY + 12 + (armLengthFactor * 0.4);
+
+    const currentWaist = waistWidth || 74;
+    const waistY = armpitY + (bodyLength * 0.45);
+    const waistDistance = currentWaist * 0.65;
+    const waistLeft = 150 - waistDistance + offsetX;
+    const waistRight = 150 + waistDistance + offsetX;
+
+    const dressHemY = isMini ? bodyLength + 160 : bodyLength + 210;
+    const hemDistance = lowerWidthOffset * 0.85;
+    const hemLeft = 150 - hemDistance + offsetX;
+    const hemRight = 150 + hemDistance + offsetX;
+
+    const centerY = canvas.height / 2;
+    const currentCenterY = (50 + dressHemY) / 2;
+    const offsetY = centerY - currentCenterY - 9;
+
+    ctx.save();
     ctx.translate(0, offsetY);
-
     ctx.beginPath();
-    
-    ctx.moveTo(neckLeftX, 50);
-    ctx.lineTo(leftShoulder.x, leftShoulder.y);
-    ctx.lineTo(leftShoulder.x + 10, leftShoulder.y + 15);
-    
-    
-    ctx.lineTo(chestLeft, armpitY);
-    ctx.quadraticCurveTo(waistLeft, waistY, hemLeft, dressHemY);
-    
-    ctx.lineTo(hemRight, dressHemY);
 
-    // 오른쪽 밑단 ~ 허리(곡선) ~ 겨드랑이
+    ctx.moveTo(neckLeftX, 50);
+    ctx.lineTo(shoulderLeftX, shoulderY);
+    ctx.lineTo(sleeveLeftX, sleeveLeftY); 
+    ctx.lineTo(chestLeft, armpitY);      
+
+    ctx.quadraticCurveTo(waistLeft, waistY, hemLeft, dressHemY);
+    ctx.lineTo(hemRight, dressHemY);
     ctx.quadraticCurveTo(waistRight, waistY, chestRight, armpitY);
-    
-    // 오른쪽 소매 ~ 넥라인
-    ctx.lineTo(rightShoulder.x - 10, rightShoulder.y + 15);
-    ctx.lineTo(rightShoulder.x, rightShoulder.y);
+
+    ctx.lineTo(sleeveRightX, sleeveRightY); 
+    ctx.lineTo(shoulderRightX, shoulderY);
     ctx.lineTo(neckRightX, 50);
 
-    ctx.lineTo(170 + neckXOffset - 20 + offsetX + 20, 40);
-    ctx.quadraticCurveTo(150 + offsetX, neckY + 82, 130 - neckXOffset + offsetX, 40);
+    ctx.lineTo(170 + (neckXOffset||15) - 20 + offsetX + 20, 40);
+    ctx.quadraticCurveTo(150 + offsetX, (neckY||18) + 82, 130 - (neckXOffset||15) + offsetX, 40);
     ctx.lineTo(neckLeftX, 50);
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save(); 
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
+    
+    ctx.fill();
+    ctx.stroke();
     applyPattern(ctx, canvas);
-
+    ctx.restore();
     ctx.restore();
   };
 
-  // 스커트 그리기 
+
   const drawSkirt = (ctx, canvas, isMini) => {
     const centerX = canvas.width / 2;
-    const offsetX = centerX - 150;
-    const waist = chestOffset * 0.8;
-    const hem = lowerWidthOffset * 1.3;
 
-    const length = isMini ? bodyLength * 1.5 + 100 : bodyLength * 2.5 + 140;
+    const waistWidth = waistOffset * 2.5;
+    const hemWidth = lowerWidthOffset * 3.0;
 
-    const centerY = canvas.height / 2; // 캔버스의 진짜 세로 중앙
-    const currentCenterY = (100 + length) / 2; // 바지의 세로 중앙 (허리 50 ~ 밑단 length)
-    const offsetY = centerY - currentCenterY; // 위아래 이동 거리 계산
+    const length = isMini
+      ? bodyLength * 2.5
+      : bodyLength * 4.9;
 
-    ctx.save(); 
+    const topY = 80;
+    const bottomY = topY + length;
+
+    const centerY = canvas.height / 2;
+    const currentCenterY = (topY + bottomY) / 2;
+    //const offsetY = centerY - currentCenterY - 20;
+
+    const offsetY = isMini
+      ? centerY - currentCenterY - 20
+      : centerY - currentCenterY + 10;
+
+    ctx.save();
     ctx.translate(0, offsetY);
 
     ctx.beginPath();
-    ctx.moveTo(155 - waist + offsetX, 100); // 왼쪽 허리
-    ctx.lineTo(135 + waist + offsetX, 100); // 오른쪽 허리
-    ctx.lineTo(130 + hem + offsetX, length); // 오른쪽 밑단
-    ctx.lineTo(165 - hem + offsetX, length); // 왼쪽 밑단
+
+    // 왼쪽 허리
+    ctx.moveTo(
+      centerX - waistWidth / 2,
+      topY
+    );
+
+    // 왼쪽 라인
+    ctx.quadraticCurveTo(
+      centerX - hemWidth / 2,
+      topY + length * 0.6,
+      centerX - hemWidth / 2,
+      bottomY
+    );
+
+    // 밑단
+    ctx.lineTo(
+      centerX + hemWidth / 2,
+      bottomY
+    );
+
+    // 오른쪽 라인
+    ctx.quadraticCurveTo(
+      centerX + hemWidth / 2,
+      topY + length * 0.6,
+      centerX + waistWidth / 2,
+      topY
+    );
+
     ctx.closePath();
 
-    ctx.save(); ctx.fillStyle = '#87ceeb'; ctx.fill(); ctx.restore(); ctx.stroke();
+    ctx.save();
+    ctx.fillStyle = (shapeColor && shapeColor !== 'undefined' && shapeColor !== 'null') ? shapeColor : '#87ceeb';   
+    ctx.fill();
+    ctx.stroke();
+
     applyPattern(ctx, canvas);
 
     ctx.restore();
+    ctx.restore();
   };
 
-  // 👟 신발 통합 그리기
+
   const drawShoes = (ctx, canvas, type) => {
     const centerX = canvas.width / 2;
     ctx.save();
-    ctx.fillStyle = '#87ceeb';
+    ctx.fillStyle = 'shapeColor';
 
-    // 신발은 기본적으로 두 짝을 그립니다.
     const drawShoe = (x, isHighTop) => {
       ctx.beginPath();
-      // 하이탑이면 발목을 높게 그립니다.
       const topY = isHighTop ? 150 : 200; 
       ctx.moveTo(x - 20, topY);
       ctx.lineTo(x + 20, topY);
-      ctx.lineTo(x + 30, 250); // 발끝
-      ctx.lineTo(x - 30, 250); // 뒤꿈치
+      ctx.lineTo(x + 30, 250); 
+      ctx.lineTo(x - 30, 250); 
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
     };
 
-    drawShoe(centerX - 40, type.includes('하이탑')); // 왼쪽 신발
-    drawShoe(centerX + 40, type.includes('하이탑')); // 오른쪽 신발
+    drawShoe(centerX - 40, type.includes('하이탑')); 
+    drawShoe(centerX + 40, type.includes('하이탑')); 
     ctx.restore();
     applyPattern(ctx, canvas);
   };
 
-  // 🎒 가방 통합 그리기 (백팩 vs 토트/도트백)
   const drawBag = (ctx, canvas, type) => {
     const centerX = canvas.width / 2;
     ctx.save();
-    ctx.fillStyle = '#87ceeb';
+    ctx.fillStyle = 'shapeColor';
 
     if (type.includes('백팩')) {
-      // 백팩 모양 (둥근 사각형)
       ctx.beginPath();
-      ctx.roundRect(centerX - 60, 80, 120, 150, 20); // x, y, width, height, radius
+      ctx.roundRect(centerX - 60, 80, 120, 150, 20); 
       ctx.fill(); ctx.stroke();
-      // 백팩 주머니
       ctx.beginPath();
       ctx.roundRect(centerX - 40, 150, 80, 60, 10);
       ctx.stroke();
     } else {
-      // 토트백/도트백 모양 (사다리꼴 + 손잡이)
       ctx.beginPath();
-      ctx.moveTo(centerX - 40, 120); // 왼쪽 위
-      ctx.lineTo(centerX + 40, 120); // 오른쪽 위
-      ctx.lineTo(centerX + 60, 220); // 오른쪽 아래
-      ctx.lineTo(centerX - 60, 220); // 왼쪽 아래
+      ctx.moveTo(centerX - 40, 120); 
+      ctx.lineTo(centerX + 40, 120); 
+      ctx.lineTo(centerX + 60, 220); 
+      ctx.lineTo(centerX - 60, 220); 
       ctx.closePath();
       ctx.fill(); ctx.stroke();
       
-      // 손잡이
       ctx.beginPath();
       ctx.arc(centerX, 120, 20, Math.PI, 0);
       ctx.stroke();
@@ -607,31 +585,71 @@ export default function ClothesTest({
     applyPattern(ctx, canvas);
   };
 
-
   const applyPattern = (ctx, canvas) => {
+    if (!shapePattern || shapePattern === '무지') return; 
+
     ctx.save();
-    ctx.clip();
-    const dotSpacing = 20;
-    const dotRadius = 3;
-    ctx.fillStyle = 'black';
-    for (let y = 0; y < canvas.height; y += dotSpacing) {
-      for (let x = 0; x < canvas.width; x += dotSpacing) {
+    ctx.clip(); 
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+    
+    const startX = -canvas.width;
+    const endX = canvas.width * 2;
+    const startY = -canvas.height;
+    const endY = canvas.height * 2;
+
+    if (shapePattern === '도트') {
+      const dotSpacing = 20;
+      const dotRadius = 3;
+      for (let y = startY; y < endY; y += dotSpacing) {
+        for (let x = startX; x < endX; x += dotSpacing) {
+          ctx.beginPath();
+          ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    } 
+    else if (shapePattern === '스트라이프') {
+      const stripeSpacing = 15;
+      ctx.lineWidth = 2;
+      for (let x = startX; x < endX; x += stripeSpacing) {
         ctx.beginPath();
-        ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+      }
+    } 
+    else if (shapePattern === '체크') {
+      const checkSpacing = 20;
+      ctx.lineWidth = 1.5;
+      // 세로줄
+      for (let x = startX; x < endX; x += checkSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, endY);
+        ctx.stroke();
+      }
+      // 가로줄
+      for (let y = startY; y < endY; y += checkSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(startX, y);
+        ctx.lineTo(endX, y);
+        ctx.stroke();
       }
     }
+
     ctx.restore();
   };
 
-
-  // useEffect(() => {
-  //   drawShirt();
-  // }, [neckY, neckXOffset, shoulderOffset, chestOffset, bodyLength, armLengthFactor, topBodyHeight, lowerWidthOffset]);
-  useEffect(() => {  // 5.4추가
+  useEffect(() => {  
     drawClothes(); 
-  }, [clothingType, neckY, neckXOffset, shoulderOffset, chestOffset, bodyLength, armLengthFactor, topBodyHeight, lowerWidthOffset]);
-
+  }, [
+    clothingType, 
+    neckY, neckXOffset, shoulderOffset, chestOffset, bodyLength, armLengthFactor, topBodyHeight, lowerWidthOffset,
+    pantsLength, waistOffset, hipOffset, thighOffset, hemOffset, crotchLength,
+    waistWidth, shapeColor, shapePattern,
+  ]);
   
   const handleInputChange = (setter, min, max) => (e) => {
     let val = e.target.value;
@@ -645,6 +663,16 @@ export default function ClothesTest({
     if (val > max) val = max;
     setter(val);
   };
+
+  const safeClothingType = typeof clothingType === 'string' ? clothingType : String(clothingType || "");
+
+  const isPants =
+    safeClothingType.includes("바지") ||
+    safeClothingType.includes("팬츠");
+
+  const isSkirt =
+    safeClothingType.includes("스커트") ||
+    safeClothingType.includes("치마");
 
   return (
     <div className="canvas-adjust" style={{ textAlign: 'center' }}>
@@ -667,7 +695,7 @@ export default function ClothesTest({
               justifyItems: 'center',
             }}
           >
-            {clothingType && clothingType.includes("바지") ? (
+            {isPants ? (
               <>
                 <div style={{ marginTop: '1rem' }}>
                   <h4>총 기장</h4>
@@ -703,6 +731,65 @@ export default function ClothesTest({
                   <h4>밑단 단면</h4>
                   <input type="range" min={18} max={24} step={0.25} value={hemOffset} onChange={(e) => setHemOffset(Number(e.target.value))} style={{ width: '80%' }} />
                   <input type="number" min={18} max={24} step={0.25} value={hemOffset} onChange={handleInputChange(setHemOffset, 10, 35)} style={{ width: 70, marginLeft: 10 }} />
+                </div>
+                            </>
+            ) : isSkirt ? (
+              <>
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>총 기장</h4>
+                  <input
+                    type="range"
+                    min={40}
+                    max={60}
+                    step={0.25}
+                    value={bodyLength}
+                    onChange={(e) => setBodyLength(Number(e.target.value))}
+                    style={{ width: '80%' }}
+                  />
+                  <input
+                    type="number"
+                    value={bodyLength}
+                    onChange={handleInputChange(setBodyLength, 30, 80)}
+                    style={{ width: 70, marginLeft: 10 }}
+                  />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>허리 단면</h4>
+                  <input
+                    type="range"
+                    min={31}
+                    max={43}
+                    step={0.25}
+                    value={waistOffset}
+                    onChange={(e) => setWaistOffset(Number(e.target.value))}
+                    style={{ width: '80%' }}
+                  />
+                  <input
+                    type="number"
+                    value={waistOffset}
+                    onChange={handleInputChange(setWaistOffset, 20, 60)}
+                    style={{ width: 70, marginLeft: 10 }}
+                  />
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <h4>밑단 단면</h4>
+                  <input
+                    type="range"
+                    min={45}
+                    max={60}
+                    step={0.25}
+                    value={lowerWidthOffset}
+                    onChange={(e) => setLowerWidthOffset(Number(e.target.value))}
+                    style={{ width: '80%' }}
+                  />
+                  <input
+                    type="number"
+                    value={lowerWidthOffset}
+                    onChange={handleInputChange(setLowerWidthOffset, 30, 100)}
+                    style={{ width: 70, marginLeft: 10 }}
+                  />
                 </div>
               </>
             ) : (
@@ -756,22 +843,6 @@ export default function ClothesTest({
                 </div>
               </>
             )}
-
-            {/* <button
-              onClick={resetValues}
-              style={{
-                marginTop: '2rem',
-                backgroundColor: 'rgb(157, 187, 213)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '20px',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                width: "100%",
-              }}
-            >
-              초기화
-            </button> */}
           </div>
         </div>
       </div>

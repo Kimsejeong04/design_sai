@@ -35,8 +35,6 @@ const FinalConfirmation = () => {
 
   const [username, setUsername] = useState(null);  // 상태로 username 관리
 
-  // 저장할 영역 ref
-  const captureRef = useRef(null);
 
   // 로그인 세션을 백엔드에서 받아와 sessionStorage에 저장 + 상태 세팅
   useEffect(() => {
@@ -105,17 +103,11 @@ const FinalConfirmation = () => {
     return;
   }
 
-  if (!captureRef.current) {
-    alert("디자인 영역을 찾을 수 없습니다.");
-    return;
-  }
-
   try {
     setLoading(true);
 
     // 1. 캔버스 이미지 생성 및 base64 획득
-    const canvas = await html2canvas(captureRef.current);
-    const imgData = canvas.toDataURL("image/png").replace(/\s/g, ""); 
+    const savedImage = sessionStorage.getItem("designImage") || "";
 
     // 2. 색상 데이터 포맷팅
     const formattedColors = selectedFabric.map((f) => {
@@ -157,7 +149,7 @@ const FinalConfirmation = () => {
       blendRatio: blendRatioStr,
       pattern: patternStr,     
       note: note,
-      designImageUrl: imgData, // 캡처한 이미지 base64 넣기
+      designImageUrl: savedImage, 
     };
 
     console.log("전송하는 finalData:", finalData);
@@ -186,19 +178,17 @@ const FinalConfirmation = () => {
 
   // 이미지 저장 함수
   const saveAsImage = () => {
-    if (!captureRef.current) return;
-
-    html2canvas(captureRef.current).then((canvas) => {
-      //const canvas = await html2canvas(captureRef.current);
-      const imgData = canvas.toDataURL("image/png").replace(/\s/g, ""); // 🔧 이 부분
-      const link = document.createElement("a");
-      link.href = imgData;
-      link.download = `${designName || "design"}_confirmation.png`;
-      link.click();
-    }).catch((error) => {
-      alert("이미지 저장 중 오류가 발생했습니다.");
-      console.error(error);
-    });
+    const savedImage = sessionStorage.getItem("designImage");
+    if (!savedImage) {
+      alert("저장된 의상 이미지가 없습니다. 3단계부터 다시 진행해주세요.");
+      return;
+    }
+    
+    // 이미지를 다운로드하는 링크 생성
+    const link = document.createElement("a");
+    link.href = savedImage;
+    link.download = `${designName || "clothes_design"}.png`;
+    link.click();
   };
 
   return (
@@ -212,7 +202,7 @@ const FinalConfirmation = () => {
           <h3>4. 최종 확인</h3>
           <hr />
 
-          <section className="summary-section" ref={captureRef}>
+          <section className="summary-section">
             <div className="summary-item design-name-input">
               <label htmlFor="designName" className="label">
                 디자인 이름:
