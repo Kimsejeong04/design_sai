@@ -7,24 +7,15 @@ import ClothesTest from "./ClothesPants/ClothesTest";
 const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () => {} }, ref) => {
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
-  // ── 상의(top) 관련 state ──
-  const [neckY, setNeckY] = useState(18);
-  const [neckXOffset, setNeckXOffset] = useState(15);
-  const [shoulderOffset, setShoulderOffset] = useState(38);
-  const [chestOffset, setChestOffset] = useState(82);
-  const [bodyLength, setBodyLength] = useState(67);
-  const [armLengthFactor, setArmLengthFactor] = useState(20);
-  const [upperWidthOffset, setUpperWidthOffset] = useState(0);
-  const [lowerWidthOffset, setLowerWidthOffset] = useState(90);
-  const [topBodyHeight, setTopBodyHeight] = useState(18);
-
-  // ── 바지(pants) 관련 state ──
-  const [pantsLength, setPantsLength] = useState(100);
-  const [waistOffset, setWaistOffset] = useState(70);
-  const [hipOffset, setHipOffset] = useState(95);
-  const [thighOffset, setThighOffset] = useState(60);
-  const [crotchLength, setCrotchLength] = useState(25);
-  const [hemOffset, setHemOffset] = useState(35);
+  const [neckY, setNeckY] = useState(18);  
+  const [neckXOffset, setNeckXOffset] = useState(15);  
+  const [shoulderOffset, setShoulderOffset] = useState(38);  
+  const [chestOffset, setChestOffset] = useState(82);  
+  const [bodyLength, setBodyLength] = useState(67);  
+  const [armLengthFactor, setArmLengthFactor] = useState(20);  
+  const [upperWidthOffset, setUpperWidthOffset] = useState(0);  
+  const [lowerWidthOffset, setLowerWidthOffset] = useState(90);  
+  const [topBodyHeight, setTopBodyHeight] = useState(18);  
 
   const initialTopRows = [
     { category: "A", label: "총 기장", values: [65, 67, 69, 71, 73, 75, 77], type: "highlight", key: "bodyLength" },
@@ -37,26 +28,13 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
     { category: "K", label: "목 너비", values: [15, 16, 17, 18, 19, 20, 21], type: "normal", key: "neckXOffset" },
   ];
 
-  // 바지용 초기 행 데이터 (상의와 동일한 패턴, 실제 수치는 디자인 스펙에 맞게 조정 필요)
-  const initialPantsRows = [
-    { category: "A", label: "바지 기장", values: [95, 98, 100, 103, 106, 109, 112], type: "highlight", key: "pantsLength" },
-    { category: "B", label: "허리 단면", values: [70, 73, 76, 79, 82, 85, 88], type: "highlight", key: "waistOffset" },
-    { category: "C", label: "엉덩이 단면", values: [95, 98, 101, 104, 107, 110, 113], type: "highlight", key: "hipOffset" },
-    { category: "D", label: "허벅지 단면", values: [60, 62, 64, 66, 68, 70, 72], type: "highlight", key: "thighOffset" },
-    { category: "E", label: "밑위 길이", values: [25, 26, 27, 28, 29, 30, 31], type: "normal", key: "crotchLength" },
-    { category: "F", label: "밑단 단면", values: [35, 36, 37, 38, 39, 40, 41], type: "normal", key: "hemOffset" },
-  ];
-
   const [rows, setRows] = useState(initialTopRows);
   const [editable, setEditable] = useState({
     xs: true, s: false, m: false, l: false, xl: false, "2xl": false, "3xl": false,
   });
 
-  const isPants = clothingType && clothingType.includes("바지");
-
   // 초기화 함수
   const resetValues = () => {
-    // 상의
     setNeckY(18);
     setNeckXOffset(15);
     setShoulderOffset(38);
@@ -65,38 +43,30 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
     setArmLengthFactor(20);
     setLowerWidthOffset(90);
     setTopBodyHeight(18);
-    // 바지
-    setPantsLength(100);
-    setWaistOffset(70);
-    setHipOffset(95);
-    setThighOffset(60);
-    setCrotchLength(25);
-    setHemOffset(35);
   };
 
   useImperativeHandle(ref, () => ({
     triggerReset: () => {
-      resetValues();
+      resetValues(); 
     }
   }));
 
-  // 로컬 스토리지에서 데이터 불러오기 (상의/바지 종류에 따라 기본값 분기)
+  // 로컬 스토리지에서 상의 데이터 불러오기
   useEffect(() => {
     if (selectedSize === null) {
       setEditable({ xs: true, s: false, m: false, l: false, xl: false, "2xl": false, "3xl": false });
-
+      
       const savedRows = localStorage.getItem("sizeSpecRows");
-      const defaultRows = isPants ? initialPantsRows : initialTopRows;
 
       if (savedRows) {
         try {
           setRows(JSON.parse(savedRows));
         } catch (e) {
           console.error("localStorage rows 파싱 오류:", e);
-          setRows(defaultRows);
+          setRows(initialTopRows); 
         }
       } else {
-        setRows(defaultRows);
+        setRows(initialTopRows); 
       }
     }
   }, [selectedSize, clothingType]);
@@ -104,29 +74,18 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
   // 상태 변수가 변경되면 표에 반영
   useEffect(() => {
     const newRows = rows.map(row => {
-      // 상의
       if (row.key === "bodyLength") return { ...row, values: [bodyLength, ...row.values.slice(1)] };
       if (row.key === "chestOffset") return { ...row, values: [chestOffset, ...row.values.slice(1)] };
       if (row.key === "lowerWidthOffset") return { ...row, values: [lowerWidthOffset, ...row.values.slice(1)] };
-      if (row.key === "armLengthFactor") return { ...row, values: [armLengthFactor, ...row.values.slice(1)] };
+      if (row.key === "armLengthFactor") return { ...row, values: [armLengthFactor , ...row.values.slice(1)] };
       if (row.key === "shoulderOffset") return { ...row, values: [shoulderOffset, ...row.values.slice(1)] };
       if (row.key === "topBodyHeight") return { ...row, values: [topBodyHeight, ...row.values.slice(1)] };
       if (row.key === "neckY") return { ...row, values: [neckY, ...row.values.slice(1)] };
       if (row.key === "neckXOffset") return { ...row, values: [neckXOffset, ...row.values.slice(1)] };
-      // 바지
-      if (row.key === "pantsLength") return { ...row, values: [pantsLength, ...row.values.slice(1)] };
-      if (row.key === "waistOffset") return { ...row, values: [waistOffset, ...row.values.slice(1)] };
-      if (row.key === "hipOffset") return { ...row, values: [hipOffset, ...row.values.slice(1)] };
-      if (row.key === "thighOffset") return { ...row, values: [thighOffset, ...row.values.slice(1)] };
-      if (row.key === "crotchLength") return { ...row, values: [crotchLength, ...row.values.slice(1)] };
-      if (row.key === "hemOffset") return { ...row, values: [hemOffset, ...row.values.slice(1)] };
       return row;
-    });
+    }); 
     setRows(newRows);
-  }, [
-    bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset,
-    pantsLength, waistOffset, hipOffset, thighOffset, crotchLength, hemOffset,
-  ]);
+  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset]);
 
   // 상단 사이즈 클릭 핸들러
   const handleCellClick = (size) => {
@@ -143,7 +102,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
 
     rows.forEach((row) => {
       const value = row.values[sizeIndex];
-      // 상의
       if (row.key === "bodyLength") setBodyLength(value);
       if (row.key === "chestOffset") setChestOffset(value);
       if (row.key === "lowerWidthOffset") setLowerWidthOffset(value);
@@ -152,13 +110,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       if (row.key === "topBodyHeight") setTopBodyHeight(value);
       if (row.key === "neckY") setNeckY(value);
       if (row.key === "neckXOffset") setNeckXOffset(value);
-      // 바지
-      if (row.key === "pantsLength") setPantsLength(value);
-      if (row.key === "waistOffset") setWaistOffset(value);
-      if (row.key === "hipOffset") setHipOffset(value);
-      if (row.key === "thighOffset") setThighOffset(value);
-      if (row.key === "crotchLength") setCrotchLength(value);
-      if (row.key === "hemOffset") setHemOffset(value);
     });
   };
 
@@ -175,7 +126,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       newRows[rowIndex].values[0] = numericValue;
 
       const key = newRows[rowIndex].key;
-      // 상의
       if (key === "bodyLength") setBodyLength(numericValue);
       if (key === "chestOffset") setChestOffset(numericValue);
       if (key === "lowerWidthOffset") setLowerWidthOffset(numericValue);
@@ -184,14 +134,7 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       if (key === "topBodyHeight") setTopBodyHeight(numericValue);
       if (key === "neckY") setNeckY(numericValue);
       if (key === "neckXOffset") setNeckXOffset(numericValue);
-      // 바지
-      if (key === "pantsLength") setPantsLength(numericValue);
-      if (key === "waistOffset") setWaistOffset(numericValue);
-      if (key === "hipOffset") setHipOffset(numericValue);
-      if (key === "thighOffset") setThighOffset(numericValue);
-      if (key === "crotchLength") setCrotchLength(numericValue);
-      if (key === "hemOffset") setHemOffset(numericValue);
-
+      
       setRows(newRows);
     }
   };
@@ -219,12 +162,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
           upperWidthOffset={upperWidthOffset} setUpperWidthOffset={setUpperWidthOffset}
           lowerWidthOffset={lowerWidthOffset} setLowerWidthOffset={setLowerWidthOffset}
           topBodyHeight={topBodyHeight} setTopBodyHeight={setTopBodyHeight}
-          pantsLength={pantsLength} setPantsLength={setPantsLength}
-          waistOffset={waistOffset} setWaistOffset={setWaistOffset}
-          hipOffset={hipOffset} setHipOffset={setHipOffset}
-          thighOffset={thighOffset} setThighOffset={setThighOffset}
-          crotchLength={crotchLength} setCrotchLength={setCrotchLength}
-          hemOffset={hemOffset} setHemOffset={setHemOffset}
           resetValues={resetValues}
         />
       </div>
