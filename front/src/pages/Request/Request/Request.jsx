@@ -56,7 +56,6 @@ const filteredItems = requestItems.filter((item) =>
           <h1>{headerText}</h1>
         <div><SearchRequest searchTerm={searchTerm} setSearchTerm={setSearchTerm} children={"의뢰제목 검색"}/></div>
         </div>
-        <div className=""></div>
         <div className="cientrequest-titlecontainer2">
             <ContentHeader/></div>
         </div>

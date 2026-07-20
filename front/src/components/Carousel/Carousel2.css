@@ -1,136 +1,403 @@
-/* Carousel 컨테이너 크기 수정 */
+/* ===== Carousel 컨테이너 ===== */
 .carousel2-container {
-    position: relative;
-    width: 100%;
-    max-width: 2024px; /* 특정 크기 이하로 줄어들지 않도록 설정 */
-    margin: auto;
-    overflow: hidden;
-    height: 500px;
-    background: rgba(0, 0, 0, 0.5);
+  position: relative;
+  width: 100%;
+  max-width: 2024px;
+  margin: auto;
+  overflow: hidden;
+  height: 500px;
 }
 
-/* 슬라이드 항목 중앙 정렬 및 이미지 크기 조정 */
-.carousel2-item {
-    min-width: 100%;
-    display: flex;
-    flex-direction: column; /* 위(글씨) → 아래(이미지) 순서 */
-    align-items: center; /* 중앙 정렬 */
-    box-sizing: border-box;
-    text-align: center;
-    justify-content: center;
-    margin-top: -20px;
+/* ===== 공통: 더보기/이벤트 버튼 ===== */
+.carousel-button {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
-.carousel2-item img {
-    width: 80%;  /* 이미지 크기 비율 조정 */
-    max-width: 500px; /* 이미지 크기 최대값 설정 */
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    border-radius: 10px; /* 이미지 모서리 둥글게 */
-    object-fit: cover;
-    margin-top: 20px;
-}
-
-/* 콘텐츠 스타일 */
-.carousel2-content {
-    position: relative;
-    width: 80%; /* 전체 배너 크기 조정 */
-    margin: 0 auto;
-    text-align: center; /* 텍스트 중앙 정렬 */
-    padding: 30px;
-    border-radius: 15px;
-}
-
-.carousel2-content h3 {
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    white-space: nowrap;
-    display: flex;
-}
-
-.description2 {
-    font-size: 16px;
-    color: #333;
-    margin-top: 20px; /* 부설명과 제목 사이의 간격 조정 */
-    margin-bottom: 20px;
-    text-align: left; /* 왼쪽 정렬 */
-    width: 100%; /* 부모 요소의 너비에 맞게 */
-}
-
-.carousel2-title {
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-/* 더보기 버튼 스타일 */
-.carousel2-button {
-    display: inline-block;
-    background-color: #a0c4e3;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    margin-top: 5px; /* 버튼 위쪽 여백 조정 */
-}
-
-.carousel2-button:hover {
-    background-color: #799fc4;
-}
-
-/* 점(dots) 스타일 */
+/* ===== 점(dots) ===== */
 .dots-container {
-    position: absolute;
-    bottom: 10px; /* 점이 이미지 바로 아래에 위치하도록 조정 */
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 5px;
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 5;
 }
 
 .dot {
-    width: 12px;  /* 점 크기 약간 키움 */
-    height: 12px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
 }
 
 .dot.active {
-    background-color: rgb(173, 172, 172);
+  background-color: rgba(90, 70, 138, 0.7);
 }
 
-/* 네비게이션 버튼 스타일 */
+/* ===== 네비게이션 버튼 ===== */
 .prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.2);
-    color: rgb(230, 230, 230);
-    border: none;
-    font-size: 25px;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  border: none;
+  font-size: 25px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
 }
 
 .prev {
-    left: 10px;
+  left: 10px;
 }
 
 .next {
-    right: 10px;
+  right: 10px;
 }
 
 .prev:hover, .next:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+/* ======================================================= */
+/* 슬라이드 1: 브랜드 슬로건 포스터 (Peach Fuzz / Periwinkle) */
+/* ======================================================= */
+.poster-banner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFEEDD 0%, #FFD8BE 45%, #B8B8FF 100%);
+}
+
+.poster-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.circle1 {
+  width: 320px;
+  height: 320px;
+  background: #F8F7FF;
+  opacity: 0.35;
+  top: -120px;
+  left: -100px;
+}
+
+.circle2 {
+  width: 260px;
+  height: 260px;
+  background: #9381FF;
+  opacity: 0.25;
+  bottom: -100px;
+  right: -60px;
+}
+
+.poster-icon {
+  position: absolute;
+  opacity: 0.55;
+}
+
+.icon-shirt {
+  width: 70px;
+  height: 70px;
+  top: 60px;
+  right: 120px;
+  color: #9381FF;
+}
+
+.icon-scissors {
+  width: 60px;
+  height: 60px;
+  bottom: 50px;
+  left: 90px;
+  color: #FF9F7A;
+  transform: rotate(-15deg);
+}
+
+.icon-thread {
+  width: 64px;
+  height: 64px;
+  bottom: 70px;
+  right: 200px;
+  color: #B8B8FF;
+}
+
+.icon-button {
+  width: 50px;
+  height: 50px;
+  top: 90px;
+  left: 60px;
+  color: #FFB48F;
+}
+
+.icon-sparkle1 {
+  width: 36px;
+  height: 36px;
+  top: 130px;
+  right: 60px;
+  color: #9381FF;
+  opacity: 0.7;
+}
+
+.icon-sparkle2 {
+  width: 24px;
+  height: 24px;
+  bottom: 150px;
+  left: 200px;
+  color: #FF9F7A;
+  opacity: 0.7;
+}
+
+.icon-button2 {
+  width: 38px;
+  height: 38px;
+  top: 120px;
+  right: 220px;
+  color: #B8B8FF;
+  opacity: 0.5;
+}
+
+.poster-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.poster-title {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #5A4A8A;
+  margin: 0;
+}
+
+.poster-subtitle {
+  font-size: 17px;
+  color: #7A6A9E;
+  margin: 0;
+}
+
+.poster-banner .carousel-button {
+  background: #9381FF;
+}
+
+.poster-banner .carousel-button:hover {
+  background-color: #7A68E0;
+}
+
+/* ======================================================= */
+/* 슬라이드 2: 첫 의뢰 이벤트 배너 (오렌지/옐로우 + 블루 포인트) */
+/* ======================================================= */
+.event-banner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #FFF6E8 0%, #FCEABC 40%, #FECC64 100%);
+  padding: 0 80px 0 110px;
+  box-sizing: border-box;
+}
+
+.event-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ecircle1 {
+  width: 260px;
+  height: 260px;
+  background: #B5D8FF;
+  opacity: 0.35;
+  top: -100px;
+  right: 60px;
+}
+
+.ecircle2 {
+  width: 180px;
+  height: 180px;
+  background: #95CAFC;
+  opacity: 0.3;
+  bottom: -80px;
+  left: 10%;
+}
+
+.ecircle3 {
+  width: 120px;
+  height: 120px;
+  background: #FA9058;
+  opacity: 0.2;
+  top: 40px;
+  left: 38%;
+}
+
+.event-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 480px;
+}
+
+.event-label {
+  display: inline-block;
+  background: #FFFFFF;
+  color: #FA9058;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+.event-title {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #6B4A1E;
+  margin: 0;
+}
+
+.event-title strong {
+  color: #FA9058;
+}
+
+.event-subtitle {
+  font-size: 16px;
+  color: #8A7350;
+  margin: 0;
+}
+
+.event-banner .carousel-button {
+  background: #FA9058;
+}
+
+.event-banner .carousel-button:hover {
+  background-color: #E07A42;
+}
+
+.event-visual {
+  position: relative;
+  z-index: 2;
+  width: 420px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-icon {
+  position: absolute;
+  object-fit: contain;
+}
+
+.icon-big-sale {
+  width: 140px;
+  top: 30px;
+  left: 0;
+  transform: rotate(-8deg);
+}
+
+.icon-discount {
+  width: 90px;
+  bottom: 50px;
+  left: 30px;
+}
+
+.icon-gift {
+  width: 150px;
+  bottom: 10px;
+  right: 0;
+}
+
+.event-percent-badge {
+  position: relative;
+  z-index: 3;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: #95CAFC;
+  border: 10px solid #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.percent-number {
+  font-size: 72px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.percent-sign {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 6px;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 900px) {
+  .poster-title {
+    font-size: 30px;
+  }
+
+  .poster-subtitle {
+    font-size: 14px;
+  }
+
+  .poster-icon {
+    display: none;
+  }
+
+  .event-banner {
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 40px 24px;
+    height: auto;
+    min-height: 500px;
+  }
+
+  .event-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .event-title {
+    font-size: 30px;
+  }
+
+  .event-visual {
+    width: 100%;
+    height: 260px;
+  }
 }

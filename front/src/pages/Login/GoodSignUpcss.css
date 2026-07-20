@@ -1,8 +1,133 @@
-.ProfileIcon{
-    border:   1px  solid #BFD7EE;
-    background-color: #BFD7EE;
-    width:60px;
-    height:60px; 
-    margin: 0 auto;
-    border-radius: 20px;
+/* ===== GoodSignUp 페이지 ===== */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes checkPop {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60%  { transform: scale(1.25) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes btnGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(191, 215, 238, 0); }
+  50%       { box-shadow: 0 0 20px 6px rgba(191, 215, 238, 0.7); }
+}
+
+/* 페이지 전체 래퍼 */
+.gs-outer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f0f4f8;
+  overflow: hidden;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+}
+
+/* 컨페티 캔버스 */
+.gs-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 카드 */
+.gs-card {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border: 1px solid #dae8f5;
+  border-radius: 20px;
+  padding: 3rem 2.5rem 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* 체크 아이콘 원 */
+.gs-check-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #BFD7EE;
+  margin-bottom: 1.5rem;
+  animation: checkPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+.gs-check-icon {
+  width: 36px;
+  height: 36px;
+}
+
+/* 제목 */
+.gs-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.6rem;
+  animation: fadeInUp 0.5s ease 0.3s both;
+}
+
+/* 설명 */
+.gs-desc {
+  font-size: 15px;
+  color: #6b7c93;
+  line-height: 1.8;
+  margin: 0 0 1.8rem;
+  animation: fadeInUp 0.5s ease 0.4s both;
+}
+
+/* 유저 정보 박스 */
+.gs-user-box {
+  background: #E6F1FB;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.8rem;
+  animation: fadeInUp 0.5s ease 0.5s both;
+}
+
+.gs-email {
+  font-size: 14px;
+  color: #185FA5;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.gs-name {
+  font-size: 17px;
+  color: #0C447C;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 시작하기 버튼 */
+.gs-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #64A1CA 0%, #4a8ab5 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  animation: fadeInUp 0.5s ease 0.6s both, btnGlow 2.5s ease-in-out 1.2s infinite;
+  transition: transform 0.12s, filter 0.15s;
+}
+
+.gs-btn:hover  { filter: brightness(0.95); }
+.gs-btn:active { transform: scale(0.98); filter: brightness(0.9); }

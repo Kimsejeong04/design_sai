@@ -16,7 +16,6 @@ const ItemBoxContainer = styled.div`
   border: 0.5px solid #A5A0A0; 
   border-radius: 20px;
   gap: 10px;
-  margin: 20px;
   padding: 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   transition: border 0.15s, box-shadow 0.15s; 

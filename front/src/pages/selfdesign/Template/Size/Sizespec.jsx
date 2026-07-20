@@ -58,6 +58,9 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       setEditable({ xs: true, s: false, m: false, l: false, xl: false, "2xl": false, "3xl": false });
       
       const savedRows = localStorage.getItem("sizeSpecRows");
+
+      const defaultRows = clothingType && clothingType.includes("바지") ? pantsRows : topRows;
+
       if (savedRows) {
         try {
           setRows(JSON.parse(savedRows));
@@ -69,11 +72,12 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
         setRows(initialTopRows); 
       }
     }
-  }, [selectedSize]);
+  }, [selectedSize, clothingType]);
 
   // 상태 변수가 변경되면 표에 반영
   useEffect(() => {
     const newRows = rows.map(row => {
+      // 상의 (기존과 동일)
       if (row.key === "bodyLength") return { ...row, values: [bodyLength, ...row.values.slice(1)] };
       if (row.key === "chestOffset") return { ...row, values: [chestOffset, ...row.values.slice(1)] };
       if (row.key === "lowerWidthOffset") return { ...row, values: [lowerWidthOffset, ...row.values.slice(1)] };
@@ -83,9 +87,10 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       if (row.key === "neckY") return { ...row, values: [neckY, ...row.values.slice(1)] };
       if (row.key === "neckXOffset") return { ...row, values: [neckXOffset, ...row.values.slice(1)] };
       return row;
-    });
+    }); 
     setRows(newRows);
-  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset]);
+  // ✨ 아래 괄호 안에도 바지 변수들을 싹 추가했습니다! ✨
+  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset, pantsLength, waistOffset, hipOffset, thighOffset, crotchLength, hemOffset]);
 
   // 상단 사이즈 클릭 핸들러
   const handleCellClick = (size) => {

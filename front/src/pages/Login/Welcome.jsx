@@ -21,7 +21,7 @@ export default function Welcome(onSignupClick) {
         });
 
         if (!response.ok) {
-            setMessage("로그인 실패");
+            setMessage("로그인에 실패하셨습니다.");
             return;
         }
 
@@ -72,6 +72,12 @@ export default function Welcome(onSignupClick) {
             <div style={{ display: 'flex', alignItems: 'center', textAlign:'left', marginTop: '10px'}}>
               <input type="checkbox"checked={rememberMe} onChange={handleRememberMeChange}></input> <p style={{ marginLeft: '8px', fontSize: '15px'}}>아이디 저장</p>
             </div>
+
+             {message && (
+              <p style={{ color: 'red', fontSize: '13px', marginTop: '8px', textAlign: 'center' }}>
+                {message}
+              </p>
+            )}
             
             <br/>
             <button type='submit' style = {{marginTop:'7px', fontSize: '20px', boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.1)'}} className='mainbaroo'>
@@ -93,21 +99,29 @@ export default function Welcome(onSignupClick) {
 
         {/* "여기도 영역임"을 divmcover 내부에서 divm-wrapper 아래로 배치 */}
         <div className='extra-sectionn' style={{textAlign: "center"}}>
-          <span style={{ margin: '0 10px', fontSize: '14px', textAlign: 'left', fontSize: '15px', opacity: 0.8 }}>SNS 계정으로 로그인<br/>{message}</span>
-          <hr style={{ width: '70%', border: '1px solid #ccc', margin: '0 auto', marginTop:'5px'}} />
-          
+          <span style={{ margin: '0 10px', fontSize: '15px', opacity: 0.8 }}>
+            SNS 계정으로 로그인<br/>
+          </span>
+          <hr style={{ width: '70%', border: '1px solid #ccc', margin: '0 auto', marginTop: '5px' }} />
+
           <div className="extra-sectionn-btn">
-            <button className='mainbaroo2' 
-              style={{backgroundColor:'#03C75A', color:'white', marginRight: '20px'}}
-            >Naver</button>      
+            {/* 네이버 */}
+            <button className='mainbaroo2' style={{ backgroundColor: 'transparent', padding: '0', overflow: 'hidden', border: 'none' }}>
+              <img src="/image/Naver_Icon.png" alt="네이버 로그인" style={{ width: '100%', height: '100%', display: 'block' }} />
+            </button>
 
-            <button className='mainbaroo2' 
-            style={{backgroundColor:'#FFE812', marginRight: '20px'}}>kakao</button>
+            {/* 카카오 */}
+            <button className='mainbaroo2' style={{ backgroundColor: '#FFE812' }}>
+              <img src="/image/Kakao_Icon.png" alt="카카오 로그인" style={{ width: '28px', height: '28px' }} />
+            </button>
 
-            <button className='mainbaroo2' 
-            style={{backgroundColor:'grey', color:'white', marginRight: '20px'}}>Google</button>
+            {/* 구글 */}
+            <button className='mainbaroo2' style={{ backgroundColor: 'white', border: '1px solid #ddd' }}>
+              <img src="/image/Google_Icon.png" alt="구글 로그인" style={{ width: '28px', height: '28px' }} />
+            </button>
           </div>
         </div>
+
         </div>
       </div>
 </div>
