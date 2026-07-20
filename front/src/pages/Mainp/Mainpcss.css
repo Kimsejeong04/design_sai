@@ -1,97 +1,156 @@
-body {
+ul, li {
   margin: 0;
   padding: 0;
 }
 
-ul, li {
-    margin: 0;
-    padding: 0;
+.maincover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 48px 64px;
+  background: linear-gradient(150deg, #FAFAFB 60%, #9dbbd5);
+  background-attachment: fixed;
+  box-sizing: border-box;
+}
 
-  }
+.hero-section {
+  margin-bottom: 48px;
+  text-align: center;
+}
 
-  .copylight {
-    font-weight: 200;
-    margin-top: -60px;
-  }
+.MainLogo {
+  margin-bottom: 10px;
+}
 
-  .divmcover{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
+.MainLogo img {
+  height: 60px;
+}
 
-    /* 배경 그라데이션 추가 */
-    background: linear-gradient(150deg, #FAFAFB, #FAFAFB, #FAFAFB, #9dbbd5);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover; 
-  }
+.hero-copy {
+  font-size: 15px;
+  color: #555;
+  margin: 0 0 12px 0;
+}
 
-  .divm{
-    margin:10px;
-    border-radius: 25px;
-    padding: 2.5em;
-    box-shadow: 0 20px 30px -25px rgba(0, 0, 0, 0.4);
-    display: inline;
-    align-items: center;
-    text-align: center;
+.hero-badge {
+  display: inline-block;
+  font-size: 12px;
+  background: rgba(121, 159, 196, 0.18);
+  color: #4A6171;
+  border-radius: 20px;
+  padding: 5px 16px;
+  border: 0.5px solid rgba(121, 159, 196, 0.4);
+}
 
-    /*justify-content:space-around;*/
-    background-color: #799FC4;
-    width: 400px;
-    height: 300px;
-  }
-  .divm2{
-    display: block;
+.divm-wrapper {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 48px;
+}
 
-  }
-  .mainbaro{
-    border-radius: 50px;
-    color:#fff;
-    background-color: #4A6171;
-    border:none;
-    padding: 10px 30px;
-    margin-top:40px;
-  }
-  .mainbaro2{
-    border-radius: 10px;
-    color:#34312E;
-    background-color: #9DBBD5;
-    border:none;
-    padding: 10px 30px;
-    margin-top:40px;
-    margin:20px;
-    width:200px;
-    height: 55px;
-    font-size: 18px;
-    box-shadow: 0 10px 40px -25px rgba(0, 0, 0, 1.0);
-    white-space: nowrap;
-  }
+.divm {
+  background-color: #799FC4;
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  width: 380px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
 
-  .mainbaro2:hover{
-        background-color:black;
+.divm-b {
+  background-color: #6B8FAF;
+}
 
-  }
+.divm:hover {
+  transform: translateY(-7px) scale(1.025);
+  box-shadow: 0 24px 40px -16px rgba(0, 0, 0, 0.22);
+}
 
-  .divm-wrapper {
-    margin-top: 5px;
-    display: flex; 
-    justify-content: center;
-    gap: 20px; 
+.divm:hover .divm-arrow {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(3px);
+}
+
+.divm-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.divm-img {
+  width: 220px;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+
+.divm-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 8px 0;
+}
+
+.divm-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.divm-arrow {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  color: #fff;
+  font-size: 18px;
+  transition: background 0.2s, transform 0.2s;
+  margin-top: auto;
 }
 
 .extra-section {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin: 40px auto;
-  width: 100%;
-  max-width: 800px;
-  padding: 10px;
+  align-items: center;
+  gap: 12px;
 }
 
-.MainLogo{
-    background-color: #FAFAFB;
-    text-align: center;
+.footer-divider {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.mainbaro2 {
+  border-radius: 10px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.7);
+  color: #34312E;
+  font-size: 16px;
+  padding: 12px 28px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.mainbaro2:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.mainbaro2-primary {
+  background: #9DBBD5;
+  color: #fff;
+  border-color: #9DBBD5;
+}
+
+.mainbaro2-primary:hover {
+  background: #7aa5c2;
 }

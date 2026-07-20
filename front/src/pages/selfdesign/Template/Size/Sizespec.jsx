@@ -98,21 +98,25 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize = () => {}, clothin
         "3xl": false,
       });
       const savedRows = localStorage.getItem("sizeSpecRows");
+
+      const defaultRows = clothingType && clothingType.includes("바지") ? pantsRows : topRows;
+
       if (savedRows) {
         try {
           setRows(JSON.parse(savedRows));
         } catch (e) {
           console.error("localStorage rows 파싱 오류:", e);
-          setRows(initialRows);
+          setRows(defaultRows); 
         }
       } else {
-        setRows(initialRows);
+        setRows(defaultRows); 
       }
     }
-  }, [selectedSize]);
+  }, [selectedSize, clothingType]);
 
   useEffect(() => {
     const newRows = rows.map(row => {
+      // 상의 (기존과 동일)
       if (row.key === "bodyLength") return { ...row, values: [bodyLength, ...row.values.slice(1)] };
       if (row.key === "chestOffset") return { ...row, values: [chestOffset, ...row.values.slice(1)] };
       if (row.key === "lowerWidthOffset") return { ...row, values: [lowerWidthOffset, ...row.values.slice(1)] };
@@ -122,16 +126,18 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize = () => {}, clothin
       if (row.key === "neckY") return { ...row, values: [neckY, ...row.values.slice(1)] };
       if (row.key === "neckXOffset") return { ...row, values: [neckXOffset, ...row.values.slice(1)] };
       
-      if (row.key === "pantsLength") setPantsLength(value); 
-      if (row.key === "waistOffset") setWaistOffset(value);
-      if (row.key === "hipOffset") setHipOffset(value);
-      if (row.key === "thighOffset") setThighOffset(value);
-      if (row.key === "crotchLength") setCrotchLength(value);
-      if (row.key === "hemOffset") setHemOffset(value);
+      // ✨ 바지 (여기가 고쳐진 부분입니다! value 에러 해결!) ✨
+      if (row.key === "pantsLength") return { ...row, values: [pantsLength, ...row.values.slice(1)] };
+      if (row.key === "waistOffset") return { ...row, values: [waistOffset, ...row.values.slice(1)] };
+      if (row.key === "hipOffset") return { ...row, values: [hipOffset, ...row.values.slice(1)] };
+      if (row.key === "thighOffset") return { ...row, values: [thighOffset, ...row.values.slice(1)] };
+      if (row.key === "crotchLength") return { ...row, values: [crotchLength, ...row.values.slice(1)] };
+      if (row.key === "hemOffset") return { ...row, values: [hemOffset, ...row.values.slice(1)] };
       return row;
-    });
+    }); 
     setRows(newRows);
-  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset]);
+  // ✨ 아래 괄호 안에도 바지 변수들을 싹 추가했습니다! ✨
+  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset, pantsLength, waistOffset, hipOffset, thighOffset, crotchLength, hemOffset]);
 
   const handleCellClick = (size) => {
     if (typeof setSelectedSize !== "function") {

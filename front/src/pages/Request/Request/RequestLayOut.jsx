@@ -9,9 +9,10 @@ const Container = styled.div`
 
 const Content = styled.div`
   width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  gap: 1.5rem;      
   margin: 0 auto;
   justify-content: center;
 `;

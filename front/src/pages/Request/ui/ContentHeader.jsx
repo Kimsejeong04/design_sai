@@ -17,14 +17,13 @@ const CustomModal = styled(Modal)`
 const SearchButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-  
+  margin-bottom: 2rem;
 `;
 
 
