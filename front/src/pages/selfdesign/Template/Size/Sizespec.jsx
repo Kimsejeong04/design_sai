@@ -17,7 +17,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
   const [lowerWidthOffset, setLowerWidthOffset] = useState(90);  
   const [topBodyHeight, setTopBodyHeight] = useState(18);  
 
-  
   const initialTopRows = [
     { category: "A", label: "총 기장", values: [65, 67, 69, 71, 73, 75, 77], type: "highlight", key: "bodyLength" },
     { category: "B", label: "가슴 단면", values: [82, 86, 90, 94, 98, 102, 106], type: "highlight", key: "chestOffset" },
@@ -59,8 +58,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       
       const savedRows = localStorage.getItem("sizeSpecRows");
 
-      const defaultRows = clothingType && clothingType.includes("바지") ? pantsRows : topRows;
-
       if (savedRows) {
         try {
           setRows(JSON.parse(savedRows));
@@ -77,7 +74,6 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
   // 상태 변수가 변경되면 표에 반영
   useEffect(() => {
     const newRows = rows.map(row => {
-      // 상의 (기존과 동일)
       if (row.key === "bodyLength") return { ...row, values: [bodyLength, ...row.values.slice(1)] };
       if (row.key === "chestOffset") return { ...row, values: [chestOffset, ...row.values.slice(1)] };
       if (row.key === "lowerWidthOffset") return { ...row, values: [lowerWidthOffset, ...row.values.slice(1)] };
@@ -89,8 +85,7 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
       return row;
     }); 
     setRows(newRows);
-  // ✨ 아래 괄호 안에도 바지 변수들을 싹 추가했습니다! ✨
-  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset, pantsLength, waistOffset, hipOffset, thighOffset, crotchLength, hemOffset]);
+  }, [bodyLength, chestOffset, lowerWidthOffset, armLengthFactor, shoulderOffset, topBodyHeight, neckY, neckXOffset]);
 
   // 상단 사이즈 클릭 핸들러
   const handleCellClick = (size) => {

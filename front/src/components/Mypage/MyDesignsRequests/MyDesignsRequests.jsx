@@ -6,8 +6,8 @@ import axios from 'axios';
 const MyDesignsRequests = ({ username: propUsername }) => {
   const [activeTab, setActiveTab] = useState('design');
   const [selectedCategory, setSelectedCategory] = useState('template');
-  const [isDesignModalOpen, setIsDesignModalOpen] = useState(false);
-  const [selectedDesignItem, setSelectedDesignItem] = useState(null);
+  //const [isDesignModalOpen, setIsDesignModalOpen] = useState(false);
+  //const [selectedDesignItem, setSelectedDesignItem] = useState(null);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [selectedOrderItem, setSelectedOrderItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,14 +79,35 @@ const MyDesignsRequests = ({ username: propUsername }) => {
   const closeDesignModal = () => setIsDesignModalOpen(false);
   const closeOrderModal = () => setIsOrderModalOpen(false);
 
-  const parseColors = (json) => {
-    try {
-      const parsed = JSON.parse(json);
-      return Array.isArray(parsed) && parsed.length > 0 ? getColorName(parsed[0].color) : '색상 없음';
-    } catch (e) {
-      return '색상 없음';
+  const parseColors = (colorJson, blendRatio) => {
+  try {
+    const colors = JSON.parse(colorJson);
+
+    if (!Array.isArray(colors)) {
+      return "색상 없음";
     }
-  };
+
+    // "데님 50%, 면 50%" → 객체로 변환
+    const ratioMap = {};
+
+    if (blendRatio) {
+      blendRatio.split(",").forEach(item => {
+        const [fabric, ratio] = item.trim().split(" ");
+        ratioMap[fabric] = ratio;
+      });
+    }
+
+    return colors
+      .map(color => {
+        const ratio = ratioMap[color.fabricName] || "";
+        return `${color.name}${ratio ? ` ${ratio}` : ""}`;
+      })
+      .join(", ");
+
+  } catch (e) {
+    return "색상 없음";
+  }
+};
 
   const formatDateTime = (datetime) => {
     try {
@@ -111,14 +132,15 @@ const MyDesignsRequests = ({ username: propUsername }) => {
   };
 
   const handleCardClick = (item) => {
+    console.log(item);
     setSelectedItem(item);
     setIsModalOpen(true);
   };
 
-  const handleDesignCardClick = (item) => {
-    setSelectedDesignItem(item);
-    setIsDesignModalOpen(true);
-  };
+  // const handleDesignCardClick = (item) => {
+  //   setSelectedDesignItem(item);
+  //   setIsDesignModalOpen(true);
+  // };
 
   const handleOrderCardClick = (item) => {
     setSelectedOrderItem(item);
@@ -162,7 +184,7 @@ const MyDesignsRequests = ({ username: propUsername }) => {
             </div>
             <div className="card-container">
               {selectedCategory === 'template' && filteredDesigns.map((item) => {
-                  console.log("🎨 designImageUrl:", item.designImageUrl); // ✅ 여기에 추가!
+                  //console.log("🎨 designImageUrl:", item.designImageUrl); // ✅ 여기에 추가!
 
                   return (
                     <div key={item.designId} className="card" onClick={() => handleCardClick(item)}>
@@ -186,9 +208,14 @@ const MyDesignsRequests = ({ username: propUsername }) => {
                 userFiles.length > 0 ? (
                   <div className="card-container">
                     {userFiles.map((item) => (
-                      <div key={item.fileName} className="card" onClick={() => handleDesignCardClick(item)}>
-                        <img src={`http://localhost:8081/image/${item.designId}`} alt={item.fileName} className="card-image" />
-                        <p>{item.uploadedAt}</p>
+                      <div key={item.fileName} className="card" onClick={() => handleCardClick(item)}>
+                        <img src={`http://localhost:8081/${item.filePath}`} alt={item.fileName} className="card-image" />
+                        <p>
+                          <strong>제작일:</strong>{" "}
+                          {item.createdAt
+                            ? formatDateTime(item.createdAt)
+                            : item.uploadedAt}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -221,26 +248,79 @@ const MyDesignsRequests = ({ username: propUsername }) => {
 
       {isModalOpen && selectedItem && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-btn" onClick={closeModal}>&times;</span>
-            <h2>{selectedItem.designName}</h2>
-            {selectedItem.designImageUrl ? (
-              <img
-                src={`http://localhost:8081${selectedItem.designImageUrl}`}
-                alt={selectedItem.designName}
-                className="card-image"
-              />
-            ) : (
-              <p>이미지 없음</p>
-            )}
-            <p><strong>의류 종류:</strong> {selectedItem.clothingType}</p>
-            <p><strong>원단:</strong> {parseFabric(selectedItem.fabricJson)}</p>
-            <p><strong>사이즈:</strong> {selectedItem.size}</p>
-            <p><strong>제작일:</strong> {formatDateTime(selectedItem.createdAt)}</p>
-            <p><strong>색상:</strong> {parseColors(selectedItem.colorsJson)}</p>
-          </div>
+          <div 
+            className="modal-content" 
+            onClick={(e) => e.stopPropagation()}
+          >
+          <span 
+            className="close-btn" 
+            onClick={closeModal}
+          >
+            &times;
+          </span>
+
+          <h2>
+            {selectedItem.designName 
+              ? selectedItem.designName 
+              : selectedItem.fileName}
+          </h2>
+
+
+          {selectedItem.designImageUrl ? (
+            <img
+              src={`http://localhost:8081${selectedItem.designImageUrl}`}
+              alt={selectedItem.designName}
+              className="card-image"
+            />
+          ) : (
+            <img
+              src={`http://localhost:8081/image/${selectedItem.designId}`}
+              alt={selectedItem.fileName}
+              className="card-image"
+            />
+          )}
+
+          <p>
+            <strong>의류 종류:</strong> 
+            {selectedItem.clothingType || "없음"}
+          </p>
+
+          <p>
+            <strong>원단:</strong>{" "}
+            {selectedItem.blendRatio
+              ? selectedItem.blendRatio
+              : parseFabric(selectedItem.fabricJson)}
+          </p>
+
+          <p>
+            <strong>사이즈:</strong> 
+            {selectedItem.size || "없음"}
+          </p>
+
+          <p>
+            <strong>제작일:</strong>{" "}
+            {selectedItem.createdAt
+              ? formatDateTime(selectedItem.createdAt)
+              : selectedItem.uploadedAt}
+          </p>
+
+          <p>
+            <strong>색상:</strong>{" "}
+            {selectedItem.colorsJson
+              ? parseColors(
+                  selectedItem.colorsJson,
+                  selectedItem.blendRatio
+                )
+              : "없음"}
+          </p>
+
+          <p>
+            <strong>메모 또는 요청사항:</strong>{" "}
+            {selectedItem.note || "없음"}
+          </p>
         </div>
-      )}
+      </div>
+    )}
     </div>
   );
 };
