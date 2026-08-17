@@ -8,7 +8,7 @@ import dress from "../../../assets/dress.png";
 import MyEditor from "./ui/MyEditor";
 import MydesignerPopup from "./MydesignerPopup";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";  // 🔧 변경
+import { useNavigate } from "react-router-dom";  
 import RequestEditor from "./ui/RequestEditor";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
@@ -299,9 +299,7 @@ useEffect(() => {
       const mockDesigns = JSON.parse(localStorage.getItem("mockDesigns") || "[]");
       console.log("Raw mockDesigns:", mockDesigns);
       setDesigns(mockDesigns);
-      console.log("🎯 모킹된 디자인 데이터:", mockDesigns);
     } catch (err) {
-      console.error("❌ 디자인 불러오기 실패", err);
       setDesigns([]);
     }
   };
@@ -317,10 +315,8 @@ useEffect(() => {
         const data = await response.json();
         setUserFiles(data);
       } else {
-        console.error('❌ 파일 가져오기 실패:', response.status);
       }
     } catch (error) {
-      console.error('⚠️ 파일 가져오기 에러:', error);
     }
   };
 
@@ -390,6 +386,18 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
     } catch (e) {
       return '날짜 없음';
     }
+  };
+
+  const formatFileName = (fileName) => {
+    if (!fileName) return "디자인";
+    
+    let cleanName = fileName.includes('_') ? fileName.substring(fileName.indexOf('_') + 1) : fileName;
+    
+    if (cleanName.includes('.')) {
+      cleanName = cleanName.substring(0, cleanName.lastIndexOf('.'));
+    }
+    
+    return cleanName;
   };
 
   return (
@@ -476,7 +484,11 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
                     ) : (
                       <p>이미지 없음</p>
                     )}
-                    <h3>{selectedItem.designName || "디자인"}</h3>
+                    <h3>
+                      {selectedItem.fileName
+                        ? formatFileName(selectedItem.fileName)
+                        : selectedItem.designName || "디자인"}
+                    </h3>
                     <p>{formatDateTime(selectedItem.createdAt || selectedItem.uploadedAt)}</p>
                   </>
                 ) : (
@@ -598,26 +610,22 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
               )
             )}
 
-            {selectedCategory === 'pattern' && (
-              userFiles.length === 0 ? (
-                <p>해당 카테고리에 저장된 파일이 없습니다.</p>
-              ) : (
-                <div style={{ justifyContent: "center" }} className="card-container">
-                  {userFiles.map((item) => (
-                    <div key={item.fileName} className="card" onClick={() => handleCardClick(item)}>
-                      <img
-                        src={`http://localhost:8081/files/view/${item.fileName}`}
-                        alt="디자인"
-                        className="card-image"
-                        style={{ width: "100%", height: "auto" }}
-                      />
-                      <h3>디자인</h3>
-                      <p>{formatDateTime(item.uploadedAt)}</p>
-                    </div>
-                  ))}
-                </div>
-              )
-            )}
+            {userFiles.map((item) => (
+              <div
+                key={item.fileName}
+                className="card"
+                onClick={() => handleCardClick(item)}
+              >
+                <img
+                  src={`http://localhost:8081/files/view/${item.fileName}`}
+                  alt="디자인"
+                  className="card-image"
+                  style={{ width: "100%", height: "auto" }}
+                />
+                <h3>{formatFileName(item.fileName)}</h3>
+                <p>{formatDateTime(item.uploadedAt)}</p>
+              </div>
+            ))}
 
             {selectedCategory === 'brand' && (
               <p>브랜드 샘플 디자인은 현재 지원되지 않습니다.</p>

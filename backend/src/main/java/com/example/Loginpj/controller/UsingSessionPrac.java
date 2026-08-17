@@ -146,6 +146,31 @@ public class UsingSessionPrac {
 
         return ResponseEntity.ok("찜 목록에 추가되었습니다.");
     }
+    
+    @GetMapping("/like/check/{postnum}")
+    public ResponseEntity<Boolean> checkLikeStatus(@PathVariable Long postnum, HttpSession session) {
+        String clientId = (String) session.getAttribute("username");
+
+        if (clientId == null) {
+            return ResponseEntity.ok(false);
+        }
+
+        try {
+            List<PostWhat> wishlist = postService.getWishlistByClient(clientId);
+            
+            boolean isLiked = false;
+            if (wishlist != null) {
+                isLiked = wishlist.stream()
+                        .anyMatch(post -> post.getPostnum() != null && post.getPostnum().equals(postnum));
+            }
+
+            return ResponseEntity.ok(isLiked);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(false); 
+        }
+    }
 
     @GetMapping("/wishlist")
     public ResponseEntity<List<PostWhat>> getWishlist(HttpSession session) {

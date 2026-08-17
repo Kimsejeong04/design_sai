@@ -6,6 +6,7 @@ import designerimg from "../../../assets/desiner.png";
 export default function FavoriteDesigners() {
   const [designers, setDesigners] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  //const [likedIds, setLikedIds] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [sortOrder, setSortOrder] = useState("recent");
 
@@ -20,6 +21,7 @@ export default function FavoriteDesigners() {
         if (res.ok) {
           const data = await res.json(); // [{ postnum, id, contents }]
           setDesigners(data);
+          //setLikedIds(data.map(d => d.postnum));
           setSelectedIds([]); // 초기엔 아무것도 선택 안됨
         }
       } catch (e) {
@@ -46,12 +48,34 @@ export default function FavoriteDesigners() {
   });
 
   const handleSelect = (postnum) => {
-    setSelectedIds((prev) =>
+    setSelectedIds(prev =>
       prev.includes(postnum)
-        ? prev.filter((id) => id !== postnum)
+        ? prev.filter(id => id !== postnum)
         : [...prev, postnum]
     );
   };
+
+  // const handleLikeToggle = async (postnum) => {
+  //   try {
+  //     if (likedIds.includes(postnum)) {
+  //       await fetch(`http://localhost:8081/api/posts/unlike/${postnum}`, {
+  //         method: "POST",
+  //         credentials: "include",
+  //       });
+
+  //       setLikedIds((prev) => prev.filter((id) => id !== postnum));
+  //     } else {
+  //       await fetch(`http://localhost:8081/api/posts/like/${postnum}`, {
+  //         method: "POST",
+  //         credentials: "include",
+  //       });
+
+  //       setLikedIds((prev) => [...prev, postnum]);
+  //     }
+  //   } catch (e) {
+  //     console.error("찜 변경 실패", e);
+  //   }
+  // };
 
   const handleSelectAll = () => {
     const visibleIds = filteredDesigners.map((d) => d.postnum);
@@ -75,6 +99,7 @@ export default function FavoriteDesigners() {
         )
       );
       setDesigners((prev) => prev.filter((d) => !selectedIds.includes(d.postnum)));
+      //setLikedIds((prev) => prev.filter((id) => !selectedIds.includes(id)));
       setSelectedIds([]);
     } catch (e) {
       console.error("선택 삭제 중 오류 발생:", e);
@@ -93,6 +118,7 @@ export default function FavoriteDesigners() {
         )
       );
       setDesigners([]);
+      //setLikedIds([]);
       setSelectedIds([]);
     } catch (e) {
       console.error("전체 삭제 중 오류 발생:", e);
@@ -143,16 +169,14 @@ export default function FavoriteDesigners() {
         ) : (
           sortedDesigners.map((designer) => (
             <div key={designer.postnum} className="designer-card">
-              <span
-                className="heart-checkbox"
-                onClick={() => handleSelect(designer.postnum)}
-              >
-                {selectedIds.includes(designer.postnum) ? (
-                  <FaHeart color="#ff5b5b" />
-                ) : (
-                  <FaRegHeart color="#aaa" />
-                )}
-              </span>
+              <input
+                  type="checkbox"
+                  checked={selectedIds.includes(designer.postnum)}
+                  onChange={() => handleSelect(designer.postnum)}
+              />
+              <span className="heart-checkbox">
+                <FaHeart color="#ff5b5b" />
+            </span>
               <img src={designer.image || designerimg} alt={designer.id} />
               <div className="info">
                 <h4>{designer.id}</h4>

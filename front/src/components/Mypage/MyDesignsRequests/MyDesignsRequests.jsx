@@ -57,6 +57,7 @@ const MyDesignsRequests = ({ username: propUsername }) => {
       if (response.ok) {
         const data = await response.json();
         setUserFiles(data);
+        console.log(data);
       }
     } catch (error) {
       console.error('파일 가져오기 에러:', error);
@@ -87,7 +88,6 @@ const MyDesignsRequests = ({ username: propUsername }) => {
       return "색상 없음";
     }
 
-    // "데님 50%, 면 50%" → 객체로 변환
     const ratioMap = {};
 
     if (blendRatio) {
@@ -110,17 +110,15 @@ const MyDesignsRequests = ({ username: propUsername }) => {
 };
 
   const formatDateTime = (datetime) => {
-    try {
+    if(!datetime) return "";
       const date = new Date(datetime);
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
       const hours = date.getHours().toString().padStart(2, '0');
+
       return `${year}-${month}-${day} ${hours}시`;
-    } catch (e) {
-      return '';
-    }
-  };
+    };
 
   const parseFabric = (json) => {
     try {
@@ -208,13 +206,11 @@ const MyDesignsRequests = ({ username: propUsername }) => {
                 userFiles.length > 0 ? (
                   <div className="card-container">
                     {userFiles.map((item) => (
-                      <div key={item.fileName} className="card" onClick={() => handleCardClick(item)}>
-                        <img src={`http://localhost:8081/${item.filePath}`} alt={item.fileName} className="card-image" />
+                      <div key={item.fileName} className="card">
+                        <img src={`http://localhost:8081/files/view/${item.fileName}`} alt={item.fileName} className="card-image" />
                         <p>
                           <strong>제작일:</strong>{" "}
-                          {item.createdAt
-                            ? formatDateTime(item.createdAt)
-                            : item.uploadedAt}
+                          {formatDateTime(item.createdAt || item.uploadedAt)}
                         </p>
                       </div>
                     ))}
@@ -249,12 +245,10 @@ const MyDesignsRequests = ({ username: propUsername }) => {
       {isModalOpen && selectedItem && (
         <div className="modal-overlay" onClick={closeModal}>
           <div 
-            className="modal-content" 
-            onClick={(e) => e.stopPropagation()}
+            className="modal-content" onClick={(e) => e.stopPropagation()}
           >
           <span 
-            className="close-btn" 
-            onClick={closeModal}
+            className="close-btn" onClick={closeModal}
           >
             &times;
           </span>
@@ -281,8 +275,7 @@ const MyDesignsRequests = ({ username: propUsername }) => {
           )}
 
           <p>
-            <strong>의류 종류:</strong> 
-            {selectedItem.clothingType || "없음"}
+            <strong>의류 종류:</strong> {selectedItem.clothingType || "없음"}
           </p>
 
           <p>
@@ -293,15 +286,12 @@ const MyDesignsRequests = ({ username: propUsername }) => {
           </p>
 
           <p>
-            <strong>사이즈:</strong> 
-            {selectedItem.size || "없음"}
+            <strong>사이즈:</strong> {selectedItem.size || "없음"}
           </p>
 
           <p>
             <strong>제작일:</strong>{" "}
-            {selectedItem.createdAt
-              ? formatDateTime(selectedItem.createdAt)
-              : selectedItem.uploadedAt}
+            {formatDateTime(selectedItem.createdAt || selectedItem.uploadedAt)}
           </p>
 
           <p>
@@ -315,8 +305,7 @@ const MyDesignsRequests = ({ username: propUsername }) => {
           </p>
 
           <p>
-            <strong>메모 또는 요청사항:</strong>{" "}
-            {selectedItem.note || "없음"}
+            <strong>메모 또는 요청사항:</strong>{" "} {selectedItem.note || "없음"}
           </p>
         </div>
       </div>
