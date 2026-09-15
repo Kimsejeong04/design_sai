@@ -17,4 +17,5 @@ public interface RequestMapper {
     
     List<Request> findByUsername(String username);
     void updateDescription(Map<String, Object> params);
+    List<Request> findDraftsByUsername(String username);
 }

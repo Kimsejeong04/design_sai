@@ -213,6 +213,10 @@ export default function RequestWriting({ username: propUsername }) {
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const draftId = new URLSearchParams(location.search).get("draftId");
+
+  //console.log("현재 draftId:", draftId);
 
   const onImageUpload = (index, url) => {
     setImageUrls(prev => {
@@ -294,15 +298,80 @@ useEffect(() => {
     }
   }, [username]);
 
-  const fetchMyDesigns = () => {
+  const fetchMyDesigns = async () => {
+  if (!username) {
+    console.error("🛑 사용자 이름이 없어 디자인을 가져올 수 없습니다.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://localhost:8081/api/designs/mydesigns",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("디자인 조회 실패");
+    }
+
+    const data = await response.json();
+
+    console.log("🎨 서버에서 가져온 내 디자인:", data);
+
+    setDesigns(data);
+  } catch (error) {
+    console.error("❌ 내 디자인 조회 실패:", error);
+    setDesigns([]);
+  }
+};
+
+
+useEffect(() => {
+  if(!draftId) return;
+
+  const fetchDraft = async () => {
     try {
-      const mockDesigns = JSON.parse(localStorage.getItem("mockDesigns") || "[]");
-      console.log("Raw mockDesigns:", mockDesigns);
-      setDesigns(mockDesigns);
-    } catch (err) {
-      setDesigns([]);
+      const response = await axios.get(
+        `http://localhost:8081/api/requests/${draftId}`
+      );
+
+      console.log("불러온 임시저장 데이터:", response.data);
+
+      setTitle(response.data.title);
+      setCategoryTags(response.data.categoryTags 
+        ? response.data.categoryTags.split(",")
+        : []
+      );
+      setStyle(response.data.style || "");
+      setImageUrls([
+        response.data.image1Url
+          ? `http://localhost:8081/api/requests${response.data.image1Url}`
+          : "",
+        response.data.image2Url
+          ? `http://localhost:8081/api/requests${response.data.image2Url}`
+          : "",
+        response.data.image3Url
+          ? `http://localhost:8081/api/requests${response.data.image3Url}`
+          : ""
+      ]);
+      setAmount(response.data.amount);
+      setDeadline(response.data.deadline);
+      setDescription(response.data.description);
+    } catch (error){
+      console.error("임시저장 데이터 조회 실패:", error);
     }
   };
+
+  fetchDraft();
+}, [draftId]);
 
   const fetchUserFiles = async () => {
     if (!username) {
@@ -323,7 +392,12 @@ useEffect(() => {
 
 const handleSubmit = async () => {
     const sanitized = description.replace(/<script[^>]*>[\s\S]*?<\/script>|<style[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->|<[^>]+>/gi,'').trim();
-      console.log('폼 제출 직전 description:', description);
+      // console.log('폼 제출 직전 description:', description);
+      // console.log("===== 제출 직전 이미지 =====");
+      // console.log("imageUrls:", imageUrls);
+      // console.log("image1Url:", imageUrls[0]);
+      // console.log("image2Url:", imageUrls[1]);
+      // console.log("image3Url:", imageUrls[2]);
 
   try {
     
@@ -335,9 +409,15 @@ const handleSubmit = async () => {
       deadline,
       description : sanitized,
       selectedItem, //6.14 선택된 나의 디자인 카드 아이템 api 벡엔드 엔드포인트 필요해요 
-      image1Url: imageUrls[0] || "",
-      image2Url: imageUrls[1] || "",
-      image3Url: imageUrls[2] || "",
+      image1Url: imageUrls[0]
+        ? imageUrls[0].replace("http://localhost:8081/api/requests", "")
+        : "",
+      image2Url: imageUrls[1]
+        ? imageUrls[1].replace("http://localhost:8081/api/requests", "")
+        : "",
+      image3Url: imageUrls[2]
+        ? imageUrls[2].replace("http://localhost:8081/api/requests", "")
+        : "",
       username
     });
     console.log("의뢰등록 성공 :", response.data);
@@ -350,6 +430,27 @@ const handleSubmit = async () => {
   }
 };
 
+const handleDraftSave = async () => {
+  try {
+    await axios.post("http://localhost:8081/api/requests/draft", {
+      title,
+      categoryTags: categoryTags.join(","),
+      style,
+      amount,
+      deadline,
+      description,
+      image1Url: imageUrls[0] || "",
+      image2Url: imageUrls[1] || "",
+      image3Url: imageUrls[2] || "",
+      username,
+    });
+
+    alert("임시저장이 완료되었습니다.");
+  } catch (error) {
+    console.error("임시저장 실패:", error);
+    alert("임시저장에 실패했습니다.");
+  }
+};
 
 const filteredDesigns = designs.filter((item) => item.category === selectedCategory);
 
@@ -367,10 +468,18 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
     }
   };
 
-  const handleCardClick = (item) => {
+  const handleFileClick = (item) => {
     setSelectedItem({
       ...item,
       imageUrl: item.imageUrl || `http://localhost:8081/files/view/${item.fileName}`
+    });
+    setIsMyDesignModal(false);
+  };
+
+  const handleTemplateClick = (item) => {
+    setSelectedItem({
+      ...item,
+      imageUrl: `http://localhost:8081${item.designImageUrl}`
     });
     setIsMyDesignModal(false);
   };
@@ -422,6 +531,7 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
             <RequiredLabel required>카테고리</RequiredLabel>
             <TagManager
               placeholder="카테고리"
+              initialTags={categoryTags}
               onTagsUpdate={(tags) => {
                 console.log("Category tags updated:", tags);
                 setCategoryTags(tags);
@@ -480,16 +590,25 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
                 {selectedItem ? (
                   <>
                     {selectedItem.imageUrl ? (
-                      <img src={selectedItem.imageUrl} alt={selectedItem.designName || "디자인"} />
+                      <img
+                        src={selectedItem.imageUrl}
+                        alt={selectedItem.designName || "디자인"}
+                      />
                     ) : (
                       <p>이미지 없음</p>
                     )}
+
                     <h3>
                       {selectedItem.fileName
                         ? formatFileName(selectedItem.fileName)
                         : selectedItem.designName || "디자인"}
                     </h3>
-                    <p>{formatDateTime(selectedItem.createdAt || selectedItem.uploadedAt)}</p>
+
+                    <p>
+                      {formatDateTime(
+                        selectedItem.createdAt || selectedItem.uploadedAt
+                      )}
+                    </p>
                   </>
                 ) : (
                   <p>디자인을 선택하세요</p>
@@ -537,18 +656,21 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
               files={files}
               setFiles={setFiles}
               onImageUpload={onImageUpload}
+              imageUrl={imageUrls[0]}
             />
             <CustomUpload
               id="upload2"
               files={files}
               setFiles={setFiles}
               onImageUpload={onImageUpload}
+              imageUrl={imageUrls[1]}
             />
             <CustomUpload
               id="upload3"
               files={files}
               setFiles={setFiles}
               onImageUpload={onImageUpload}
+              imageUrl={imageUrls[2]}
             />
           </UploadContainer>
         </DetailAndUploadWrapper>
@@ -556,7 +678,7 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
         <Footer>
           <NextButtonUI onClick={handleSubmit}>의뢰 등록</NextButtonUI>
           <NextButtonUI to="/client/Request">취소</NextButtonUI>
-          <NextButtonUI onClick={() => alert("임시 저장되었습니다!")}>임시 저장</NextButtonUI>
+          <NextButtonUI onClick={handleDraftSave}>임시 저장</NextButtonUI>
         </Footer>
       </Wrapper>
 
@@ -579,42 +701,47 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
           <div className="dropdown">
             <select onChange={handleCategoryChange} value={selectedCategory}>
               <option value="template">템플릿 디자인</option>
-              <option value="pattern">의류 패턴 설계도 디자인</option>
+              <option value="pattern">디자인 파일 업로드</option>
               <option value="brand">브랜드 샘플 디자인</option>
             </select>
           </div>
 
           <div>
             {selectedCategory === 'template' && (
-              filteredDesigns.length === 0 ? (
-                <p>해당 카테고리에 저장된 디자인이 없습니다.</p>
-              ) : (
-                <div style={{ justifyContent: "center" }} className="card-container">
-                  {filteredDesigns.map((item) => (
-                    <div key={item.designId} className="card" onClick={() => handleCardClick(item)}>
-                      {item.imageUrl ? (
-                        <img
-                          src={item.imageUrl}
-                          alt={item.designName}
-                          className="card-image"
-                          style={{ width: "100%", height: "auto" }}
-                        />
-                      ) : (
-                        <div>이미지 없음</div>
-                      )}
-                      <h3>{item.designName}</h3>
-                      <p>{formatDateTime(item.createdAt)}</p>
-                    </div>
-                  ))}
-                </div>
-              )
-            )}
+                filteredDesigns.length === 0 ? (
+                  <p>해당 카테고리에 저장된 디자인이 없습니다.</p>
+                ) : (
+                  <div className="card-container">
+                    {filteredDesigns.map((item) => (
+                      <div
+                        key={item.designId}
+                        className="card"
+                        onClick={() => handleTemplateClick(item)}
+                      >
+                        {item.designImageUrl ? (
+                          <img
+                            src={`http://localhost:8081${item.designImageUrl}`}
+                            alt={item.designName}
+                            className="card-image"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        ) : (
+                          <div>이미지 없음</div>
+                        )}
+
+                        <h3>{item.designName}</h3>
+                        <p>{formatDateTime(item.createdAt)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
 
             {userFiles.map((item) => (
               <div
                 key={item.fileName}
                 className="card"
-                onClick={() => handleCardClick(item)}
+                onClick={() => handleFileClick(item)}
               >
                 <img
                   src={`http://localhost:8081/files/view/${item.fileName}`}

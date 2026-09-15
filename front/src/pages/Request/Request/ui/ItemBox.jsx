@@ -127,6 +127,16 @@ export default function ItemBox({ children,data = {} }) {
   console.log("ItemBox categoryTags:", data?.categoryTags);
   console.log("ItemBox requestId:", data?.requestId);
 
+  // console.log("===== 목록 이미지 =====");
+  // console.log("data:", data);
+  // console.log("image1Url:", data?.image1Url);
+  // console.log(
+  //   "src:",
+  //   data?.image1Url
+  //     ? `http://localhost:8081/api/requests${data.image1Url}`
+  //     : null
+  // );
+
   return (
     <ItemBoxContainer style={{ cursor: "pointer" }} onClick={handleClick}> 
       <InnerBox>

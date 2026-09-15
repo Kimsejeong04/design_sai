@@ -48,4 +48,13 @@ public class RequestService {
         mapper.updateDescription(params);
         return 1; // MyBatis의 update는 영향을 받은 행 수를 반환하므로, 실제 구현에서는 이를 반환하도록 수정 가능
     }
+    
+    public int createDraft(Request request) {
+        request.setStatus("DRAFT");
+        return mapper.insert(request);
+    }
+    
+    public List<Request> getDraftsByUsername(String username) {
+        return mapper.findDraftsByUsername(username);
+    }
 }

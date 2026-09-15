@@ -18,12 +18,13 @@
     <result property="image3Url" column="image3_url" />
     <result property="username" column="username" />
     <result property="requesterName" column="name" />
+    <result property="status" column="status" />
   </resultMap>
 
   <!-- 기존 쿼리들 유지 -->
   <select id="findAll" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      ORDER BY r.request_id
@@ -39,7 +40,7 @@
   <!-- 나머지 기존 쿼리들 유지 -->
   <select id="findById" parameterType="long" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      WHERE r.request_id = #{requestId}
@@ -47,7 +48,7 @@
 
   <insert id="insert" parameterType="com.example.Loginpj.model.Request" useGeneratedKeys="false">
   INSERT INTO request (
-    request_id, title, category_tags, style, amount, deadline, description, image1_url, image2_url, image3_url, username
+    request_id, title, category_tags, style, amount, deadline, description, image1_url, image2_url, image3_url, username, status
   )
   VALUES (
     request_seq.nextval,
@@ -60,7 +61,8 @@
     #{image1Url, jdbcType=VARCHAR},
     #{image2Url, jdbcType=VARCHAR},
     #{image3Url, jdbcType=VARCHAR},
-    #{username, jdbcType=VARCHAR}
+    #{username, jdbcType=VARCHAR},
+    #{status, jdbcType=VARCHAR}
   )
 </insert>
 
@@ -85,10 +87,25 @@
 
   <select id="findByUsername" parameterType="string" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      WHERE r.username = #{username}
      ORDER BY r.request_id DESC
   </select>
+  
+  <select id="findDraftsByUsername"
+        parameterType="string"
+        resultMap="RequestResultMap">
+
+    SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description, r.image1_url, 
+    	   r.image2_url, r.image3_url, r.username, r.status, u.name
+      FROM request r
+      LEFT JOIN user_info u
+        ON r.username = u.username
+     WHERE r.username = #{username}
+       AND r.status = 'DRAFT'
+     ORDER BY r.request_id DESC
+
+</select>
 </mapper>
