@@ -3,18 +3,19 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Container = styled.div`
-  width: 400px;
+  width: 100%;
   height: auto;
+  box-sizing: border-box;
 `;
 
 const DetailBox = styled.div`
-  flex: 0.8;
   width: 100%;
-  max-width: 400px;
-  height: 200px;
+  height: 220px;
+  box-sizing: border-box;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
+  padding: 20px;
   font-weight: 500;
   font-size: 1.125rem;
   line-height: 1.6;
@@ -24,14 +25,16 @@ const DetailBox = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   white-space: pre-wrap;
   word-break: break-word;
+  overflow-y: auto;
 `;
 
 const TextArea = styled.textarea`
-  aspect-ratio: 1 / 1;
   width: 100%;
-  height: 100%;
+  height: 220px;
+  box-sizing: border-box;
   background-color: white;
   border: 2px solid;
+  border-radius: 12px;
   padding: 10px;
   font-size: 16px;
   resize: none;
@@ -59,13 +62,12 @@ const ButtonDetailContainer = styled.button`
 `;
 
 const Text = styled.div`
-  margin: 20px;
+  margin: 0;
 `;
 
 const ImgItem = styled.img`
   width: 100%;
-  max-height: 245px;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
   background: #f0f0f0;
@@ -73,11 +75,16 @@ const ImgItem = styled.img`
 
 const ImgContainer1 = styled.div`
   margin-top: 16px;
-  min-height: 150px;
+  height: 220px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   border: 2px dashed #ccc;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #fafafa;
+  color: #B4AFAF;
   position: relative;
 `;
 

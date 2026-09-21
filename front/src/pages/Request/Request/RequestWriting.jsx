@@ -103,14 +103,13 @@ const RequiredLabel = styled.label`
   }
 `;
 
-/* 🎨 [수정] Content 박스 자체를 중앙으로 정렬시켜서 시각적 안정감 확보 */
+/* 라벨+입력창을 왼쪽 정렬하고, 남는 공간은 오른쪽에 자연스럽게 둠 */
 const Content = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  /* 양쪽 끝이 아닌, 라벨과 입력창을 묶어서 전체 박스의 중앙에 오도록 함 */
-  justify-content: center; 
-  gap: 24px; /* 라벨과 인풋 사이 간격 */
+  justify-content: flex-start;
+  gap: 24px;
 `;
 
 /* 🎨 공통 넓이(500px) 통일 래퍼 */
@@ -133,6 +132,7 @@ const TitleFieldWrapper = styled(FieldWrapper)`
     padding: 0 12px !important;
     border-radius: 8px !important;
     border: 1px solid #d0d0d0 !important;
+    box-sizing: border-box !important;
   }
   & input {
     height: 100% !important;
@@ -151,6 +151,7 @@ const TagManagerWrapper = styled(FieldWrapper)`
     padding: 0 12px !important;
     border-radius: 8px !important;
     border: 1px solid #d0d0d0 !important;
+    box-sizing: border-box !important;
   }
   & input {
     height: 100% !important;
@@ -206,26 +207,32 @@ const TagManagerWrapper = styled(FieldWrapper)`
   }
 `;
 
-/* 🎨 [수정] 드롭다운의 이중 테두리 제거 */
+/* 🎨 [수정] 드롭다운 이중 테두리 제거
+   - 바깥 div(DropDown이 기본으로 갖고 있는 wrapper)에만 테두리를 주고
+   - 그 안의 실제 버튼/입력요소는 테두리·배경을 지우고 100% 채우기만 함 */
 const DropDownFieldWrapper = styled(FieldWrapper)`
   position: relative;
   z-index: 10;
-  
-  /* 기존에 감싸는 쪽에 있던 border를 없애고, 높이(48px)만 DropDown 내부 요소에 맞게 전달되도록 처리 */
-  & > div { 
-    height: 48px !important; 
-    /* 만약 DropDown 내부 컨테이너도 건드려야 한다면 */
-  }
-  
-  & button {
+
+  & > div {
     height: 48px !important;
     border-radius: 8px !important;
-    /* 테두리는 DropDown 자체의 것을 쓰거나, 여기서 덮어쓰려면 1번만 적용 */
     border: 1px solid #d0d0d0 !important;
-    background-color: white !important;
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
     padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 안쪽 버튼/입력요소는 테두리·배경 제거하고 부모(위 div)를 꽉 채우기만 */
+  & button,
+  & input,
+  & select {
+    border: none !important;
+    background: transparent !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 `;
 
@@ -296,6 +303,7 @@ const MydesignContainer = styled.div`
   border: 1px dashed #d0d0d0; 
   border-radius: 12px;
   padding: 16px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -351,6 +359,7 @@ const CustomOutlineButton = styled(OutlineButton)`
   border-radius: 8px;
   padding: 0 12px; 
   justify-content: space-between; 
+  box-sizing: border-box;
 `;
 
 const Footer = styled.div`
@@ -566,7 +575,7 @@ export default function RequestWriting({ username: propUsername }) {
     <Container>
       <Wrapper>
         <HeaderWrapper>
-          <Header style={{ paddingLeft: '32px' }}> {/* 🎨 헤더 제목도 시각적 균형을 위해 살짝 우측으로 밉니다 */}
+          <Header>
             <img src={dress} alt="sample" style={{ width: 28, height: 28 }} />
             어떠한 옷을 원하세요?
           </Header>
@@ -663,21 +672,23 @@ export default function RequestWriting({ username: propUsername }) {
 
           <Content>
             <RequiredLabel />
-            <MydesignContainer>
-              {selectedItem ? (
-                <>
-                  {selectedItem.imageUrl ? (
-                    <img src={selectedItem.imageUrl} alt={selectedItem.designName || "디자인"} />
-                  ) : (
-                    <p>이미지 없음</p>
-                  )}
-                  <h3>{selectedItem.designName || "디자인"}</h3>
-                  <p>{formatDateTime(selectedItem.createdAt || selectedItem.uploadedAt)}</p>
-                </>
-              ) : (
-                <p>디자인을 선택하세요</p>
-              )}
-            </MydesignContainer>
+            <FieldWrapper>
+              <MydesignContainer>
+                {selectedItem ? (
+                  <>
+                    {selectedItem.imageUrl ? (
+                      <img src={selectedItem.imageUrl} alt={selectedItem.designName || "디자인"} />
+                    ) : (
+                      <p>이미지 없음</p>
+                    )}
+                    <h3>{selectedItem.designName || "디자인"}</h3>
+                    <p>{formatDateTime(selectedItem.createdAt || selectedItem.uploadedAt)}</p>
+                  </>
+                ) : (
+                  <p>디자인을 선택하세요</p>
+                )}
+              </MydesignContainer>
+            </FieldWrapper>
           </Content>
         </HeaderWrapper>
 

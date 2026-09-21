@@ -5,27 +5,32 @@
   margin: 0 auto;
   justify-content: flex-start;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   box-sizing: border-box;
   width : 100%;
-  padding-top: 40px;
+  padding-top: 48px;
 }
 
 .clientrequest-titlecontainer {
   display: flex;
   width: 1200px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  
+  padding-bottom: 20px;
+  border-bottom: 1px solid #EEE9E9;
 }
 
 .cientrequest-titlecontainer2 {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: flex-end;
   width: 1200px;
 }
 
 .clientrequest-titlecontainer h1 {
   margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2B2B2B;
+  white-space: nowrap;
 }

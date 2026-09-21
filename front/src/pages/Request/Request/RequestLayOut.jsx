@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   width: 100%;
   background: white;
+  padding-bottom: 80px;
 `;
 
 const Content = styled.div`
@@ -12,7 +13,7 @@ const Content = styled.div`
   max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;      
+  gap: 1.5rem;
   margin: 0 auto;
   justify-content: center;
 `;
@@ -71,4 +72,3 @@ export default function RequestLayOut({ children }) {
     </Container>
   );
 }
-
