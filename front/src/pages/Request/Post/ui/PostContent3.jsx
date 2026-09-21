@@ -4,13 +4,17 @@ import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 const DetailBox = styled.div`
   width: 100%;
-  height: 220px;
+  flex: 1;
+  min-height: 160px;
   box-sizing: border-box;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -30,7 +34,8 @@ const DetailBox = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 220px;
+  flex: 1;
+  min-height: 160px;
   box-sizing: border-box;
   background-color: white;
   border: 2px solid;
@@ -42,8 +47,8 @@ const TextArea = styled.textarea`
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
 `;
 
 const ButtonDetailContainer = styled.button`
@@ -58,7 +63,6 @@ const ButtonDetailContainer = styled.button`
   font-size: 18px;
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
 `;
 
 const Text = styled.div`
@@ -74,8 +78,8 @@ const ImgItem = styled.img`
 `;
 
 const ImgContainer1 = styled.div`
-  margin-top: 16px;
-  height: 220px;
+  flex: 1;
+  min-height: 160px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -144,19 +148,13 @@ export default function PostCotent3({ data = {} }) {
 
   return (
     <Container>
-      <ButtonContainer>
-        <ButtonDetailContainer>상세설명</ButtonDetailContainer>
-        {editMode ? (
-          <>
-            <ButtonDetailContainer disabled={isSaving} onClick={handleSave}>
-              {isSaving ? "저장 중..." : "저장"}
-            </ButtonDetailContainer>
-            <ButtonDetailContainer onClick={handleCancel}>취소</ButtonDetailContainer>
-          </>
+      <ImgContainer1>
+        {firstImageUrl ? (
+          <ImgItem src={firstImageUrl} alt="요청 이미지" />
         ) : (
-          <ButtonDetailContainer onClick={handleEditToggle}>수정하기</ButtonDetailContainer>
+          <div>이미지가 없습니다.</div>
         )}
-      </ButtonContainer>
+      </ImgContainer1>
 
       {editMode ? (
         <TextArea
@@ -170,13 +168,19 @@ export default function PostCotent3({ data = {} }) {
         </DetailBox>
       )}
 
-      <ImgContainer1>
-        {firstImageUrl ? (
-          <ImgItem src={firstImageUrl} alt="요청 이미지" />
+      <ButtonContainer>
+        <ButtonDetailContainer>상세설명</ButtonDetailContainer>
+        {editMode ? (
+          <>
+            <ButtonDetailContainer disabled={isSaving} onClick={handleSave}>
+              {isSaving ? "저장 중..." : "저장"}
+            </ButtonDetailContainer>
+            <ButtonDetailContainer onClick={handleCancel}>취소</ButtonDetailContainer>
+          </>
         ) : (
-          <div>이미지가 없습니다.</div>
+          <ButtonDetailContainer onClick={handleEditToggle}>수정하기</ButtonDetailContainer>
         )}
-      </ImgContainer1>
+      </ButtonContainer>
     </Container>
   );
 }

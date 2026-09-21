@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { ButtonCategory } from "../../../../components";
 
 const List = styled.div`
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -15,7 +17,7 @@ const Container = styled.div`
   background-color: white;
   border: 1px solid #E5E0E0;
   border-radius: 12px;
-  height: 72px;
+  height: 76px;
   box-sizing: border-box;
   padding: 0 20px;
 `;
@@ -57,14 +59,14 @@ export default function PostContent2({data}) {
     <Container>
     <Text>{data?.amount || "원하는 금액"}</Text>
     <ButtonContainer>
-    <ButtonCategory amount={data.amount}/>
+    <ButtonCategory amount={data.amount} label="가격"/>
     </ButtonContainer>
     </Container>
 
     <Container>
     <Text>{data?.deadline || "희망 마감기한"}</Text>
     <ButtonContainer>
-    <ButtonCategory deadline={data.deadline}/>
+    <ButtonCategory deadline={data.deadline} label="날짜"/>
     </ButtonContainer>
     </Container>
 
