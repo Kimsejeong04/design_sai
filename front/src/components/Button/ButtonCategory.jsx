@@ -16,9 +16,13 @@ const Container = styled.button`
   padding: 0 10px; /* 좌우 패딩 추가 */
 `;
 
-export default function ButtonCategory({ categoryTags, style, amount, deadline }) {
+export default function ButtonCategory({ categoryTags, style, amount, deadline, label }) {
   // 디버깅: 전달된 prop 확인
-  console.log("ButtonCategory props:", { categoryTags, style, amount, deadline });
+  console.log("ButtonCategory props:", { categoryTags, style, amount, deadline, label });
+
+  if (label) {
+    return <Container>{label}</Container>;
+  }
 
   // 표시할 텍스트 결정
   let displayText = "미지정";

@@ -8,7 +8,7 @@ import dress from "../../../assets/dress.png";
 import MyEditor from "./ui/MyEditor";
 import MydesignerPopup from "./MydesignerPopup";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";  // 🔧 변경
+import { useNavigate } from "react-router-dom";
 import RequestEditor from "./ui/RequestEditor";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
@@ -20,118 +20,262 @@ const CustomMydesignModal = styled(Modal)`
   background-color: white;
   width: 700px;
   overflow: auto;
-  padding: 20px;
+  padding: 24px;
 `;
 
+/* ---------------------------------------------
+   레이아웃: 간격은 전부 8px 배수로 통일 (8/16/24/32/40)
+--------------------------------------------- */
+
 const Container = styled.div`
-  max-width: 1000px;
+  max-width: 1200px;
   width: 100%;
-  margin: 30px auto;
+  margin: 40px auto;
   display: flex;
   flex-direction: column;
+  align-items: center; 
   gap: 40px;
 `;
 
 const Wrapper = styled.div`
-  max-width: 1000px;
+  max-width: 880px; 
   width: 100%;
-  margin: 30px auto;
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  align-items: center;
+  align-items: stretch;
+
+  & > *:not(:last-child) {
+    margin-bottom: 40px;
+  }
+  & > *:nth-last-child(2) {
+    margin-bottom: 16px;
+  }
 `;
 
-const HeaderWrapper = styled.div`
+const CardBase = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  align-items: center;
-  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 40px;
+  box-sizing: border-box;
 `;
 
-const DetailAndUploadWrapper = styled.div`
-  width: 100%;
+const HeaderWrapper = styled(CardBase)`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  align-items: center;
+  gap: 32px;
+  align-items: stretch; /* 하위 Content 들을 가로 꽉 차게 둠 */
+  text-align: left;
+`;
+
+const DetailAndUploadWrapper = styled(CardBase)`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
 `;
 
 const Header = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
-  margin: 50px 0;
-  gap: 10px;
-  font-size: 30px;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
 `;
 
+/* 🎨 [수정] 라벨 폭을 유동적으로 늘려서 우측 여백 쏠림 해결 */
 const RequiredLabel = styled.label`
-  font-size: 20px;
-  font-weight: bold;
-  width: 150px;
-  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
   white-space: nowrap;
+  
+  /* 기존 160px 고정 폭을 해제하고, Flexbox를 활용해 남은 공간을 밀어냅니다. */
+  flex-shrink: 0;
+  width: 180px; /* 라벨 자체의 기본 공간 */
+  
   &::after {
     content: ${(props) => (props.required ? '"*"' : '""')};
-    color: red;
+    color: #e5484d;
     margin-left: 4px;
   }
 `;
 
+/* 라벨+입력창을 왼쪽 정렬하고, 남는 공간은 오른쪽에 자연스럽게 둠 */
 const Content = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 70px;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 24px;
+`;
 
-  & > *:nth-child(2) {
-    width: 500px;
-    flex-shrink: 0;
+/* 🎨 공통 넓이(500px) 통일 래퍼 */
+const FieldWrapper = styled.div`
+  width: 500px;
+  flex-shrink: 0;
+
+  & input,
+  & select,
+  & textarea,
+  & button {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 `;
 
+const TitleFieldWrapper = styled(FieldWrapper)`
+  & > div {
+    height: 48px !important; 
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #d0d0d0 !important;
+    box-sizing: border-box !important;
+  }
+  & input {
+    height: 100% !important;
+    padding: 0 !important;
+  }
+`;
+
+const TagManagerWrapper = styled(FieldWrapper)`
+  & > div, & > div > div:not(:first-child) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  & > div > div:first-child { 
+    height: 48px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #d0d0d0 !important;
+    box-sizing: border-box !important;
+  }
+  & input {
+    height: 100% !important;
+    padding: 0 !important;
+  }
+
+  & [class*="tag"], & [class*="Tag"], & [class*="item"],
+  & > div > div > span, & > div > div > div, 
+  & > div > span {
+    display: inline-flex !important;
+    align-items: center !important;
+    background-color: transparent !important; 
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 4px 4px 4px 0 !important;
+    margin: 4px 12px 4px 0 !important;
+    white-space: nowrap !important; 
+    flex-wrap: nowrap !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+  }
+
+  & [class*="tag"]::before, & [class*="Tag"]::before, & [class*="item"]::before,
+  & > div > div > span::before, & > div > div > div::before,
+  & > div > span::before {
+    content: '#';
+    color: #888 !important; 
+    margin-right: 3px;
+    font-weight: bold;
+  }
+
+  & button {
+    background: transparent !important;
+    color: #aaa !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important; 
+    padding: 0 !important;
+    margin-left: 2px !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+  }
+
+  & button:hover {
+    background-color: #ebebeb !important;
+    color: #333 !important;
+  }
+`;
+
+/* 🎨 [수정] 드롭다운 이중 테두리 제거
+   - 바깥 div(DropDown이 기본으로 갖고 있는 wrapper)에만 테두리를 주고
+   - 그 안의 실제 버튼/입력요소는 테두리·배경을 지우고 100% 채우기만 함 */
+const DropDownFieldWrapper = styled(FieldWrapper)`
+  position: relative;
+  z-index: 10;
+
+  & > div {
+    height: 48px !important;
+    border-radius: 8px !important;
+    border: 1px solid #d0d0d0 !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 안쪽 버튼/입력요소는 테두리·배경 제거하고 부모(위 div)를 꽉 채우기만 */
+  & button,
+  & input,
+  & select {
+    border: none !important;
+    background: transparent !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+`;
+
+const HelperText = styled.span`
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+  padding-left: 4px;
+  display: block;
+`;
+
 const Detail = styled.div`
-  margin-top: 20px;
   font-size: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 
   & > h2 {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
   }
 `;
 
 const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 8px;
 `;
 
-const Footer = styled.div`
+const UploadRow = styled.div`
+  width: 100%;
   display: flex;
   justify-content: flex-end;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 70px;
-  gap: 20px;
-  align-items: center;
+`;
+
+const UploadContainer = styled.div`
+  display: inline-flex;
+  background-color: #fafafa;
+  border: 1px dashed #d0d0d0;
+  border-radius: 12px;
+  gap: 16px;
+  padding: 16px;
 `;
 
 const CustomUpload = styled(ImageUploader)`
@@ -139,30 +283,34 @@ const CustomUpload = styled(ImageUploader)`
   height: 150px;
 `;
 
-const UploadContainer = styled.div`
-  background-color: white;
-  border: 1px dashed #ccc;
-  border-radius: 10px;
-  display: flex;
-  padding: 20px;
-  width: 600px;
-  justify-content: space-between;
-  margin-top: 20px;
-  margin-left: 22%;
+const AmountFieldWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const CurrencyPrefix = styled.span`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 15px;
+  pointer-events: none;
 `;
 
 const MydesignContainer = styled.div`
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
+  background-color: #fafafa;
+  border: 1px dashed #d0d0d0; 
+  border-radius: 12px;
+  padding: 16px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 150px;
   width: 100%;
-  max-width: 500px;
+  max-width: 500px; /* 입력창 폭 500px과 통일 */
   color: #333;
 
   img {
@@ -170,18 +318,92 @@ const MydesignContainer = styled.div`
     max-height: 100px;
     object-fit: contain;
     border-radius: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   p {
-    margin: 5px 0;
+    margin: 4px 0;
     font-size: 14px;
+    color: #888;
   }
 
   h3 {
-    margin: 5px 0;
+    margin: 4px 0;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
+  }
+`;
+
+/* ---------------------------------------------
+   버튼: Primary(의뢰 등록) / Outline(취소) / Ghost(임시 저장)
+--------------------------------------------- */
+const OutlineButton = styled(NextButtonUI)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  background-color: #fff;
+  color: #555;
+  font-weight: 500;
+  border: 1px solid #d0d0d0;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const CustomOutlineButton = styled(OutlineButton)`
+  width: 500px; 
+  height: 48px;
+  border-radius: 8px;
+  padding: 0 12px; 
+  justify-content: space-between; 
+  box-sizing: border-box;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  padding-right: 0px; 
+`;
+
+const PrimaryButton = styled(NextButtonUI)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  background-color: var(--color-primary, #6b8cae);
+  color: #fff;
+  font-weight: 700;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+`;
+
+const GhostButton = styled(NextButtonUI)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  color: #999;
+  font-weight: 500;
+  padding: 12px 16px;
+  text-decoration: underline;
+
+  &:hover {
+    color: #666;
   }
 `;
 
@@ -191,10 +413,11 @@ function formatNumberWithCommas(value) {
   return Number(numericValue).toLocaleString();
 }
 
+const TITLE_MAX_LENGTH = 30;
+
 export default function RequestWriting({ username: propUsername }) {
   const [enteredTags, setEnteredTags] = useState([]);
-  const options = ["2025-05-01", "2025-06-01", "2025-07-01"];
-  const options2 = ["미니멀", "캐주얼", "포멀","아메카지","스트리트웨어","락시크","빈티지/레트로" ];
+  const options2 = ["미니멀", "캐주얼", "포멀", "아메카지", "스트리트웨어", "락시크", "빈티지/레트로"];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMyDesignModal, setIsMyDesignModal] = useState(false);
   const [files, setFiles] = useState({});
@@ -208,8 +431,7 @@ export default function RequestWriting({ username: propUsername }) {
   const [designs, setDesigns] = useState([]);
   const [userFiles, setUserFiles] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('template');
-  const [selectedItem, setSelectedItem] = useState(null); // 선택된 카드 항목
-  const [rawAmount, setRawAmount] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState("");
   const navigate = useNavigate();
@@ -222,47 +444,16 @@ export default function RequestWriting({ username: propUsername }) {
     });
   };
 
-  /* "원하는 금액" 쉼표 */
   const handleAmountChange = (e) => {
     const formatted = formatNumberWithCommas(e.target.value);
     setAmount(formatted);
   };
 
-
-useEffect(() => {
-    if (!propUsername) {
-      const fetchSession = async () => {
-        try {
-          const res = await fetch("http://localhost:8081/api/user", {
-            credentials: 'include', // 세션 쿠키 포함
-          });
-          if (!res.ok) throw new Error("세션 없음");
-          const data = await res.json();
-          if (data.username) {
-            console.log("✅ 세션에서 username 획득:", data.username);
-            setUsername(data.username);
-          } else {
-            console.warn("❗ 세션은 있지만 username 없음");
-            setLoading(false);
-          }
-        } catch (err) {
-          console.warn("⚠️ 세션 정보 없음:", err);
-          setLoading(false);
-        }
-      };
-      fetchSession();
-    } else {
-      setLoading(false); // props로 username이 주어진 경우 바로 false 처리
-    }
-  }, [propUsername]);
-
-  const handleFileChange = (index, event) => {
-    const newFiles = [...files];
-    newFiles[index] = event.target.files[0];
-    setFiles(newFiles);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value.slice(0, TITLE_MAX_LENGTH));
   };
 
-useEffect(() => {
+  useEffect(() => {
     if (!propUsername) {
       const fetchSession = async () => {
         try {
@@ -272,24 +463,24 @@ useEffect(() => {
           if (!res.ok) throw new Error("세션 없음");
           const data = await res.json();
           if (data.username) {
-            console.log("✅ 세션에서 username 획득:", data.username);
             setUsername(data.username);
           } else {
-            console.warn("❗ 세션은 있지만 username 없음");
+            setLoading(false);
           }
         } catch (err) {
           console.warn("⚠️ 세션 정보 없음:", err);
+          setLoading(false);
         }
       };
       fetchSession();
+    } else {
+      setLoading(false);
     }
   }, [propUsername]);
 
   useEffect(() => {
     if (username) {
-      console.log("📦 fetchMyDesigns 호출, 현재 username:", username);
       fetchMyDesigns();
-      console.log("📂 fetchUserFiles 호출, 현재 username:", username);
       fetchUserFiles();
     }
   }, [username]);
@@ -297,9 +488,7 @@ useEffect(() => {
   const fetchMyDesigns = () => {
     try {
       const mockDesigns = JSON.parse(localStorage.getItem("mockDesigns") || "[]");
-      console.log("Raw mockDesigns:", mockDesigns);
       setDesigns(mockDesigns);
-      console.log("🎯 모킹된 디자인 데이터:", mockDesigns);
     } catch (err) {
       console.error("❌ 디자인 불러오기 실패", err);
       setDesigns([]);
@@ -307,10 +496,7 @@ useEffect(() => {
   };
 
   const fetchUserFiles = async () => {
-    if (!username) {
-      console.error('🛑 사용자 이름이 없어 파일을 가져올 수 없습니다.');
-      return;
-    }
+    if (!username) return;
     try {
       const response = await fetch(`http://localhost:8081/files/userimg?username=${username}`);
       if (response.ok) {
@@ -324,38 +510,32 @@ useEffect(() => {
     }
   };
 
+  const handleSubmit = async () => {
+    const sanitized = description.replace(/<script[^>]*>[\s\S]*?<\/script>|<style[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->|<[^>]+>/gi, '').trim();
 
-const handleSubmit = async () => {
-    const sanitized = description.replace(/<script[^>]*>[\s\S]*?<\/script>|<style[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->|<[^>]+>/gi,'').trim();
-      console.log('폼 제출 직전 description:', description);
+    try {
+      const response = await axios.post("http://localhost:8081/api/requests", {
+        title,
+        categoryTags: categoryTags.join(","),
+        style,
+        amount,
+        deadline,
+        description: sanitized,
+        selectedItem,
+        image1Url: imageUrls[0] || "",
+        image2Url: imageUrls[1] || "",
+        image3Url: imageUrls[2] || "",
+        username
+      });
+      alert("의뢰가 등록되었습니다!");
+      navigate('/client/request');
+    } catch (error) {
+      console.error("의뢰등록 요청실패 :", error);
+      alert("의뢰 등록에 실패했습니다.");
+    }
+  };
 
-  try {
-    
-    const response = await axios.post("http://localhost:8081/api/requests", {
-      title,
-      categoryTags: categoryTags.join(","),  // 배열을 콤마 구분 문자열로 변환
-      style,
-      amount,
-      deadline,
-      description : sanitized,
-      selectedItem, //6.14 선택된 나의 디자인 카드 아이템 api 벡엔드 엔드포인트 필요해요 
-      image1Url: imageUrls[0] || "",
-      image2Url: imageUrls[1] || "",
-      image3Url: imageUrls[2] || "",
-      username
-    });
-    console.log("의뢰등록 성공 :", response.data);
-    alert("의뢰가 등록되었습니다!");
-    navigate('/client/request')
-    
-  } catch (error) {
-    console.error("의뢰등록 요청실패 :", error);
-    alert("의뢰 등록에 실패했습니다.",error.message);
-  }
-};
-
-
-const filteredDesigns = designs.filter((item) => item.category === selectedCategory);
+  const filteredDesigns = designs.filter((item) => item.category === selectedCategory);
 
   const handleCategoryChange = async (event) => {
     const selected = event.target.value;
@@ -379,7 +559,6 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
     setIsMyDesignModal(false);
   };
 
-  // 날짜 포맷팅 함수
   const formatDateTime = (datetime) => {
     try {
       const date = new Date(datetime);
@@ -397,77 +576,103 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
       <Wrapper>
         <HeaderWrapper>
           <Header>
-            <img src={dress} alt="sample" />
+            <img src={dress} alt="sample" style={{ width: 28, height: 28 }} />
             어떠한 옷을 원하세요?
           </Header>
 
           <Content>
             <RequiredLabel required>글제목</RequiredLabel>
-            <TextInputUIManager
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="예시) 디자인 사이"
-            />
+            <TitleFieldWrapper>
+              <TextInputUIManager
+                value={title}
+                onChange={handleTitleChange}
+                maxLength={TITLE_MAX_LENGTH}
+                placeholder="예시) 디자인 사이"
+              />
+            </TitleFieldWrapper>
           </Content>
 
-          <Content>
+          {/* 🎨 align-items를 지워서 다른 Content들과 정렬(center)을 통일합니다 */}
+          <Content> 
             <RequiredLabel required>카테고리</RequiredLabel>
-            <TagManager
-              placeholder="카테고리"
-              onTagsUpdate={(tags) => {
-                console.log("Category tags updated:", tags);
-                setCategoryTags(tags);
-              }}
-            />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <TagManagerWrapper>
+                <TagManager
+                  placeholder="카테고리"
+                  onTagsUpdate={(tags) => setCategoryTags(tags)}
+                />
+              </TagManagerWrapper>
+              <HelperText>* 키워드는 최대 5개까지 입력 가능합니다.</HelperText>
+            </div>
           </Content>
 
           <Content>
             <RequiredLabel required>원하는 스타일</RequiredLabel>
-            <DropDown
-              options={options2}
-              defaultSelected={style || "선택하세요"}
-              onChange={(value) => {
-                console.log("Style selected:", value);
-                setStyle(value);
-              }}
-            />
+            <DropDownFieldWrapper>
+              <DropDown
+                options={options2}
+                defaultSelected={style || "선택하세요"}
+                onChange={(value) => setStyle(value)}
+              />
+            </DropDownFieldWrapper>
           </Content>
 
           <Content>
             <RequiredLabel required>원하는 금액</RequiredLabel>
-            <TextInputUIManager
-              value={amount}
-              onChange={handleAmountChange}
-              placeholder="₩ 가격"
-            />
+            <FieldWrapper>
+              <AmountFieldWrapper>
+                <CurrencyPrefix>₩</CurrencyPrefix>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  placeholder="가격을 입력하세요"
+                  style={{
+                    width: "100%",
+                    height: "48px", 
+                    padding: "0 12px 0 28px",
+                    fontSize: "15px",
+                    border: "1px solid #d0d0d0",
+                    borderRadius: "8px",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </AmountFieldWrapper>
+            </FieldWrapper>
           </Content>
 
           <Content>
             <RequiredLabel required>희망 마감기한</RequiredLabel>
-            <input
-              type="date"
-              value={deadline}
-              onChange={(e) => {
-                console.log("Deadline selected:", e.target.value);
-                setDeadline(e.target.value);
-              }}
-              style={{
-                width: "500px",
-                padding: "10px",
-                fontSize: "16px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-            />
+            <FieldWrapper>
+              <input
+                type="date"
+                value={deadline}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setDeadline(e.target.value)}
+                style={{
+                  width: "100%",
+                  height: "48px", 
+                  padding: "0 12px",
+                  fontSize: "15px",
+                  border: "1px solid #d0d0d0",
+                  borderRadius: "8px",
+                  boxSizing: "border-box",
+                }}
+              />
+            </FieldWrapper>
           </Content>
 
           <Content>
             <RequiredLabel>내가 제작한 스타일</RequiredLabel>
-            <button onClick={() => setIsMyDesignModal(true)}>선택하세요</button>
+            <CustomOutlineButton onClick={() => setIsMyDesignModal(true)}>
+                <span>선택하세요</span>
+            </CustomOutlineButton>
           </Content>
 
           <Content>
-            <RequiredLabel>
+            <RequiredLabel />
+            <FieldWrapper>
               <MydesignContainer>
                 {selectedItem ? (
                   <>
@@ -483,82 +688,45 @@ const filteredDesigns = designs.filter((item) => item.category === selectedCateg
                   <p>디자인을 선택하세요</p>
                 )}
               </MydesignContainer>
-            </RequiredLabel>
+            </FieldWrapper>
           </Content>
         </HeaderWrapper>
 
         <DetailAndUploadWrapper>
           <Detail>
-            <div>
-              <h2>상세설명</h2>
-            </div>
+            <h2>상세설명</h2>
             <TagList>
-              {enteredTags.length === 0 ? (
-                <span></span>
-              ) : (
-                enteredTags.map((tag, index) => (
-                  <Tag key={index} text={tag} onRemove={() => {}} />
-                ))
-              )}
+              {enteredTags.map((tag, index) => (
+                <Tag key={index} text={tag} onRemove={() => {}} />
+              ))}
             </TagList>
           </Detail>
-  <RequestEditor
-        value={description}
-        onChange={(html) => {
-          console.log('에디터 onChange:', html);
-          setDescription(html);
-        }}
-      />
-              
-          {/* <MyEditor
-            onSendMessage={(text) => {
-              console.log("Description updated:", text);
-              setDescription(text);
-            }}
-          
-          /> */}
-          
 
-          <UploadContainer>
-            <CustomUpload
-              id="upload1"
-              files={files}
-              setFiles={setFiles}
-              onImageUpload={onImageUpload}
-            />
-            <CustomUpload
-              id="upload2"
-              files={files}
-              setFiles={setFiles}
-              onImageUpload={onImageUpload}
-            />
-            <CustomUpload
-              id="upload3"
-              files={files}
-              setFiles={setFiles}
-              onImageUpload={onImageUpload}
-            />
-          </UploadContainer>
+          <RequestEditor
+            value={description}
+            onChange={(html) => setDescription(html)}
+          />
+
+          <UploadRow>
+            <UploadContainer>
+              <CustomUpload id="upload1" files={files} setFiles={setFiles} onImageUpload={onImageUpload} />
+              <CustomUpload id="upload2" files={files} setFiles={setFiles} onImageUpload={onImageUpload} />
+              <CustomUpload id="upload3" files={files} setFiles={setFiles} onImageUpload={onImageUpload} />
+            </UploadContainer>
+          </UploadRow>
         </DetailAndUploadWrapper>
 
         <Footer>
-          <NextButtonUI onClick={handleSubmit}>의뢰 등록</NextButtonUI>
-          <NextButtonUI to="/client/Request">취소</NextButtonUI>
-          <NextButtonUI onClick={() => alert("임시 저장되었습니다!")}>임시 저장</NextButtonUI>
+          <GhostButton onClick={() => alert("임시 저장되었습니다!")}>임시 저장</GhostButton>
+          <OutlineButton to="/client/Request">취소</OutlineButton>
+          <PrimaryButton onClick={handleSubmit}>의뢰 등록</PrimaryButton>
         </Footer>
       </Wrapper>
 
       {isModalOpen && (
         <CustomRequestPopup
           onClose={() => setIsModalOpen(false)}
-          data={{
-            title,
-            categoryTags,
-            style,
-            amount,
-            deadline,
-            description,
-          }}
+          data={{ title, categoryTags, style, amount, deadline, description }}
         />
       )}
 

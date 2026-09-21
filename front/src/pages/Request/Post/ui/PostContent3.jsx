@@ -3,18 +3,23 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Container = styled.div`
-  width: 400px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 const DetailBox = styled.div`
-  flex: 0.8;
   width: 100%;
-  max-width: 400px;
-  height: 200px;
+  flex: 1;
+  min-height: 160px;
+  box-sizing: border-box;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
+  padding: 20px;
   font-weight: 500;
   font-size: 1.125rem;
   line-height: 1.6;
@@ -24,14 +29,17 @@ const DetailBox = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   white-space: pre-wrap;
   word-break: break-word;
+  overflow-y: auto;
 `;
 
 const TextArea = styled.textarea`
-  aspect-ratio: 1 / 1;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 160px;
+  box-sizing: border-box;
   background-color: white;
   border: 2px solid;
+  border-radius: 12px;
   padding: 10px;
   font-size: 16px;
   resize: none;
@@ -39,8 +47,8 @@ const TextArea = styled.textarea`
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
 `;
 
 const ButtonDetailContainer = styled.button`
@@ -55,29 +63,32 @@ const ButtonDetailContainer = styled.button`
   font-size: 18px;
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
 `;
 
 const Text = styled.div`
-  margin: 20px;
+  margin: 0;
 `;
 
 const ImgItem = styled.img`
   width: 100%;
-  max-height: 245px;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
   background: #f0f0f0;
 `;
 
 const ImgContainer1 = styled.div`
-  margin-top: 16px;
-  min-height: 150px;
+  flex: 1;
+  min-height: 160px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
   border: 2px dashed #ccc;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #fafafa;
+  color: #B4AFAF;
   position: relative;
 `;
 
@@ -137,19 +148,13 @@ export default function PostCotent3({ data = {} }) {
 
   return (
     <Container>
-      <ButtonContainer>
-        <ButtonDetailContainer>상세설명</ButtonDetailContainer>
-        {editMode ? (
-          <>
-            <ButtonDetailContainer disabled={isSaving} onClick={handleSave}>
-              {isSaving ? "저장 중..." : "저장"}
-            </ButtonDetailContainer>
-            <ButtonDetailContainer onClick={handleCancel}>취소</ButtonDetailContainer>
-          </>
+      <ImgContainer1>
+        {firstImageUrl ? (
+          <ImgItem src={firstImageUrl} alt="요청 이미지" />
         ) : (
-          <ButtonDetailContainer onClick={handleEditToggle}>수정하기</ButtonDetailContainer>
+          <div>이미지가 없습니다.</div>
         )}
-      </ButtonContainer>
+      </ImgContainer1>
 
       {editMode ? (
         <TextArea
@@ -163,13 +168,19 @@ export default function PostCotent3({ data = {} }) {
         </DetailBox>
       )}
 
-      <ImgContainer1>
-        {firstImageUrl ? (
-          <ImgItem src={firstImageUrl} alt="요청 이미지" />
+      <ButtonContainer>
+        <ButtonDetailContainer>상세설명</ButtonDetailContainer>
+        {editMode ? (
+          <>
+            <ButtonDetailContainer disabled={isSaving} onClick={handleSave}>
+              {isSaving ? "저장 중..." : "저장"}
+            </ButtonDetailContainer>
+            <ButtonDetailContainer onClick={handleCancel}>취소</ButtonDetailContainer>
+          </>
         ) : (
-          <div>이미지가 없습니다.</div>
+          <ButtonDetailContainer onClick={handleEditToggle}>수정하기</ButtonDetailContainer>
         )}
-      </ImgContainer1>
+      </ButtonContainer>
     </Container>
   );
 }

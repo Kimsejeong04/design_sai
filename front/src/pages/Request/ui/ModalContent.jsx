@@ -16,45 +16,83 @@ const CloseButton = styled.button`
     height: 20px;
   }
 `;
+
+/* 🎨 UI만 추가: 리스트 항목들 사이 간격을 최대한 촘촘하게.
+   단, 각 항목 자체의 높이/내부 여백은 RequestBar 컴포넌트 내부에서 정의돼 있어서
+   여기서는 "항목 사이 간격"만 줄일 수 있음 */
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
 // 휴지톧 버튼누르면 나오는 팝업 부분
+/* 🎨 UI만 수정: 500x400 고정박스 → 훨씬 컴팩트하게 */
 const CustomModal = styled(Modal)`
   display:flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 500px;
-  height: 400px;
+  padding: 32px 24px;
+  border-radius: 12px;
+  width: 320px;
+  height: 280px;
   text-align: center;
-  max-height: 400px;
+  box-sizing: border-box;
+
+  h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin: 4px 0 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #888;
+    margin: 8px 0 0;
+  }
 `;
 
 const ButtonWrapper = styled.div`
-width: 70%;
+width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-  gap: 20px;
+  margin-top: 24px;
+  gap: 12px;
   
 `;
 
+/* 🎨 UI만 수정: 색상/라운드만 다듬음 (onClick 로직은 그대로) */
 const CancelButton = styled.button`
-  width: 50%;
-  border: 1px solid black;
-  padding: 10px 20px;
-  background: black;
+  flex: 1;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 10px 0;
+  background: #fff;
+  color: #555;
+  font-weight: 500;
   cursor: pointer;
-  color: white;
+
+  &:hover {
+    background: #f5f5f5;
+  }
 `;
 
 const ConfirmButton = styled.button`
-  width: 50%;
-  border: 1px solid red;
-  padding: 10px 20px;
-  background: white;
-  color: red;
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  background: #e5484d;
+  color: #fff;
+  font-weight: 700;
   cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
 `;
 
 
@@ -63,8 +101,9 @@ const DeleteIcon = styled.img`
   display:flex;
   justify-content:center;
   algin-items: center;
-  width: 200px; /* 원하는 크기로 설정 */
-  height: 170px;
+  width: 64px;
+  height: 54px;
+  object-fit: contain;
 `
 
 
@@ -96,12 +135,14 @@ export default function ModalContent() {
   return (
     <>
     {requestItems.length > 0 ? (
-      requestItems.map((item, index) => (
+      <ListWrapper>
+      {requestItems.map((item, index) => (
 <RequestBar 
 title={requestTitle}
 date={requestDate}
 onCloseClick={() => setIsModalOpen(true)}/>
-    ))
+    ))}
+      </ListWrapper>
   ): (
     <>
     </>

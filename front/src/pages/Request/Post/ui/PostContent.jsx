@@ -5,24 +5,24 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: auto;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   background-color: #f5f5f5;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 32px;
   gap: 20px;
-  max-height: 800px;
 `;
 
 const LeftSection = styled.div`
   flex: 2;
   text-align: center;
-  margin-top: 40px;
 `;
 
 const Title = styled.h2`
   max-width: 100%;
   font-size: 28px;
-  margin-bottom: 200px;
+  margin: 0 0 16px;
 `;
 
 const SubTitle = styled.p`
@@ -46,9 +46,22 @@ const RightSection = styled.div`
   align-items: center;
 `;
 
+const ImageFrame = styled.div`
+  width: 220px;
+  height: 220px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+`;
+
 const StyledImage = styled.img`
-  max-width: 100%;
-  height: auto;
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
 `;
 
 /* 라벨 배열 예시 */
@@ -103,10 +116,10 @@ export default function PostContent({data = {} }) {
       </LeftSection>
 
       <RightSection>
-       <StyledImage
-        src={selectedItem.imageUrl || image}  alt="이미지가 없습니다"/> {/*의뢰작성에서 디자인한 이미지 선택했으면imageUrl 이미지 표시  */}
-        
-       
+        <ImageFrame>
+          <StyledImage
+            src={selectedItem.imageUrl || image} alt="이미지가 없습니다"/> {/*의뢰작성에서 디자인한 이미지 선택했으면imageUrl 이미지 표시  */}
+        </ImageFrame>
       </RightSection>
     </Container>
   );
