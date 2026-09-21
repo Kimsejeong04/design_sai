@@ -1,10 +1,22 @@
 .searchrequest-container {
-  width : 650px;
+  width : 420px;
   padding : 0px;
-  
+
 }
 .search-input {
-  border-radius: 30px !important; 
-  border: solid 2px rgb(128, 161, 190) !important;
-  padding: 20px !important;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 30px !important;
+  border: solid 1.5px #D8E3EE !important;
+  background-color: #F8FAFC !important;
+  padding: 12px 20px !important;
+  font-size: 15px;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.search-input:focus {
+  outline: none !important;
+  border-color: #80A1BE !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(128, 161, 190, 0.15);
 }

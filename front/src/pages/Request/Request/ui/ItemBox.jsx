@@ -10,21 +10,21 @@ const ItemBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;      
+  align-items: center;
   background-color: white;
   min-height: 300px;
-  border: 0.5px solid #A5A0A0; 
+  border: 1px solid #ECE7E7;
   border-radius: 20px;
   gap: 10px;
   padding: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  transition: border 0.15s, box-shadow 0.15s; 
-  
-  /* 호버 시 테두리 추가 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+
+  /* 호버 시 살짝 떠오르는 느낌 */
   &:hover {
-    border-color: #BFD7EE; 
-    border-width: 3.5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: #BFD7EE;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(128, 161, 190, 0.22);
   }
 `;
 
@@ -32,33 +32,32 @@ const InnerBox = styled.div`
   background-color: #F6F2F2;
   width: 87%;
   height: 180px;
-  border: 0.5px solid;
-  border-color: #EBE5E5;
-  border-radius: 20px;
-  margin-top: 10px;
-  padding: 5px;
+  border-radius: 16px;
+  margin-top: 14px;
   overflow: hidden;
 `;
 
 const DescriptionContainer = styled.div`
   align-self: flex-start;
-  margin: 10px;
+  margin: 6px 14px 14px;
 `;
 
 const TagContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
 `;
 
 const Tag = styled.div`
-  background-color: #bfd7ee;
+  background-color: #EAF1F9;
   width: auto;
-  min-width : 50px;
-  height: 20px;
-  border: 0.5px solid;
-  border-radius: 15px;
-  color: white;
-  padding: 7px;
-  margin: 5px;
+  height: auto;
+  border-radius: 999px;
+  color: #4A7CA8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
   text-align: center;
 `;
 
@@ -84,17 +83,20 @@ const Profile = styled.div`
 `;
 
 const Text = styled.div`
-  margin: 5px;
-  font-weight: 1000;
+  margin: 4px 5px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #262323;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 180px;
+  width: 260px;
 `;
 
 const Text2 = styled.div`
-  margin: 5px;
-  color: #6B6565;
+  margin: 3px 5px;
+  font-size: 13px;
+  color: #8B8585;
 `;
 
 
@@ -148,7 +150,6 @@ export default function ItemBox({ children,data = {} }) {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              borderRadius: '15px'
             }}
           />
         ) : (
@@ -159,8 +160,9 @@ export default function ItemBox({ children,data = {} }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#888',
+              color: '#B4AFAF',
               fontSize: '14px',
+              fontWeight: 500,
             }}
           >
             이미지 없음

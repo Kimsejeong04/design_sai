@@ -65,12 +65,14 @@ const TextInputUI = ({
         maxLength={maxLength} // 기본 글자 수 제한 (IME 조합 시 이슈가 있을 수 있음)
         onCompositionStart={onCompositionStart}
         onCompositionEnd={onCompositionEnd}
-        
         {...props}
       />
-      <Counter isMax={length === maxLength}>
-        {length} / {maxLength}
-      </Counter>
+      {/* 💡 수정한 부분: maxLength가 전달되었을 때만 Counter를 렌더링합니다 */}
+      {maxLength && (
+        <Counter isMax={length === maxLength}>
+          {length} / {maxLength}
+        </Counter>
+      )}
     </InputContainer>
   );
 };

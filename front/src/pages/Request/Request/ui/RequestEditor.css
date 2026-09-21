@@ -1,17 +1,20 @@
 /* 툴바 전체 */
 #toolbar {
   border-radius: 8px 8px 0 0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+  border-bottom: none;
   background: #fff;
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px;
+  padding: 8px 12px;
 }
 
 /* 에디터 영역 */
 .ql-container {
   border-radius: 0 0 8px 8px;
+  border: 1px solid #e0e0e0;
+  border-top: none;
   min-height: 200px;
   font-size: 1rem;
   line-height: 1.6;
@@ -27,9 +30,10 @@
 }
 
 .editor-container {
-  width : 100%;
-  height : 500px;
+  width: 100%;
+  /* height: 500px 고정값 제거 - 내용만큼만 자연스럽게 차지 */
 }
+
 .quill {
-  height : 300px;
+  /* height: 300px 고정값 제거 - .ql-container의 min-height가 담당 */
 }

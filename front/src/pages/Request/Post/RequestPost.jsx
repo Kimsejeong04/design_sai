@@ -7,22 +7,34 @@ import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
 
+const PageWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+`;
+
 const Content = styled.div`
   width: 100%;
   display: flex;
-  
+  align-items: flex-start;
+  gap: 20px;
   justify-content: space-between; /* 왼쪽과 오른쪽 컨테이너를 양 끝으로 */
 `;
 
 const Left = styled.div`
   flex: 1.2;  /* 왼쪽을 좀 더 넓게 차지 */
+  display: flex;
 `;
 
 const Right = styled.div`
-  
+  flex: 1;
   display: flex;               /* 내부 요소를 가로 배치 */
   justify-content: center;   /* 내부 요소들을 오른쪽 정렬 */
-  align-items: flex-start;     /* 필요 시 세로 정렬 (예: 상단에 붙이기) */
+  align-items: flex-start;
   padding : 10px;
 `;
 
@@ -68,7 +80,7 @@ const [data, setData] = useState([]);
   } = data;
 
   return (
-    <>
+    <PageWrapper>
       <PostContent data={requestData} />
 
       {requestData && (
@@ -82,6 +94,6 @@ const [data, setData] = useState([]);
           </Right>
         </Content>
       )}
-    </>
+    </PageWrapper>
   );
 }
