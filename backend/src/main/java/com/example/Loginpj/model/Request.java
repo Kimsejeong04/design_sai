@@ -13,6 +13,7 @@ public class Request {
     private String image3Url;   
     private String username; //user_info테이블에 있는 username을 join하기 위해 추가 
     private String requesterName; // user_info.name을 담을 필드
+    private String status;
 
     public Request() {}
 
@@ -115,6 +116,13 @@ public class Request {
     public void setImage3Url(String image3Url) {
         this.image3Url = image3Url;
     }
+    
+    public String getStatus() {
+    	return status;
+    }
+    public void setStatus(String status) {
+    	this.status = status;
+    }
 
     @Override
     public String toString() {
@@ -129,6 +137,7 @@ public class Request {
                 ", image1Url='" + image1Url + '\'' +
                 ", image2Url='" + image2Url + '\'' +
                 ", image3Url='" + image3Url + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

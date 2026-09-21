@@ -449,7 +449,8 @@ export default function Profile({ post, reviews }) {
           }
         );
         if (res.ok) {
-          const isLiked = await res.json();
+          const textResponse = await res.text();
+          const isLiked = textResponse === "true" || textResponse === true;
           setLiked(isLiked);
         }
       } catch (error) {

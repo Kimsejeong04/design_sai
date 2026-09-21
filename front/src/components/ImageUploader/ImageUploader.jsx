@@ -48,7 +48,7 @@ const RemoveButton = styled.button`
   font-size: 1rem;
 `;
 
-export default function ImageUploader({ className, id, files, setFiles, onImageUpload }) {
+export default function ImageUploader({ className, id, files, setFiles, onImageUpload, imageUrl }) {
   const inputRef = useRef();
 
   const handleFileChange = async (e) => {
@@ -100,10 +100,9 @@ export default function ImageUploader({ className, id, files, setFiles, onImageU
     <UploadContainer className={className}>
       <DropArea onClick={handleClick}>
         {files[id] ? (
-          <>
-            <PreviewImage src={files[id].preview} alt="Preview" />
-            <RemoveButton onClick={removeFile}>×</RemoveButton>
-          </>
+          <PreviewImage src={files[id].preview} alt="Preview" />
+        ): imageUrl ? (
+          <PreviewImage src={imageUrl} alt="Preview" />
         ) : (
           '+'
         )}
