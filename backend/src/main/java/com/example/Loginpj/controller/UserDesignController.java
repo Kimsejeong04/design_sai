@@ -34,7 +34,7 @@ public class UserDesignController {
 //        System.out.println("======================================");
     	
     	String username = (String) session.getAttribute("username");
-        System.out.println("🔍 세션에서 가져온 username: " + username);
+//        System.out.println("🔍 세션에서 가져온 username: " + username);
 
         System.out.println("📸 프론트에서 전달된 designImageUrl: " + userDesign.getDesignImageUrl());
 
@@ -132,6 +132,13 @@ public class UserDesignController {
         
         return ResponseEntity.ok(designs);
     }
-
+    
+    @GetMapping("/search")
+    public List<Map<String, Object>> seachDesigns(
+    		@RequestParam String username,
+    		@RequestParam String keyword
+    ){
+    	return userDesignService.searchDesigns(username, keyword);
+    }
 
 }

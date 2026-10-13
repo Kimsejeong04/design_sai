@@ -8,15 +8,19 @@ const Button = styled.button`
   width: 120px;
   height: 40px;
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 0;
   border: none;
   background-color: #799FC4;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   border-radius: 20px;
-  text-align: center;
   color: white;
+
+  display; flex;
+  text-align: center;
+  justify-content: center;
+
   &:hover {
     background-color: #9dbbd5;
   }

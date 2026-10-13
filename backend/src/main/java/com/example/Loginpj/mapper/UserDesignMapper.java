@@ -4,6 +4,7 @@ import com.example.Loginpj.model.UserDesign;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserDesignMapper {
@@ -17,5 +18,10 @@ public interface UserDesignMapper {
     int updateSizeByUserId(@Param("username") String username, @Param("size") String size);
     
     UserDesign findById(Long designId);
+    
+    List<Map<String, Object>> searchDesigns(
+    	@Param("username") String username,
+    	@Param("keyword") String keyword
+    );
+    
 }
-

@@ -8,8 +8,9 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  padding: 1.875rem 3.125rem;  /* 30px 50px */
-  border: 0.05rem solid black;  /* 0.8px */
+  padding: 1.875rem 3.125rem;  
+  margin-left: 0.9375rem;
+  border: 0.05rem solid #7E8A99;
   position: relative;
   box-sizing: border-box;
 `;

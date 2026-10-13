@@ -59,8 +59,45 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/favorite")
-    public void deleteFavorite(@RequestParam String designerId, @RequestParam Long requestId) {
-        favoriteService.removeFavorite(designerId, requestId);
+    public ResponseEntity<?> deleteFavorite(
+            @RequestParam Long requestId,
+            HttpSession session
+    ) {
+        String designerId = (String) session.getAttribute("username");
+
+        if (designerId == null || designerId.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요합니다.");
+        }
+
+        try {
+            favoriteService.removeFavorite(designerId, requestId);
+            return ResponseEntity.ok("찜 해제 성공!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("찜 해제 실패: " + e.getMessage());
+        }
+    }
+    
+    @GetMapping("/favorite/check/{requestId}")
+    public ResponseEntity<Boolean> checkFavorite(
+            @PathVariable Long requestId,
+            HttpSession session
+    ) {
+        String designerId = (String) session.getAttribute("username");
+
+        if (designerId == null || designerId.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }
+
+        boolean liked = favoriteService.isFavorite(designerId, requestId);
+
+        return ResponseEntity.ok(liked);
     }
 
 }

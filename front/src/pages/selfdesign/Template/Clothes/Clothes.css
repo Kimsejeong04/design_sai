@@ -80,8 +80,8 @@
 
 .layout1 .content1 {
   margin-left: 0.9375rem;  /* 15px */
-  margin-right: 0.9375rem;  /* 15px */
-  margin-top: 1.125rem;  /* 18px */
+  margin-right: 1.9375rem;  /* 15px */
+  margin-top: 0.65rem;  /* 10px */
   margin-bottom: 2.0625rem;  /* 33px */
   padding-bottom: 0;
   padding-right: 9.375rem;  /* 150px */
@@ -97,9 +97,12 @@
   font-family: 'Noto Sans KR', sans-serif;
   color: #799FC4;
   font-size: 1.5625rem;  /* 25px */
+  margin-bottom: 0.15rem;
+  margin-left: 0.9375rem;
 }
 
 .content1 hr {
   border: 0; /* 기본 테두리 제거 */
   border-top: 0.03125rem solid #799FC4;  /* 0.5px */
+  margin-left: 0.9375rem;
 }

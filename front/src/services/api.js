@@ -32,3 +32,21 @@ export const fetchImages = async () => {
     throw error;
   }
 };
+
+// 디자인 검색
+export const searchDesigns = async (username, keyword) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/designs/search`, {
+      params: {
+        username,
+        keyword
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("디자인 검색 실패:", error);
+    throw error;
+  }
+};

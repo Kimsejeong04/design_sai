@@ -129,6 +129,15 @@ const MyDesignsRequests = ({ username: propUsername }) => {
     }
   };
 
+  const formatFileName = (fileName) => {
+    if (!fileName) return "디자인";
+    
+    let cleanName = fileName.includes('_') ? fileName.substring(fileName.indexOf('_') + 1) : fileName;
+    cleanName = cleanName.replace(/\.(png|jpe?g|gif|svg|webp)$/i, '');
+    
+    return cleanName;
+  };
+
   const handleCardClick = (item) => {
     console.log(item);
     setSelectedItem(item);
@@ -182,7 +191,6 @@ const MyDesignsRequests = ({ username: propUsername }) => {
             </div>
             <div className="card-container">
               {selectedCategory === 'template' && filteredDesigns.map((item) => {
-                  //console.log("🎨 designImageUrl:", item.designImageUrl); // ✅ 여기에 추가!
 
                   return (
                     <div key={item.designId} className="card" onClick={() => handleCardClick(item)}>
@@ -208,6 +216,7 @@ const MyDesignsRequests = ({ username: propUsername }) => {
                     {userFiles.map((item) => (
                       <div key={item.fileName} className="card">
                         <img src={`http://localhost:8081/files/view/${item.fileName}`} alt={item.fileName} className="card-image" />
+                        <h3>{formatFileName(item.fileName)}</h3>
                         <p>
                           <strong>제작일:</strong>{" "}
                           {formatDateTime(item.createdAt || item.uploadedAt)}

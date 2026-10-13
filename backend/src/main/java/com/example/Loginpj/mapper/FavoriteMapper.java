@@ -17,4 +17,6 @@ public interface FavoriteMapper {
     List<Request> getFavoritesByDesignerId(@Param("designerId") String designerId);
 
     void deleteFavorite(Map<String, Object> params);
+    
+    int checkFavorite(Map<String, Object> params);
 }

@@ -32,4 +32,13 @@ public class FavoriteService {
         params.put("requestId", requestId);
         favoriteMapper.deleteFavorite(params);
     }
+    
+    public boolean isFavorite(String designerId, Long requestId) {
+    	Map<String, Object> params = new HashMap<>();
+    	
+    	params.put("designerId", designerId);
+    	params.put("requestId", requestId);
+
+    	return favoriteMapper.checkFavorite(params) > 0;
+    }
 }

@@ -41,18 +41,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem; /* 40px */
-  height: 2.5rem; /* 40px */
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   background-color: transparent;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   font-weight: bold;
-  box-shadow: 0 0 0 0.08125rem #9DBBD5; /* 1.3px */
+  box-shadow: 0 0 0 0.08125rem #9DBBD5;
   line-height: 1;
   margin: 0;
   padding: 0;
   flex-shrink: 0;
-  margin-bottom: 0.625rem; /* 10px */
+  box-sizing: border-box;
+  margin-bottom: 0.35rem;
+  margin-top: 0.35rem;
 }
 
 .sidebar .active .step-circle {

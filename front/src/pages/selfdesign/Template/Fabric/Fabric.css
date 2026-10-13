@@ -249,7 +249,7 @@ body{
   margin: 0 auto;
   margin-left: 0.94rem; /* 15px */
   width: 76.25rem; /* 1220px */
-  height: 70rem !important; /* 1000px */
+  height: 78rem !important; /* 1000px */
 }
 
 
@@ -260,7 +260,7 @@ body{
 }
 
 .ColorSelect {
-  max-width: 100%;
+  max-width: 97.5%;
   width: 100%; /* 또는 auto */
   background-color: #f0f0f0;
   border: 1px solid #ddd;

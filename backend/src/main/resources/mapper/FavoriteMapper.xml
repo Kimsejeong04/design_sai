@@ -32,5 +32,12 @@
     DELETE FROM favorite
     WHERE designer_id = #{designerId} AND request_id = #{requestId}
   </delete>
+  
+  <select id="checkFavorite" parameterType = "map" resultType="int">
+  	SELECT COUNT(*)
+  	FROM favorite 
+  	WHERE designer_id = #{designerId}
+  	AND request_id = #{requestId}
+  </select>
 
 </mapper>

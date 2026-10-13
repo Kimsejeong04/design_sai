@@ -292,7 +292,7 @@ const Fabric = () => {
             />
           </div>
 
-          <h3>2-2. 색상 및 혼합율 선택</h3>
+          <h3 className="ection-title">2-2. 색상 및 혼합율 선택</h3>
           <hr />
           <div className="ColorSelect">
             {selectedItems.length > 0 ? (
@@ -351,10 +351,10 @@ const Fabric = () => {
           </div>
 
           <div style={{ marginTop: "0.625rem", marginLeft: "2.5rem", fontWeight: "bold", paddingRight: "1.25rem" }}>
-            <div style={{ color: "green", fontSize: "1rem" }}>
+            <div style={{ color: totalRatio === 100 ? "green" : "red", fontSize: "1.12rem" }}>
               혼합율 합계: {totalRatio}%.
             </div>
-            <div style={{ color: totalRatio === 100 ? "green" : "red", fontSize: "0.75rem", marginTop: "0.25rem" }}>
+            <div style={{ color: totalRatio === 100 ? "green" : "red", fontSize: "0.9rem", marginTop: "0.25rem" }}>
               {totalRatio === 100 ? "정상입니다." : "합계가 100%가 되어야 합니다!"}
             </div>
           </div>
