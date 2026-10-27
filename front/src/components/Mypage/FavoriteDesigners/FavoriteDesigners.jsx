@@ -25,7 +25,7 @@ export default function FavoriteDesigners() {
         if (res.ok) {
           const data = await res.json(); // [{ postnum, id, contents }]
           setDesigners(data);
-          setSelectedIds([]);
+          setSelectedIds([]); // 초기엔 아무것도 선택 안됨
         }
       } catch (e) {
         console.error("찜 목록 불러오기 실패", e);

@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { TextInputUI, Tag } from "../../components";
 import styled from "styled-components";
 
@@ -8,6 +8,8 @@ const tagReducer = (state, action) => {
       return [...state, action.payload];
     case "REMOVE_TAG":
       return state.filter((tag) => tag !== action.payload);
+    case "SET_TAGS":
+      return action.payload;
     default:
       return state;
   }
@@ -22,10 +24,17 @@ const TagListContainer = styled.div`
   margin-top: 10px;
 `;
 
-const TagManager = ({ placeholder = "태그 입력", onTagsUpdate }) => {
+const TagManager = ({ placeholder = "태그 입력", onTagsUpdate, initialTags = [] }) => {
   const [tags, dispatch] = useReducer(tagReducer, []);
   const [tagInput, setTagInput] = useState("");
   const [isComposing, setIsComposing] = useState(false);
+
+  useEffect (() => {
+    dispatch({
+      type: "SET_TAGS",
+      payload: initialTags
+    });
+  }, [initialTags]);
 
   const handleAddTag = (trimmed) => {
     const updatedTags = [...tags, trimmed];

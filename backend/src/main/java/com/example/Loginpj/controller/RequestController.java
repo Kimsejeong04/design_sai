@@ -35,6 +35,27 @@ public class RequestController {
         return service.getAll();
     }
 
+    @PostMapping("/draft")
+    public ResponseEntity<String> createDraft(@RequestBody Request request) {
+
+        int result = service.createDraft(request);
+
+        if (result == 1) {
+            return ResponseEntity.ok("Draft saved successfully");
+        }
+
+        return ResponseEntity.status(500)
+                .body("Failed to save draft");
+    }
+    
+    @GetMapping("/drafts")
+    public ResponseEntity<List<Request>> getDrafts(
+            @RequestParam String username) {
+
+        List<Request> drafts = service.getDraftsByUsername(username);
+        return ResponseEntity.ok(drafts);
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<Request> getById(@PathVariable Long id) {
         Request request = service.getById(id);
@@ -44,6 +65,8 @@ public class RequestController {
 
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Request request) {
+    	
+    	request.setStatus("SUBMITTED");
     	System.out.println("image1Url: " + request.getImage1Url());
         System.out.println("image2Url: " + request.getImage2Url());
         System.out.println("image3Url: " + request.getImage3Url());
@@ -154,4 +177,5 @@ public class RequestController {
             return ResponseEntity.status(500).body(null);
         }
     }
+    
 }

@@ -117,6 +117,15 @@ public class UserDesignController {
 
         List<UserDesign> designs = userDesignService.getUserDesignsById(username);
         
+        System.out.println("========== RESULT ==========");
+
+        for (UserDesign d : designs) {
+            System.out.println("id = " + d.getDesignId());
+            System.out.println("blend = " + d.getBlendRatio());
+            System.out.println("pattern = " + d.getPattern());
+            System.out.println("note = " + d.getNote());
+        }
+
         if (!designs.isEmpty()) {
             System.out.println("불러온 첫 번째 디자인 이미지: " + designs.get(0).getDesignImageUrl());
         }

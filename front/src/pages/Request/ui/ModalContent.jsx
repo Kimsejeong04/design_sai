@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 
 import { Modal } from '../../../utils';
 import deleteIcon from '../../../assets/delete.png';
 import RequestBar from "../../../components/RequestBar/RequestBar";
-import { useEffect} from 'react'
+//import { useEffect} from 'react'
 
 const CloseButton = styled.button`
   background: none;
@@ -108,45 +110,53 @@ const DeleteIcon = styled.img`
 
 
 export default function ModalContent() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const requestTitle = "후드티 제작"
   const requestDate = "2025-01-01";
 
-  
+  const [isVisible, setIsVisible] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState(false);
+
   // localStorage에서 requestData 가져오기
   const [requestItems, setRequestItems] = useState([]);
     useEffect(() => {
-      const storedData = localStorage.getItem("requestData");
-      if (storedData) {
-        try {
-          const parsedData = JSON.parse(storedData);
-          if (Array.isArray(parsedData)) {
-            setRequestItems(parsedData);
-          }
-        } catch (error) {
-          console.error("requestData 파싱 오류:", error);
+      const fetchDrafts = async () =>{
+        try{
+          const response = await axios.get("http://localhost:8081/api/requests/drafts?username=bzbz");
+          console.log("임시저장 목록: ", response.data);
+          setRequestItems(response.data);
+        } catch (error){
+          console.error("임시저장 목록 조회 실패:", error);
         }
-      }
-    }, []);
+      };
+    fetchDrafts();
+  }, []);
   
   if (!isVisible) return null;
 
   return (
     <>
     {requestItems.length > 0 ? (
-      <ListWrapper>
-      {requestItems.map((item, index) => (
-<RequestBar 
-title={requestTitle}
-date={requestDate}
-onCloseClick={() => setIsModalOpen(true)}/>
-    ))}
-      </ListWrapper>
-  ): (
-    <>
-    </>
-  )}
+      requestItems.map((item, index) => (
+      <RequestBar 
+          key={item.requestId}
+          title={item.title}
+          date={item.deadline}
+          onClick={() => {
+            console.log("선택한 임시저장 글:", item.requestId);
+            navigate(`/client/RequestWriting?draftId=${item.requestId}`);
+          }}
+          onCloseClick={() => {
+            setSelectedRequestId(item.requestId);
+            setIsModalOpen(true);
+          }}
+        />
+        ))
+      ): (
+        <>
+        </>
+      )}
     
 
       {/* 삭제 확인 모달 */}
@@ -161,9 +171,25 @@ onCloseClick={() => setIsModalOpen(true)}/>
               onClick={() => 
                 setIsModalOpen(false)}>취소</CancelButton>
             <ConfirmButton
-              onClick={() => {
-                setIsVisible(false); // 컴포넌트 숨기기
-                setIsModalOpen(false); // 모달 닫기
+              onClick={async() => {
+                try {
+                  await axios.delete(
+                    `http://localhost:8081/api/requests/${selectedRequestId}`
+                  );
+
+                  // 삭제된 글을 목록에서도 제거
+                  setRequestItems((prev) =>
+                    prev.filter((item) => item.requestId !== selectedRequestId)
+                  );
+
+                  setIsModalOpen(false);
+                  setSelectedRequestId(null);
+
+                  alert("삭제되었습니다.");
+                } catch (error) {
+                  console.error("임시저장 삭제 실패:", error);
+                  alert("삭제에 실패했습니다.");
+                }
               }}
             >
               확인

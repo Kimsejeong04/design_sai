@@ -34,7 +34,11 @@ export default function Request({headerText = "의뢰 등록하기"}) {
   useEffect(() => {
     axios.get("http://localhost:8081/api/requests")
       .then(response => {
-        setRequestItems(response.data);
+        const submittedItems = response.data.filter(
+          item => item.status === "SUBMITTED"
+        );
+        
+        setRequestItems(submittedItems);
         setLoading(false);
       })
       .catch(err => {

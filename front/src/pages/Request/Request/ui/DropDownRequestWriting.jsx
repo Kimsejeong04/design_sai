@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const DropdownContainer = styled.div`
@@ -53,6 +53,10 @@ export default function DropDown({ options, defaultSelected = "선택하세요",
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(defaultSelected);
 
+  useEffect(() => {
+    setSelected(defaultSelected);
+  }, [defaultSelected]);
+  
   const handleSelect = (option) => {
     setSelected(option);
     setIsOpen(false);

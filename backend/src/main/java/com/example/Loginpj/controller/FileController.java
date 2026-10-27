@@ -66,7 +66,6 @@ public class FileController {
 
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType(contentType))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"") // 다운로드 강제
                         .body(resource);
             } else {
                 return ResponseEntity.badRequest().build();

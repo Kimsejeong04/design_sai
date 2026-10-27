@@ -3,6 +3,29 @@ import "./ClothesTest.css";
 
 export default function ClothesTest({
   clothingType, 
+  // neckY, setNeckY,
+  // neckXOffset, setNeckXOffset,
+  // shoulderOffset, setShoulderOffset,
+  // chestOffset, setChestOffset,
+  // bodyLength, setBodyLength,
+  // armLengthFactor, setArmLengthFactor,
+  // upperWidthOffset, 
+  // lowerWidthOffset, setLowerWidthOffset,
+  // topBodyHeight, setTopBodyHeight,
+
+  // waistWidth, setWaistWidth,
+  
+  // resetValues,
+  // isPreview = false, 
+  
+  // pantsLength, setPantsLength,
+  // waistOffset, setWaistOffset,
+  // hipOffset, setHipOffset,
+  // thighOffset, setThighOffset,
+  // hemOffset, setHemOffset,
+  // crotchLength, setCrotchLength,
+
+
   neckY, setNeckY,
   neckXOffset, setNeckXOffset,
   shoulderOffset, setShoulderOffset,
@@ -12,11 +35,7 @@ export default function ClothesTest({
   upperWidthOffset, 
   lowerWidthOffset, setLowerWidthOffset,
   topBodyHeight, setTopBodyHeight,
-
   waistWidth, setWaistWidth,
-  
-  resetValues,
-  isPreview = false, 
   
   pantsLength, setPantsLength,
   waistOffset, setWaistOffset,
@@ -24,6 +43,9 @@ export default function ClothesTest({
   thighOffset, setThighOffset,
   hemOffset, setHemOffset,
   crotchLength, setCrotchLength,
+
+  resetValues,
+  isPreview = false,
 }) {
   const canvasRef = useRef(null);
   
