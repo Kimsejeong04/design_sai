@@ -1,166 +1,293 @@
-.favorites-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 30px;
-    font-family: "Pretendard", sans-serif;
-    background-color: #fff;
-    border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+.fav-wrap {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+}
+
+/* 툴바 */
+.fav-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.fav-search {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.fav-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9aa7b5;
+  font-size: 14px;
+  pointer-events: none;
+}
+.fav-search input {
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 16px 0 42px;
+  border: 1px solid #dfe6ee;
+  border-radius: 999px;
+  background: #f7f9fc;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.fav-search input:focus {
+  outline: none;
+  background: #fff;
+  border-color: #799fc4;
+  box-shadow: 0 0 0 3px rgba(121, 159, 196, 0.2);
+}
+.fav-select {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #dfe6ee;
+  border-radius: 999px;
+  background: #f7f9fc;
+  font-size: 14px;
+  color: #3b4754;
+  cursor: pointer;
+}
+.fav-select:focus {
+  outline: none;
+  border-color: #799fc4;
+}
+.fav-actions {
+  display: flex;
+  gap: 8px;
+}
+.fav-btn {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+.fav-btn-primary {
+  background: #799fc4;
+  color: #fff;
+  border: 1px solid #799fc4;
+}
+.fav-btn-primary:hover:not(:disabled) {
+  background: #6890b8;
+}
+.fav-btn-danger {
+  background: #fff;
+  color: #e5484d;
+  border: 1px solid #f1c4c6;
+}
+.fav-btn-danger:hover:not(:disabled) {
+  background: #fff1f1;
+}
+.fav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 서브바 */
+.fav-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 12px;
+  font-size: 14px;
+  color: #5b6773;
+}
+.fav-check-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.fav-check-all input {
+  width: 16px;
+  height: 16px;
+  accent-color: #799fc4;
+}
+.fav-count strong {
+  color: #799fc4;
+}
+
+/* 카드 그리드 */
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.fav-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 52px 16px 16px;
+  background: #fff;
+  border: 1px solid #e8edf3;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(40, 60, 90, 0.04);
+  animation: favCardIn 0.3s ease;
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+.fav-card:hover {
+  box-shadow: 0 6px 18px rgba(40, 60, 90, 0.1);
+}
+.fav-card.selected {
+  background: #f3f8fd;
+  border-color: #799fc4;
+}
+.fav-card.removing {
+  animation: favCardOut 0.3s ease forwards;
+  pointer-events: none;
+}
+.fav-avatar {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e6eef6;
+}
+.fav-info {
+  min-width: 0;
+}
+.fav-info h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2f3b47;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fav-info p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #7a8794;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* 하트 (크기 고정 + 부드러운 교차) */
+.fav-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.fav-heart:hover {
+  background: #f1f4f8;
+}
+.fav-heart:focus-visible {
+  outline: 2px solid #799fc4;
+}
+.fav-heart svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transition: opacity 0.25s ease;
+}
+.fav-heart .heart-off {
+  color: #b4bfcb;
+  opacity: 1;
+}
+.fav-heart .heart-on {
+  color: #ff5b5b;
+  opacity: 0;
+}
+.fav-heart.on .heart-off {
+  opacity: 0;
+}
+.fav-heart.on .heart-on {
+  opacity: 1;
+  animation: favHeartPop 0.3s ease;
+}
+
+/* 빈 상태 */
+.fav-empty {
+  padding: 64px 16px;
+  text-align: center;
+  color: #8b97a3;
+  border: 1px dashed #d9e1ea;
+  border-radius: 16px;
+  background: #fafbfd;
+}
+.fav-empty-icon {
+  font-size: 32px;
+  color: #c3cdd8;
+  margin-bottom: 10px;
+}
+.fav-empty p {
+  margin: 0;
+  font-size: 15px;
+}
+
+/* 애니메이션 */
+@keyframes favCardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes favCardOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.9); }
+}
+@keyframes favHeartPop {
+  0%   { transform: scale(0.8); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* 반응형 */
+@media (max-width: 720px) {
+  .fav-grid {
+    grid-template-columns: 1fr;
   }
-  
-  h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #799FC4;
+}
+@media (max-width: 600px) {
+  .fav-wrap {
+    padding: 8px 12px 24px;
   }
-  
-  .top-bar {
-    display: flex;
+  .fav-toolbar {
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-  }  
-  
-  .top-bar input[type="text"] {
+    align-items: stretch;
+  }
+  .fav-actions .fav-btn {
     flex: 1;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
   }
-  
-  .checkbox-all {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  .fav-avatar {
+    width: 56px;
+    height: 56px;
   }
-  
-  .count {
-    font-size: 14px;
-    color: #666;
-    margin-left: auto;
-  }
-  
-  button {
-    background-color: #9dbbd5;
-    border: none;
-    padding: 8px 12px;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-  }
-  
-  button:hover {
-    background-color: #799fc4;
-  }
-  
-  .designer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .designer-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    transition: box-shadow 0.2s;
-  }
-  
-  .designer-card:hover {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .designer-card img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  
-  .info h4 {
-    margin: 0;
-    font-size: 16px;
-  }
-  
-  .info p {
-    margin: 4px 0 0;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .heart-checkbox {
-    cursor: pointer;
-    font-size: 22px;
-    margin-right: 10px;
-    user-select: none;
-  }
-  
-  .top-bar select {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-   
-  .top-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .bottom-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    color: #444;
-  }
-  
-  .top-row select {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
+}
 
-  .search-input {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 500px;
-    height: 25px;
+@media (prefers-reduced-motion: reduce) {
+  .fav-card,
+  .fav-card.removing,
+  .fav-heart.on .heart-on {
+    animation: none;
   }
-  
-  .search-input input {
-    width: 100%;
-    height: 100%;  /* 부모 높이와 맞추기 */
-    padding: 0.6rem 0.8rem 0.6rem 3rem; /* ← 왼쪽 여백 더 확보! */
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-  }  
-
-  .search-input input:focus {
-    outline: none;
-    border-color: #799fc4;
-    box-shadow: 0 0 0 2px rgba(121, 159, 196, 0.2); /* 부드러운 포커스 효과 */
-  }  
-  
-  .search-icon {
-    position: absolute;
-    left: 8px;
-    color: #888;
-    font-size: 14px;
-    pointer-events: none;
+  .fav-card,
+  .fav-heart svg {
+    transition: none !important;
   }
-  
+}
