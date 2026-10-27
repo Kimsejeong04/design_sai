@@ -134,7 +134,7 @@ function SizeCoat({ selectedSize, setSelectedSize, actionRef, clothingType }) {
   }, [rowsCoat]);
 
   return (
-    <div style={{justifyContent : "center"}} className="table-container2">
+    <div style={{justifyContent : "center"}} className="table-container">
       <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
         <ClothesTest
           clothingType={clothingType || "아우터"}
@@ -150,7 +150,6 @@ function SizeCoat({ selectedSize, setSelectedSize, actionRef, clothingType }) {
         />
       </div>
 
-      <div className="size-right-section">
         <table className="sizespec-table">
           <thead>
             <tr>
@@ -195,7 +194,6 @@ function SizeCoat({ selectedSize, setSelectedSize, actionRef, clothingType }) {
           </tbody>
         </table>
       </div>
-    </div>
   );
 }
 

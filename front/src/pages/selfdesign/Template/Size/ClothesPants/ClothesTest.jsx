@@ -704,19 +704,18 @@ export default function ClothesTest({
             ref={canvasRef}
             width={350}
             height={350}
-            style={{ margin: "3px", width: "450px", height: "450px", display: "block", border: '2px solid #ccc', borderRadius: '10px', backgroundColor: '#f9f9f9' }}
+            style={{ 
+              margin: "-1.5px", 
+              width: "430px",  
+              height: "390px",  
+              display: "block", 
+              border: '2px solid #ccc', 
+              borderRadius: '10px', 
+              backgroundColor: '#f9f9f9' 
+            }}
           ></canvas>
 
-          <div
-            className="cliders-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr 1fr',
-              gap: '5px',
-              marginTop: '2rem',
-              justifyItems: 'center',
-            }}
-          >
+          <div className="cliders-grid">
             {isPants ? (
               <>
                 <div style={{ marginTop: '1rem' }}>

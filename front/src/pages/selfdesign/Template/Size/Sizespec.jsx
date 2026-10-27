@@ -199,7 +199,7 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
                         type="text"
                         value={value}
                         onChange={(event) => handleInputChange(rowIndex, event)}
-                        style={{ width: "30px" }}
+                        style={{ width: "20px" }}
                       />
                     ) : (
                       typeof value === "number" ? value.toFixed(1) : value

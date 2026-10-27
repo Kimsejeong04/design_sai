@@ -124,7 +124,7 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
   }, [rowsBottom]);
 
   return (
-    <div style={{justifyContent : "center"}} className="table-container2">
+    <div style={{justifyContent : "center"}} className="table-container">
       <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
         <ClothesTest
           clothingType="바지"
@@ -138,7 +138,6 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
         />
       </div>
 
-      <div className="size-right-section">
         <table className="sizespec-table">
           <thead>
             <tr>
@@ -183,7 +182,6 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
           </tbody>
         </table>
       </div>
-    </div>
   );
 }
 
