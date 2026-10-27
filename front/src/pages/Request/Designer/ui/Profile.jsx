@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import cart2 from "../../../../assets/cart2.png";
 import chat from "../../../../assets/대화.png";
 import request from "../../../../assets/의뢰.png";
 import jeans from "../../../../assets/jeans.png";
 import port from "../../../../assets/Portfoilo.png";
 import designer from "../../../../assets/desiner.png";
 import { Modal } from "../../../../utils";
-import { useNavigate } from "react-router-dom";
 import RequestPopup from "../../Request/ui/RequestPopup";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axios from "axios";
 import Room from "../../../ChatMain/ui/Room";
-import { useChat } from "../../../ChatMain/ui/useChat"; // useChat 훅 임포트
+import { useChat } from "../../../ChatMain/ui/useChat";
 
 // 이미지 배열
 const profileImages = [
@@ -45,62 +43,161 @@ const portfolioImages = [
   require("../../../../assets/포트폴리오이미지/포트폴리오6.png"),
 ];
 
-// Styled Components (원본과 동일, 생략된 부분은 그대로 유지)
+/* ===================== 팝업(모달) 스타일 ===================== */
+// && 로 공용 Modal의 고정 크기(800x1000)를 확실히 덮어씀
 const PortfoilModalContainer = styled(Modal)`
-  display: flex;
-  flex-direction: row;
-  height: 800px;
+  && {
+    display: flex;
+    flex-direction: row;
+    width: min(960px, 94vw);
+    height: min(720px, 92vh);
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  @media (max-width: 860px) {
+    && {
+      flex-direction: column;
+      height: 92vh;
+      overflow-y: auto;
+    }
+  }
 `;
 
-const ModalContent = styled.div`
+const ProfilePanel = styled.div`
+  flex: 0 0 290px;
+  box-sizing: border-box;
+  padding: 28px 24px;
+  background: #f7f9fc;
+  border-right: 1px solid #e8edf3;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border: 2px solid #799fc4;
-  border-radius: 15px;
-  margin: 20px;
-  padding: 20px;
-  max-width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-`;
-
-const ModalContent3 = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border: 2px solid #799fc4;
-  border-radius: 15px;
-  margin: 20px;
-  padding: 20px;
-  max-width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-  min-height: 0;
-  max-height: 70vh;
+  align-items: center;
   overflow-y: auto;
+
+  @media (max-width: 860px) {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid #e8edf3;
+    padding-top: 52px;
+  }
 `;
 
 const DesignerImage = styled.img`
-  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 3px solid #e6eef6;
+  background: #fff;
+`;
+
+const DesignerName = styled.h3`
+  margin: 18px 0 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2f3b47;
+  text-align: center;
+  word-break: break-all;
+`;
+
+const DesignerIntro = styled.p`
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #7a8794;
+  text-align: center;
+  word-break: break-word;
+`;
+
+const PeriodBadge = styled.div`
+  margin: 16px 0 18px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #e8f0f8;
+  color: #4a6171;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+`;
+
+const ActionButton = styled.button`
   width: 100%;
-  max-width: 150px;
-  height: auto;
-  object-fit: contain;
-  margin-top: 10px;
-  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border: 1px solid #799fc4;
+  background: ${(p) => (p.$primary ? "#799fc4" : "#fff")};
+  color: ${(p) => (p.$primary ? "#fff" : "#799fc4")};
+
+  &:hover {
+    background: ${(p) => (p.$primary ? "#6890b8" : "#eef4fa")};
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    ${(p) => (p.$primary ? "filter: brightness(0) invert(1);" : "")}
+  }
+`;
+
+const CareerBox = styled.div`
+  width: 100%;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e8edf3;
+
+  h4 {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    color: #2f3b47;
+  }
+
+  p {
+    margin: 0;
+    padding: 14px 12px;
+    border: 1px dashed #d9e1ea;
+    border-radius: 10px;
+    background: #fff;
+    color: #9aa7b5;
+    font-size: 0.82rem;
+    text-align: center;
+  }
+`;
+
+const RightPanel = styled.div`
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 52px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+
+  @media (max-width: 860px) {
+    overflow: visible;
+    padding: 20px 16px 24px;
+  }
 `;
 
 const ImageCarouselContainer = styled.div`
   position: relative;
-  width: 500px;
-  height: 535px;
-  margin: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-  border: 2px solid #799fc4;
-  border-radius: 15px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  flex-shrink: 0;
+  background: #f7f9fc;
+  border: 1px solid #e8edf3;
+  border-radius: 14px;
   overflow: hidden;
 `;
 
@@ -108,106 +205,129 @@ const CarouselImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
+  display: block;
 `;
 
 const NavButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
   color: white;
   border: none;
-  padding: 8px;
   cursor: pointer;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:hover {
     background: rgba(0, 0, 0, 0.7);
   }
 `;
 
 const PrevButton = styled(NavButton)`
-  left: 8px;
+  left: 10px;
 `;
 
 const NextButton = styled(NavButton)`
-  right: 8px;
+  right: 10px;
 `;
 
 const PageIndicator = styled.div`
   position: absolute;
-  bottom: 12px;
-  width: 100%;
-  text-align: center;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
   color: white;
-  font-size: 0.9rem;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 4px 0;
-  border-radius: 8px;
+  font-size: 0.8rem;
   z-index: 2;
 `;
 
-const ImgaeContainer = styled.img`
-  width: 10%;
-  object-fit: contain;
+const ReviewSection = styled.div`
+  flex-shrink: 0;
+  border: 1px solid #e8edf3;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    color: #2f3b47;
+  }
 `;
 
-const PeriodContainer = styled.div`
+const ReviewList = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  font-weight: bold;
-  font-size: 13px;
-  margin: 10px;
-  justify-content: flex-start;
-  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
-const PeriodText = styled.p`
-  margin: 0;
-  color: #333;
-`;
+const ReviewContainer = styled.div`
+  padding: 12px 14px;
+  background-color: #f9fcfe;
+  border: 1px solid #dbe6f1;
+  border-radius: 10px;
 
-const ModalButton = styled.button`
-  all: unset;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 5px;
-  &:hover {
-    background-color: #f5f5f5;
+  strong {
+    margin-right: 4px;
+    color: #345c74;
+    font-size: 0.9rem;
+  }
+  p {
+    margin: 0;
+    color: #8b97a3;
+    font-size: 0.9rem;
+  }
+  span {
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 `;
 
-const ModalButton2 = styled.button`
-  all: unset;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 5px;
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
-
+/* ===================== 카드 스타일 ===================== */
 const Container = styled.div`
   display: flex;
   position: relative;
-  width: 250px;
-  height: 280px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 16px;
   background-color: white;
-  border-radius: 0.3125rem;
-  border: none;
-  margin: 30px;
+  border: 1px solid #e8edf3;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(40, 60, 90, 0.05);
   cursor: pointer;
-  box-shadow: 0 0.3125rem 0.3125rem rgba(0, 0, 0, 0.1);
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(40, 60, 90, 0.12);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
 `;
 
 const ImageWrapper = styled.div`
-  width: 250px;
-  height: 190px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 0.3125rem 0.3125rem 0 0;
   position: relative;
 `;
 
@@ -224,16 +344,19 @@ const HeartButton = styled.button`
   right: 10px;
   width: 36px;
   height: 36px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.85);
   border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  &:hover svg {
-    color: rgba(128, 128, 128, 0.5);
+  transition: transform 0.15s ease;
+  &:hover {
+    transform: scale(1.08);
   }
   &:focus {
     outline: none;
@@ -241,59 +364,32 @@ const HeartButton = styled.button`
 `;
 
 const Title = styled.h3`
-  font-size: 1.3rem;
+  width: calc(100% - 24px);
+  font-size: 1.05rem;
   font-weight: 700;
-  margin: 1.5rem 0 4px;
-  color: #4a6171;
+  margin: 14px 12px 4px;
+  color: #2f3b47;
   text-align: center;
-`;
-
-const Modalcontainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ReviewContainer = styled.div`
-  width: 80%;
-  margin: 10px auto;
-  padding: 16px;
-  background-color: #f9fcfe;
-  border: 1px solid #799fc4;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  strong {
-    display: block;
-    margin-bottom: 8px;
-    color: #345c74;
-    font-size: 1rem;
-  }
-  p {
-    margin: 0;
-    color: #333;
-    line-height: 1.5;
-    font-size: 0.95rem;
-  }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const DesignerSuffix = styled.span`
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #4a6171;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #8b97a3;
   margin-left: 4px;
 `;
 
 const ContentText = styled.p`
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #555;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #7a8794;
   text-align: center;
-  margin: 0 10px 5px;
+  margin: 0 14px;
   line-height: 1.3;
+  min-height: 2.6em;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -318,28 +414,16 @@ export default function Profile({ post, reviews }) {
   const [liked, setLiked] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [chatData, setChatData] = useState([]); // 채팅방 데이터
-  const navigate = useNavigate();
 
   // useChat 훅 초기화
   const {
-    filteredChats,
-    recentSearches,
     isModalOpen: isChatModalOpen,
     selectedRoomId,
     selectedUser,
     isSideMenuOpen,
     messages,
-    modalOpen,
-    modalOpen2,
-    currentView,
-    isConfirmOpen,
-    confirmMessage,
-    isSuccessPopupOpen,
-    popupMessage,
     bottomRef,
     setMessages,
-    handleSearch,
-    handleRecentSearchClick,
     handleProfileClick,
     handleCloseModal,
     handleMenuClick,
@@ -347,18 +431,16 @@ export default function Profile({ post, reviews }) {
     handleKeyDown,
     handleCompositionStart,
     handleCompositionEnd,
-    handleSidebarLinkClick,
-    handleBlockClick,
-    handleReportClick,
     handleSideMenuBlock,
     handleSideMenuReport,
     handleConfirmYes,
     handleConfirmNo,
+    isConfirmOpen,
+    confirmMessage,
+    isSuccessPopupOpen,
+    popupMessage,
     setModalOpen,
     setModalOpen2,
-    addRequestMessage,
-    handleItemSelect,
-    handleRequestselect,
   } = useChat(chatData);
 
   // 채팅방 데이터 초기화
@@ -371,7 +453,6 @@ export default function Profile({ post, reviews }) {
         const currentUserId = sessionResponse.data.username;
         if (!currentUserId) throw new Error("로그인이 필요합니다.");
 
-        // 디자이너와의 채팅방 조회
         const response = await axios.get("http://localhost:8081/api/rooms/list", {
           withCredentials: true,
         });
@@ -402,16 +483,13 @@ export default function Profile({ post, reviews }) {
       const currentUserId = sessionResponse.data.username;
       if (!currentUserId) throw new Error("로그인이 필요합니다.");
 
-      // 기존 채팅방 확인
       const existingRoom = chatData.find(
         (room) => room.creator === post.id || room.participant === post.id
       );
 
       if (existingRoom) {
-        // 기존 채팅방이 있으면 선택
         handleProfileClick(existingRoom);
       } else {
-        // 새 채팅방 생성
         const response = await axios.post(
           "http://localhost:8081/api/rooms/create",
           {
@@ -520,7 +598,7 @@ export default function Profile({ post, reviews }) {
         <ImageWrapper>
           <JeansImage src={profileImages[imageIndex]} alt="프로필 이미지" />
           <HeartButton onClick={handleToggleLike}>
-            {liked ? <FaHeart color="red" size={24} /> : <FaRegHeart color="gray" size={24} />}
+            {liked ? <FaHeart color="red" size={20} /> : <FaRegHeart color="gray" size={20} />}
           </HeartButton>
         </ImageWrapper>
         <Title>
@@ -532,52 +610,62 @@ export default function Profile({ post, reviews }) {
 
       {isModalOpen && (
         <PortfoilModalContainer onClose={() => setIsModalOpen(false)}>
-          <ModalContent>
-            <DesignerImage src={designerImages[designerImageIndex]} alt="예시" />
-            <h3>{post.id}</h3>
-            <p>{post.contents}</p>
-            <PeriodContainer>
-              <PeriodText>참여기간</PeriodText>
-              <PeriodText>2025.01 ~ 2025.01</PeriodText>
-            </PeriodContainer>
-            <PeriodContainer>
-              <ImgaeContainer src={chat} alt="대화하기" />
-              <ModalButton onClick={ChatEvent}>대화하기</ModalButton>
-            </PeriodContainer>
-            <PeriodContainer>
-              <ImgaeContainer src={request} alt="의뢰신청하기" />
-              <ModalButton2 onClick={() => setIsRequestPopupOpen(true)}>
-                의뢰신청하기
-              </ModalButton2>
-            </PeriodContainer>
-          </ModalContent>
-          <Modalcontainer>
+          <ProfilePanel>
+            <DesignerImage src={designerImages[designerImageIndex]} alt="디자이너 프로필" />
+            <DesignerName>{post.id}</DesignerName>
+            <DesignerIntro>{post.contents}</DesignerIntro>
+            <PeriodBadge>참여기간 2025.01 ~ 2025.01</PeriodBadge>
+
+            <ActionButton type="button" $primary onClick={ChatEvent}>
+              <img src={chat} alt="" />
+              대화하기
+            </ActionButton>
+            <ActionButton type="button" onClick={() => setIsRequestPopupOpen(true)}>
+              <img src={request} alt="" />
+              의뢰신청하기
+            </ActionButton>
+
+            {/* 이력사항 자리: 백엔드 API 준비 후 이 영역에 연결 */}
+            <CareerBox>
+              <h4>이력사항</h4>
+              <p>이력사항이 아직 등록되지 않았어요.</p>
+            </CareerBox>
+          </ProfilePanel>
+
+          <RightPanel>
             <ImageCarouselContainer>
-              <PrevButton onClick={prevImage}>{"<"}</PrevButton>
+              <PrevButton type="button" onClick={prevImage}>{"<"}</PrevButton>
               <CarouselImage
                 src={portfolioImages[carouselIndex]}
                 alt={`포트폴리오 이미지 ${carouselIndex + 1}`}
               />
-              <NextButton onClick={nextImage}>{">"}</NextButton>
+              <NextButton type="button" onClick={nextImage}>{">"}</NextButton>
               <PageIndicator>
                 {carouselIndex + 1} / {portfolioList.length}
               </PageIndicator>
             </ImageCarouselContainer>
-            <ModalContent3>
+
+            <ReviewSection>
               <h4>작성된 리뷰</h4>
-              {matchedReview && matchedReview.reviewcontent && matchedReview.reviewcontent.length > 0 ? (
-                matchedReview.reviewcontent.map((comment, idx) => (
-                  <ReviewContainer key={idx}>
-                    <strong>{matchedReview.id}</strong>: {comment}
+              <ReviewList>
+                {matchedReview &&
+                matchedReview.reviewcontent &&
+                matchedReview.reviewcontent.length > 0 ? (
+                  matchedReview.reviewcontent.map((comment, idx) => (
+                    <ReviewContainer key={idx}>
+                      <strong>{matchedReview.id}</strong>
+                      <span>{comment}</span>
+                    </ReviewContainer>
+                  ))
+                ) : (
+                  <ReviewContainer>
+                    <p>리뷰가 없습니다.</p>
                   </ReviewContainer>
-                ))
-              ) : (
-                <ReviewContainer>
-                  <p>리뷰가 없습니다.</p>
-                </ReviewContainer>
-              )}
-            </ModalContent3>
-          </Modalcontainer>
+                )}
+              </ReviewList>
+            </ReviewSection>
+          </RightPanel>
+
           {isRequestPopupOpen && <RequestPopup onClose={() => setIsRequestPopupOpen(false)} />}
         </PortfoilModalContainer>
       )}
