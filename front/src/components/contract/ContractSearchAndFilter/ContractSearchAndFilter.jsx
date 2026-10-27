@@ -7,12 +7,12 @@ const ContractSearchAndFilter = ({
   setStatusFilter,
 }) => {
   return (
-    <div className="search-filter-container">
-      {/* 필터 드롭다운 */}
+    <div className="csf-bar">
       <select
-        className="filter-select"
+        className="csf-select"
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value)}
+        aria-label="상태 필터"
       >
         <option>전체</option>
         <option>진행중</option>
@@ -20,11 +20,10 @@ const ContractSearchAndFilter = ({
         <option>해지</option>
       </select>
 
-      {/* 검색 입력창 */}
       <input
         type="text"
         placeholder="계약 제목, 내용 검색"
-        className="search-input"
+        className="csf-input"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

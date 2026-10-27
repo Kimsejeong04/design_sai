@@ -11,27 +11,33 @@ const ContractItem = ({ contract, onToggleStar, onClick, to, style }) => {
     if (to) navigate(to);
   };
 
+  const statusText = status || "";
+
   return (
     <div
-      className="contract-item"
+      className={`contract-item${starredStatus ? " active" : ""}`}
       onClick={onClick || handleClick}
-      style={style} 
+      style={style}
     >
       <div className="contract-left">
         <div className="contract-star" onClick={(e) => e.stopPropagation()}>
           <Star
             className={`star-icon ${starredStatus ? "active" : ""}`}
-            size={23}
+            size={22}
             onClick={onToggleStar}
           />
         </div>
         <div className="contract-text">
           <h3 className="contract-title">{title}</h3>
-          <p className="contract-preview">{preview}</p>
+          {preview && <p className="contract-preview">{preview}</p>}
         </div>
       </div>
       <div className="contract-right">
-        <p className={`contract-status ${status.toLowerCase()}`}>{status}</p>
+        {statusText && (
+          <span className={`contract-status ${statusText.toLowerCase()}`}>
+            {statusText}
+          </span>
+        )}
         <p className="contract-date">{date}</p>
       </div>
     </div>
