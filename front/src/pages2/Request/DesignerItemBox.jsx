@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import designerImage from "../../assets/desiner.png";
 import React, { useState, useEffect } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 // 아이템 박스 컨테이너
 const ItemBoxContainer = styled.div`
@@ -41,6 +42,8 @@ const InnerBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  position: relative;
 `;
 
 const DescriptionContainer = styled.div`
@@ -101,19 +104,27 @@ const Text2 = styled.div`
   color: #6B6565;
 `;
 
-const LikeButton = styled.button`
-  margin-top: 10px;
-  padding: 6px 14px;
-  background-color: #a0cfff;
+const HeartButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
   border: none;
-  border-radius: 10px;
-  color: white;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
 
-  &:hover {
-    background-color: #e03e5d;
+  &:hover svg {
+    color: rgba(128, 128, 128, 0.5);
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
@@ -128,65 +139,114 @@ const InnerBoxImage = styled.img`
 export default function DesignerItemBox({ children, data, propUsername }) {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
-  const [username, setUsername] = useState(propUsername || "");
+  //const [username, setUsername] = useState(propUsername || "");
 
   useEffect(() => {
-    if (!propUsername) {
-      const fetchSession = async () => {
-        try {
-          const res = await fetch("http://localhost:8081/api/user", {
-            credentials: "include",
-          });
-          if (!res.ok) throw new Error("세션 없음");
-          const data = await res.json();
-          if (data.username) {
-            setUsername(data.username);
-          }
-        } catch (err) {
-          console.warn("세션 정보 없음:", err);
-        }
-      };
-      fetchSession();
-    } else {
-      setUsername(propUsername);
+  const fetchLiked = async () => {
+    if (!data?.requestId) {
+      return;
     }
-  }, [propUsername]);
 
-  const handleClick = () => {
-    navigate("/designer/DesignerRequestPost", { state: { requestData: data } });
+    try {
+      const res = await fetch(
+        `http://localhost:8081/designer/favorite/check/${data.requestId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      // console.log("찜 상태 응답:", {
+      //   requestId: data.requestId,
+      //   status: res.status,
+      //   ok: res.ok
+      // });
+
+      if (res.ok) {
+        const result = await res.json();
+
+        console.log("찜 상태 결과:", result);
+
+        setLiked(result);
+      } else {
+        const errorText = await res.text();
+        console.log("찜 상태 확인 실패:", errorText);
+      }
+
+    } catch (error) {
+      console.error("찜 상태 확인 오류:", error);
+    }
   };
+
+  fetchLiked();
+}, [data?.requestId]);
 
   const handleLike = async (e) => {
     e.stopPropagation();
 
     if (!data?.requestId) {
-      alert("의뢰 ID를 찾을 수 없습니다. 찜하기 실패.");
+      alert("의뢰 ID를 찾을 수 없습니다.");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:8081/designer/favorite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          requestId: data.requestId,
-          username,
-        }),
-      });
+      if (liked) {
+        // 찜 해제
+        const response = await fetch(
+          `http://localhost:8081/designer/favorite?requestId=${data.requestId}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
 
-      if (res.ok) {
-        setLiked(true);
-        alert("찜 완료!");
-      } else if (res.status === 401) {
-        alert("로그인이 필요합니다.");
+        if (response.ok) {
+          setLiked(false);
+          alert("찜 해제되었습니다.");
+        } else if (response.status === 401) {
+          alert("로그인이 필요합니다.");
+        } else {
+          const errorText = await response.text();
+          alert(`찜 해제 실패: ${errorText}`);
+        }
+
       } else {
-        const errorText = await res.text();
-        alert(`찜 실패: ${errorText}`);
+        // 찜하기
+        const response = await fetch(
+          "http://localhost:8081/designer/favorite",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              requestId: data.requestId,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setLiked(true);
+          alert("찜하기 되었습니다.");
+        } else if (response.status === 401) {
+          alert("로그인이 필요합니다.");
+        } else {
+          const errorText = await response.text();
+          alert(`찜하기 실패: ${errorText}`);
+        }
       }
-    } catch (err) {
+
+    } catch (error) {
+      console.error("찜 처리 오류:", error);
       alert("서버 오류가 발생했습니다.");
     }
+  };
+
+  const handleClick = () => {
+    navigate("/designer/DesignerRequestPost", {
+      state: { requestData: data }
+    });
   };
 
   return (
@@ -218,6 +278,13 @@ export default function DesignerItemBox({ children, data, propUsername }) {
             이미지 없음
           </div>
         )}
+        <HeartButton onClick={handleLike}>
+          {liked ? (
+            <FaHeart color="red" size={24} />
+          ) : (
+            <FaRegHeart color="gray" size={24} />
+          )}
+        </HeartButton>
       </InnerBox>
       <DescriptionContainer>
         <TagContainer>
@@ -234,9 +301,6 @@ export default function DesignerItemBox({ children, data, propUsername }) {
 
         <Text2>{data?.amount || "10000원"}</Text2>
         <Text2>{data?.deadline ? `희망기한 ${data.deadline}` : "희망기한 2주"}</Text2>
-        <LikeButton onClick={handleLike} liked={liked}>
-          {liked ? "❤️ 찜 완료" : "🤍 찜하기"}
-        </LikeButton>
       </DescriptionContainer>
     </ItemBoxContainer>
   );

@@ -60,5 +60,28 @@
     SELECT * FROM user_design
     WHERE design_id = #{designId}
   </select>
+  
+  <!-- 이전 디자인 검색 -->
+	<select id="searchDesigns" resultType="map">
+	    SELECT
+	        DESIGN_ID AS ID,
+	        DESIGN_NAME AS NAME,
+	        DESIGN_IMAGE_URL AS IMAGE_URL,
+	        'TEMPLATE' AS DESIGN_TYPE
+	    FROM user_design
+	    WHERE USERNAME = #{username}
+	      AND DESIGN_NAME LIKE '%' || #{keyword} || '%'
+	
+	    UNION ALL
+	
+	    SELECT
+	        ID AS ID,
+	        FILE_NAME AS NAME,
+	        FILE_PATH AS IMAGE_URL,
+	        'FILE' AS DESIGN_TYPE
+	    FROM files
+	    WHERE USER_ID = #{username}
+	      AND FILE_NAME LIKE '%' || #{keyword} || '%'
+	</select>
 
 </mapper>

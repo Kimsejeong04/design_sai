@@ -19,14 +19,16 @@ export default function SignIn2() {
     const [isidValid, setIsidValid] = useState(false);
     const [idCheckMessage, setidCheckMessage] = useState("");            
     const [confirmPassword, setConfirmPassword] = useState("");
-      const [isUsernameValid, setIsUsernameValid] = useState(false);
-      const [usernameCheckMessage, setUsernameCheckMessage] = useState("");
-      const [isSignup, setIsSignup] = useState(false);
+    const [isUsernameValid, setIsUsernameValid] = useState(false);
+    const [usernameCheckMessage, setUsernameCheckMessage] = useState("");
+    const [isSignup, setIsSignup] = useState(false);
+    const [profileImage, setProfileImage] = useState(null);
+    const [profileImageFile, setProfileImageFile] = useState(null);
 
       const handleSignupSubmit = async (e) => {
         e.preventDefault();
         if (!username.trim() && !password.trim()) {
-          setMessage("회원가입 정보를 입력해 주십시오.");
+          setMessage("회원가입 정보를 입력해 주세요.");
           return;
         }
     
@@ -73,33 +75,67 @@ export default function SignIn2() {
           setMessage("비밀번호가 일치하지 않습니다.");
           return;
         }
-    
-        const response = await fetch(`http://localhost:8081/api/signup`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password, email, birthdate, tel, name, gender, userType }),
-          credentials: "include",
-          mode: "cors",
-        });
-    
-        const data = await response.json();
-        if (response.ok && data.message === "회원가입 성공!") {
-            localStorage.setItem("signupEmail", email);
-            localStorage.setItem("signupUsername", username);
-            localStorage.setItem("signupName", name);
-            localStorage.setItem("signupPass", password);
 
+        try {
+        // 회원가입 요청 시점에 FormData 생성
+        const formData = new FormData();
+
+        formData.append(
+          "user",
+          new Blob(
+            [
+              JSON.stringify({
+                username,
+                password,
+                email,
+                birthdate,
+                tel,
+                name,
+                gender,
+                userType,
+              }),
+            ],
+            { type: "application/json" }
+          )
+        );
+
+        // 프로필 사진을 선택한 경우에만 추가
+        if (profileImageFile) {
+          formData.append("profileImage", profileImageFile);
+        }
+
+        const response = await fetch(
+          "http://localhost:8081/api/signup",
+          {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+            mode: "cors",
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.message === "회원가입 성공!") {
+          localStorage.setItem("signupEmail", email);
+          localStorage.setItem("signupUsername", username);
+          localStorage.setItem("signupName", name);
+          localStorage.setItem("signupPass", password);
 
           setMessage(data.message);
+
           setTimeout(() => {
-            navigate('/GoodSign');  // 회원가입 성공 시 Hello 컴포넌트로 이동
+            navigate("/GoodSign");
           }, 1000);
         } else {
-          setMessage(data.message);
+          setMessage(data.message || "회원가입에 실패했습니다.");
         }
-      };
+      } catch (error) {
+        console.error("회원가입 오류:", error);
+        setMessage("회원가입 중 오류가 발생했습니다.");
+      }
+    };
+
        // 회원가입 화면으로 이동 시 초기화
        const handleGoToSignup = () => {
         setId("");
@@ -118,6 +154,37 @@ export default function SignIn2() {
         setUsernameCheckMessage("");
       };
     
+      const handleProfileImageChange = (e) => {
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+          alert("이미지 파일만 선택할 수 있습니다.");
+          e.target.value = "";
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert("프로필 사진은 5MB 이하만 가능합니다.");
+          e.target.value = "";
+          return;
+        }
+
+        setProfileImage(URL.createObjectURL(file));
+        setProfileImageFile(file);
+      };
+
+      const handleProfileImageRemove = () => {
+        if (profileImage) {
+          URL.revokeObjectURL(profileImage);
+        }
+
+        setProfileImage(null);
+        setProfileImageFile(null);
+      };
+      
+
       const handleCheckUsername = async () => {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/api/check-username/?username=${username}`
@@ -148,6 +215,51 @@ export default function SignIn2() {
                 필수정보 입력
         
             <form className="form1" onSubmit={handleSignupSubmit}>
+              <div className="profile-image-section">
+                <label className="profile-image-label">
+                  프로필 사진
+                </label>
+
+                <div className="profile-image-preview">
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt="프로필 미리보기"
+                      className="profile-image"
+                    />
+                  ) : (
+                    <div className="profile-image-placeholder">
+                      <span>사진 선택</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="profile-image-buttons">
+                  <label className="profile-image-upload">
+                    사진 선택
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileImageChange}
+                      hidden
+                    />
+                  </label>
+
+                  {profileImage && (
+                    <button
+                      type="button"
+                      className="profile-image-remove"
+                      onClick={handleProfileImageRemove}
+                    >
+                      사진 삭제
+                    </button>
+                  )}
+                </div>
+
+                <p className="profile-image-guide">
+                  이미지 파일만 가능하며, 최대 5MB까지 업로드할 수 있습니다.
+                </p>
+              </div>
             <div className="inputinfo">
             아이디
             <br/>
@@ -246,8 +358,6 @@ export default function SignIn2() {
                 </select>
               </div>
 
-            
-
             {message && <p style={{ color: "red" }}>{message}</p>}
             <button type="submit" className="mpbutton">
               다음
@@ -262,22 +372,14 @@ export default function SignIn2() {
             </button>*/}
             </form>
         
-        
             </div>
             </p>
-          
 
-           
           </div>
 
         </div>
         </div>
-
       </div>
-
-
-        
-
     </div>
   )
 }

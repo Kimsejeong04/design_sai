@@ -123,13 +123,16 @@ export default function PantsOutlineCanvas({
         <div className="size-spec-container">
           <canvas
             ref={canvasRef}
-            width={300}
-            height={300}
-            style={{
-              margin: '3px',
-              border: '2px solid #ccc',
-              borderRadius: '10px',
-              backgroundColor: '#f9f9f9',
+            width={350}
+            height={350}
+            style={{ 
+              margin: "-1.5px", 
+              width: "420px",  
+              height: "425px",  
+              display: "block", 
+              border: '2px solid #ccc', 
+              borderRadius: '10px', 
+              backgroundColor: '#f9f9f9' 
             }}
           ></canvas>
 

@@ -3,7 +3,8 @@
   background-color: #fafafa;
   color: #333;
   min-height: 100vh;
-  padding: 1.25rem;
+  /* padding: 0.31rem; */
+  margin-right: 0.03rem;  /* 15px */
   box-sizing: border-box;
 }
 
@@ -52,10 +53,11 @@ hr {
 }
 
 .label {
-    flex-shrink: 0; /* 항상 보이도록 고정 */
+  flex-shrink: 0; /* 항상 보이도록 고정 */
 
   font-weight: 600;
   min-width: 8.75rem;
+  margin-left: 0.9375rem;
   color: #4a6171;
 }
 

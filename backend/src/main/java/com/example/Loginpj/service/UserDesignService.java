@@ -4,6 +4,7 @@ import com.example.Loginpj.mapper.UserDesignMapper;
 import com.example.Loginpj.model.UserDesign;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserDesignService {
@@ -28,6 +29,10 @@ public class UserDesignService {
     
     public UserDesign getDesignById(Long designId) {
         return userDesignMapper.findById(designId);
+    }
+    
+    public List<Map<String, Object>> searchDesigns(String username, String keyword){
+    	return userDesignMapper.searchDesigns(username, keyword);
     }
 
 }

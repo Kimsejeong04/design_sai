@@ -13,23 +13,24 @@
         <result property="tel" column="tel"/>
         <result property="name" column="name"/>
         <result property="gender" column="gender"/>
+        <result property="profileImageUrl" column="PROFILE_IMAGE_URL"/>
     </resultMap>
 
     <select id="findByUsername" resultMap="UserResultMap">
-        SELECT username, password, email, usertype, birthdate, tel, name, gender 
+        SELECT username, password, email, usertype, birthdate, tel, name, gender, PROFILE_IMAGE_URL 
         FROM user_info 
         WHERE username = #{username, jdbcType=VARCHAR} 
     </select>
 
     <select id="findByTel" resultMap="UserResultMap">
-        SELECT username, password, email, usertype, birthdate, tel, name, gender 
+        SELECT username, password, email, usertype, birthdate, tel, name, gender, PROFILE_IMAGE_URL
         FROM user_info 
         WHERE tel = #{tel, jdbcType=VARCHAR} 
     </select>
     
     <insert id="insertUser" parameterType="com.example.Loginpj.model.User">
-        INSERT INTO user_info (username, password, email, usertype, birthdate, tel, name, gender)
-        VALUES (#{username, jdbcType=VARCHAR}, #{password}, #{email}, #{usertype, jdbcType=VARCHAR}, #{birthdate}, #{tel}, #{name}, #{gender})
+        INSERT INTO user_info (username, password, email, usertype, birthdate, tel, name, gender, PROFILE_IMAGE_URL)
+        VALUES (#{username, jdbcType=VARCHAR}, #{password}, #{email}, #{usertype, jdbcType=VARCHAR}, #{birthdate}, #{tel}, #{name}, #{gender}, #{profileImageUrl, jdbcType=VARCHAR})
     </insert>
 </mapper>
 

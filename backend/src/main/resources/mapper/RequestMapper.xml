@@ -18,13 +18,14 @@
     <result property="image3Url" column="image3_url" />
     <result property="username" column="username" />
     <result property="requesterName" column="name" />
+    <result property="requesterProfileImageUrl" column="profile_image_url" />
     <result property="status" column="status" />
   </resultMap>
 
   <!-- 기존 쿼리들 유지 -->
   <select id="findAll" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name, u.profile_image_url
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      ORDER BY r.request_id
@@ -40,7 +41,7 @@
   <!-- 나머지 기존 쿼리들 유지 -->
   <select id="findById" parameterType="long" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name, u.profile_image_url
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      WHERE r.request_id = #{requestId}
@@ -87,7 +88,7 @@
 
   <select id="findByUsername" parameterType="string" resultMap="RequestResultMap">
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description,
-           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name
+           r.image1_url, r.image2_url, r.image3_url, r.username, r.status, u.name, u.profile_image_url
       FROM request r
       LEFT JOIN user_info u ON r.username = u.username
      WHERE r.username = #{username}
@@ -99,7 +100,7 @@
         resultMap="RequestResultMap">
 
     SELECT r.request_id, r.title, r.category_tags, r.style, r.amount, r.deadline, r.description, r.image1_url, 
-    	   r.image2_url, r.image3_url, r.username, r.status, u.name
+    	   r.image2_url, r.image3_url, r.username, r.status, u.name, u.profile_image_url
       FROM request r
       LEFT JOIN user_info u
         ON r.username = u.username

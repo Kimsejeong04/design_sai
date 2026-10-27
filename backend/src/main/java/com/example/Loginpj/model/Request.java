@@ -14,6 +14,7 @@ public class Request {
     private String username; //user_info테이블에 있는 username을 join하기 위해 추가 
     private String requesterName; // user_info.name을 담을 필드
     private String status;
+    private String requesterProfileImageUrl;
 
     public Request() {}
 
@@ -124,6 +125,12 @@ public class Request {
     	this.status = status;
     }
 
+    public String getRequesterProfileImageUrl() {
+    	return requesterProfileImageUrl;
+    }
+    public void setRequesterProfileImageUrl(String requesterProfileImageUrl) {
+    	this.requesterProfileImageUrl = requesterProfileImageUrl;
+    }
     @Override
     public String toString() {
         return "Request{" +

@@ -6,16 +6,16 @@ const TabsWrapper = styled.ul`
   width: 100%; 
   list-style: none;
   padding: 0;
-  margin: 0;
-  border-bottom: 0.125rem solid #ddd; 
+  margin-left: 0.9375rem;
+  // border-bottom: 0.125rem solid #ddd; 
   text-align: center;
 
   li {
-    width: 8.75rem;
+    width: 13.75rem;
     padding: 0.625rem 0.9375rem;
     cursor: pointer;
     border-radius: 0.9375rem 0.9375rem 0 0; 
-    border: 0.05rem solid black; 
+    border: 0.05rem solid #7E8A99; 
     border-bottom: none;
     background-color: #fff;
     font-weight: bold;

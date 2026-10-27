@@ -9,10 +9,13 @@ const PrevButton = ({ onClick }) => {
     fontSize: "16px",
     fontWeight: "600",
     margin: "20px 0 0 0",
-    padding: "10px 20px",
+    padding: "0",
     border: "none",
     borderRadius: "20px",
     cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   return (
