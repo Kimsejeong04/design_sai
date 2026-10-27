@@ -1,137 +1,165 @@
 .contract-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e5e7eb; /* gray-200 */
-    background-color: #fff;
-    transition: background-color 0.2s ease;
-    width : 100%; /*5/24 수정 */
-  }
-  
-  .contract-item:hover {
-    background-color: #f9fafb; /* gray-50 */
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 16px 20px;
+  background-color: #fff;
+  border: 1px solid #e8edf3;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(40, 60, 90, 0.04);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
 
-  .contract-item.active {
-    border-left: 4px solid #FFD700; /* 중요한 계약에 대해 왼쪽에 강조선 추가 */
-    background-color: #fef9e9; /* 배경색을 연한 노란색으로 변경 */
+.contract-item:hover {
+  box-shadow: 0 8px 20px rgba(40, 60, 90, 0.1);
+  transform: translateY(-2px);
+}
+
+.contract-item.active {
+  border-color: #f3dc8a;
+  background-color: #fffdf4;
+}
+
+.contract-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.contract-star {
+  display: flex;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.star-icon {
+  color: #c5cdd6;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.star-icon:hover {
+  color: #ffc933;
+}
+.star-icon.active {
+  color: #ffb800;
+  fill: #ffb800;
+  transform: scale(1.1);
+}
+
+.contract-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.contract-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2f3b47;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contract-preview {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #8b97a3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contract-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+/* 상태 배지: 기본(정의 안 된 상태)도 배지 */
+.contract-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background-color: #eef1f5;
+  color: #5b6773;
+}
+
+.contract-status.진행중,
+.contract-status.디자인하기 {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+.contract-status.완료,
+.contract-status.본뜨기 {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+.contract-status.해지,
+.contract-status.마감하기 {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+.contract-status.배송중 {
+  background-color: #efda8d;
+  color: #000;
+}
+.contract-status.대기중,
+.contract-status.포장하기 {
+  background-color: #a7a7a7;
+  color: #fff;
+}
+/* 새로 정한 상태 색 */
+.contract-status.미수신,
+.contract-status.미송신 {
+  background-color: #f1f3f6;
+  color: #6b7280;
+}
+.contract-status.수정건의 {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+.contract-status.해지요청 {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.contract-date {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 600px) {
+  .contract-item {
+    padding: 14px 14px;
+    gap: 10px;
   }
-  
-  .contract-left {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  
-  /* ContractItem.css */
-  
-  .contract-star {
-    cursor: pointer;
-  }
-  
-  .star-icon {
-    color: #d3d3d3; /* 연한 회색, startoff 기본 색 */
-    cursor: pointer;
-    transition: color 0.2s ease;
-  }
-  
-  .star-icon.active {
-    color: #FFD700; /* 노란색 별 */
-    transform: scale(1.2); /* 별의 크기 살짝 키우기 */
-    transition: transform 0.3s ease;
-  }
-  
-  .contract-text {
-    display: grid; /* 그리드 레이아웃으로 변경 */
-    grid-template-columns: 1fr 1fr; /* 2개의 열을 생성 */
-    gap: 16px; /* title과 preview 간의 간격을 좀 더 넓게 */
-    align-items: start; /* 세로 정렬 */
-  }
-  
-  .contract-title {
-    font-size: 20px; /* 기존 14px → 16px */
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0;
-    font-weight: bold;
-    margin-bottom: 0;
-    white-space: nowrap; /* 제목이 줄바꿈되지 않게 */
-  }
-  
-  .contract-preview {
-    font-size: 16px; /* 글씨 크기 키우기 (기존 14px → 16px) */
-    color: #6b7280;
-    margin: 0;
-    white-space: nowrap; /* 내용이 한 줄로 나오도록 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* overflow된 텍스트에 ... 처리 */
-    max-width: 240px; /* 길이를 조금 더 늘림 */
-    justify-self: start; /* preview의 시작점이 title의 시작점과 맞도록 조정 */
-  }
-  
   .contract-right {
-    text-align: right;
-    min-width: 90px;
+    min-width: 64px;
   }
-  
-  .contract-status {
-    font-size: 13px; /* 기존 11px → 13px */
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 9999px;
-    display: inline-block;
-  }
-  
-  .contract-status.진행중 {
-    background-color: #dbeafe; /* blue-100 */
-    color: #2563eb; /* blue-600 */
-  }
-  
-  .contract-status.완료 {
-    background-color: #d1fae5; /* green-100 */
-    color: #10b981; /* green-600 */
-  }
-  
-  .contract-status.해지 {
-    background-color: #fee2e2; /* red-100 */
-    color: #ef4444; /* red-600 */
-  }
+}
 
-    .contract-status.배송중 {
-    background-color: #efda8d; /* red-100 */
-    color: #000000; /* red-600 */
+@media (prefers-reduced-motion: reduce) {
+  .contract-item,
+  .star-icon {
+    transition: none;
   }
-
-    .contract-status.대기중 {
-    background-color: #a7a7a7; /* red-100 */
-    color: #ffffff; /* red-600 */
+  .contract-item:hover {
+    transform: none;
   }
-
- .contract-status.디자인하기 {
-    background-color: #dbeafe; /* blue-100 */
-    color: #2563eb; /* blue-600 */
-  }
-   .contract-status.본뜨기 {
-    background-color: #d1fae5; /* green-100 */
-    color: #10b981; /* green-600 */
-  }
-  
- .contract-status.마감하기 {
-    background-color: #fee2e2; /* red-100 */
-    color: #ef4444; /* red-600 */
-  }
-
-
-    .contract-status.포장하기 {
-    background-color: #a7a7a7; /* red-100 */
-    color: #ffffff; /* red-600 */
-  }
-
-  
-  .contract-date {
-    font-size: 12px; /* 기존 11px → 12px */
-    color: #9ca3af;
-    margin-top: 4px;
-  }
-  
+}
