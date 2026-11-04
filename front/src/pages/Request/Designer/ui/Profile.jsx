@@ -12,6 +12,7 @@ import axios from "axios";
 import Room from "../../../ChatMain/ui/Room";
 import { useChat } from "../../../ChatMain/ui/useChat";
 
+
 // 이미지 배열
 const profileImages = [
   jeans,
@@ -23,15 +24,15 @@ const profileImages = [
   require("../../../../assets/프로필이미지/프로필이미지6.jpg"),
 ];
 
-const designerImages = [
-  designer,
-  require("../../../../assets/디자이너이미지/디자이너1.png"),
-  require("../../../../assets/디자이너이미지/디자이너2.png"),
-  require("../../../../assets/디자이너이미지/디자이너3.png"),
-  require("../../../../assets/디자이너이미지/디자이너4.png"),
-  require("../../../../assets/디자이너이미지/디자이너5.png"),
-  require("../../../../assets/디자이너이미지/디자이너6.png"),
-];
+// const designerImages = [
+//   designer,
+//   require("../../../../assets/디자이너이미지/디자이너1.png"),
+//   require("../../../../assets/디자이너이미지/디자이너2.png"),
+//   require("../../../../assets/디자이너이미지/디자이너3.png"),
+//   require("../../../../assets/디자이너이미지/디자이너4.png"),
+//   require("../../../../assets/디자이너이미지/디자이너5.png"),
+//   require("../../../../assets/디자이너이미지/디자이너6.png"),
+// ];
 
 const portfolioImages = [
   port,
@@ -409,11 +410,14 @@ function formatDate(dateString) {
 }
 
 export default function Profile({ post, reviews }) {
+    console.log("post:", post);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRequestPopupOpen, setIsRequestPopupOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [chatData, setChatData] = useState([]); // 채팅방 데이터
+  const [designerProfile, setDesignerProfile] = useState(null);
 
   // useChat 훅 초기화
   const {
@@ -579,6 +583,26 @@ export default function Profile({ post, reviews }) {
     }
   };
 
+  useEffect(() => {
+    const fetchDesignerProfile = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/profile/${encodeURIComponent(post.id)}`,
+          { withCredentials: true }
+        );
+
+        setDesignerProfile(response.data);
+
+      } catch (error) {
+        console.error("디자이너 프로필 조회 실패:", error);
+      }
+    };
+
+    if (post?.id) {
+      fetchDesignerProfile();
+    }
+  }, [post.id]);
+
   const portfolioList = portfolioImages;
   const prevImage = (e) => {
     e.stopPropagation();
@@ -591,12 +615,24 @@ export default function Profile({ post, reviews }) {
 
   const matchedReview = reviews.find((review) => review.id === post.id);
   const imageIndex = Math.abs(post.postnum % profileImages.length);
-  const designerImageIndex = Math.abs(post.postnum % designerImages.length);
+  //const designerImageIndex = Math.abs(post.postnum % designerImages.length);
 
   return (
     <>
       <Container onClick={() => setIsModalOpen(true)}>
         <ImageWrapper>
+          {/* <JeansImage
+              src={
+                designerProfile?.profileImageUrl
+                  ? `http://localhost:8081${designerProfile.profileImageUrl}`
+                  : designer
+              }
+              alt="프로필 이미지"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = designer;
+              }}
+            /> */}
           <JeansImage src={profileImages[imageIndex]} alt="프로필 이미지" />
           <HeartButton onClick={handleToggleLike}>
             {liked ? <FaHeart color="red" size={20} /> : <FaRegHeart color="gray" size={20} />}
@@ -612,8 +648,20 @@ export default function Profile({ post, reviews }) {
       {isModalOpen && (
         <PortfoilModalContainer onClose={() => setIsModalOpen(false)}>
           <ProfilePanel>
-            <DesignerImage src={designerImages[designerImageIndex]} alt="디자이너 프로필" />
-            <DesignerName>{post.id}</DesignerName>
+            <DesignerImage
+              src={
+                designerProfile?.profileImageUrl
+                  ? `http://localhost:8081${designerProfile.profileImageUrl}`
+                  : designer
+              }
+              alt="디자이너 프로필"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = designer;
+              }}
+            />
+
+            <DesignerName>{designerProfile?.name || post.id}</DesignerName>
             <DesignerIntro>{post.contents}</DesignerIntro>
             <PeriodBadge>참여기간 2025.01 ~ 2025.01</PeriodBadge>
 
@@ -621,12 +669,15 @@ export default function Profile({ post, reviews }) {
               <img src={chat} alt="" />
               대화하기
             </ActionButton>
-            <ActionButton type="button" onClick={() => setIsRequestPopupOpen(true)}>
+
+            <ActionButton
+              type="button"
+              onClick={() => setIsRequestPopupOpen(true)}
+            >
               <img src={request} alt="" />
               의뢰신청하기
             </ActionButton>
 
-            {/* 이력사항 자리: 백엔드 API 준비 후 이 영역에 연결 */}
             <CareerBox>
               <h4>이력사항</h4>
               <p>이력사항이 아직 등록되지 않았어요.</p>

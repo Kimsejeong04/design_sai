@@ -121,17 +121,24 @@ export default function ModalContent() {
   // localStorage에서 requestData 가져오기
   const [requestItems, setRequestItems] = useState([]);
     useEffect(() => {
-      const fetchDrafts = async () =>{
-        try{
-          const response = await axios.get("http://localhost:8081/api/requests/drafts?username=bzbz");
-          console.log("임시저장 목록: ", response.data);
-          setRequestItems(response.data);
-        } catch (error){
-          console.error("임시저장 목록 조회 실패:", error);
+  const fetchDrafts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8081/api/requests/drafts",
+        {
+          withCredentials: true,
         }
-      };
-    fetchDrafts();
-  }, []);
+      );
+
+      console.log("임시저장 목록:", response.data);
+      setRequestItems(response.data);
+    } catch (error) {
+      console.error("임시저장 목록 조회 실패:", error);
+    }
+  };
+
+  fetchDrafts();
+}, []);
   
   if (!isVisible) return null;
 
@@ -174,7 +181,10 @@ export default function ModalContent() {
               onClick={async() => {
                 try {
                   await axios.delete(
-                    `http://localhost:8081/api/requests/${selectedRequestId}`
+                    `http://localhost:8081/api/requests/${selectedRequestId}`,
+                    {
+                      withCredentials: true,
+                    }
                   );
 
                   // 삭제된 글을 목록에서도 제거

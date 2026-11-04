@@ -293,11 +293,22 @@ export default function DesignerItemBox({ children, data, propUsername }) {
         <Text>{data?.title || "의뢰 제목을 입력해주세요."}</Text>
 
         <Profile>
-          <Circle>
-            <ProfileImage src={designerImage} alt="디자이너 프로필" />
-          </Circle>
-          {data.requesterName || "홍길동"}
-        </Profile>
+            <Circle>
+              <ProfileImage
+                src={
+                  data?.requesterProfileImageUrl
+                    ? `http://localhost:8081${data.requesterProfileImageUrl}`
+                    : designerImage
+                }
+                alt="의뢰인 프로필"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = designerImage;
+                }}
+              />
+            </Circle>
+            {data.requesterName || "홍길동"}
+          </Profile>
 
         <Text2>{data?.amount || "10000원"}</Text2>
         <Text2>{data?.deadline ? `희망기한 ${data.deadline}` : "희망기한 2주"}</Text2>

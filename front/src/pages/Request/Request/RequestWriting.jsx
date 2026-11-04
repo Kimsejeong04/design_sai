@@ -577,26 +577,22 @@ useEffect(() => {
     }
   };
 
-  const handleSubmit = async () => {
-    const sanitized = description.replace(/<script[^>]*>[\s\S]*?<\/script>|<style[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->|<[^>]+>/gi, '').trim();
+ const handleSubmit = async () => {
+  const sanitized = description
+    .replace(
+      /<script[^>]*>[\s\S]*?<\/script>|<style[^>]*>[\s\S]*?<\/style>|<!--[\s\S]*?-->|<[^>]+>/gi,
+      ""
+    )
+    .trim();
 
-      // console.log('폼 제출 직전 description:', description);
-      // console.log("===== 제출 직전 이미지 =====");
-      // console.log("imageUrls:", imageUrls);
-      // console.log("image1Url:", imageUrls[0]);
-      // console.log("image2Url:", imageUrls[1]);
-      // console.log("image3Url:", imageUrls[2]);
-
-  try {
-    
-    const response = await axios.post("http://localhost:8081/api/requests", {
+    const requestData = {
       title,
-      categoryTags: categoryTags.join(","),  // 배열을 콤마 구분 문자열로 변환
+      categoryTags: categoryTags.join(","),
       style,
       amount,
       deadline,
-      description : sanitized,
-      selectedItem, //6.14 선택된 나의 디자인 카드 아이템 api 벡엔드 엔드포인트 필요해요 
+      description: sanitized,
+      selectedItem,
       image1Url: imageUrls[0]
         ? imageUrls[0].replace("http://localhost:8081/api/requests", "")
         : "",
@@ -606,15 +602,37 @@ useEffect(() => {
       image3Url: imageUrls[2]
         ? imageUrls[2].replace("http://localhost:8081/api/requests", "")
         : "",
-      username
-    });
-    console.log("의뢰등록 성공 :", response.data);
+      username,
+    };
+
+    try {
+      let response;
+
+      if (draftId) {
+        response = await axios.put(
+          `http://localhost:8081/api/requests/${draftId}`,
+          requestData,
+          {
+            withCredentials: true,
+          }
+        );
+      } else {
+      response = await axios.post(
+        "http://localhost:8081/api/requests",
+        requestData,
+        {
+          withCredentials: true,
+        }
+      );
+    }
+
+    console.log("의뢰등록 성공:", response.data);
     alert("의뢰가 등록되었습니다!");
-    navigate('/client/request')
-    
+    navigate("/client/request");
+
   } catch (error) {
-    console.error("의뢰등록 요청실패 :", error);
-    alert("의뢰 등록에 실패했습니다.",error.message);
+    console.error("의뢰등록 요청실패:", error);
+    alert("의뢰 등록에 실패했습니다.");
   }
 };
 
@@ -631,7 +649,11 @@ const handleDraftSave = async () => {
       image2Url: imageUrls[1] || "",
       image3Url: imageUrls[2] || "",
       username,
-    });
+    },
+      {
+        withCredentials: true,
+      }
+    );
 
     alert("임시저장이 완료되었습니다.");
   } catch (error) {

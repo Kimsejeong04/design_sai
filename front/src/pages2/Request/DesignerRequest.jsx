@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
+
 import styled from "styled-components";
 import DesignerItemBox from "./DesignerItemBox";
 import SearchRequest from "./SearchRequest";
@@ -79,22 +81,25 @@ export function RequestLayOut({ children }) {
 export default function DesignerRequest({ headerText = "의뢰 찾기" }) {
   const [requestItems, setRequestItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-  fetch("http://localhost:8081/api/requests")
-    .then(async (res) => {
-      const text = await res.text(); // JSON으로 파싱하지 않고 원본 텍스트 확인
-      console.log("서버 응답 원문:", text);
-
-      try {
-        const json = JSON.parse(text); // 수동 JSON 파싱 시도
-        setRequestItems(json);
-      } catch (e) {
-        console.error("JSON 파싱 실패:", e);
-      }
-    })
-    .catch((error) => console.error("데이터 불러오기 실패:", error));
-}, []);
+    useEffect(() => {
+    axios.get("http://localhost:8081/api/requests")
+      .then(response => {
+        const submittedItems = response.data.filter(
+          item => item.status === "SUBMITTED"
+        );
+        
+        setRequestItems(submittedItems);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("API 요청 실패:", err);
+        setError("데이터를 불러오는 데 실패했습니다.");
+        setLoading(false);
+      });
+  }, []);
 
   // ✅ 이 부분이 JSX 위에 있어야 함
   const filteredItems = requestItems.filter((item) =>

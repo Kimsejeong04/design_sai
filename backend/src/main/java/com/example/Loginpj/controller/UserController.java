@@ -65,7 +65,6 @@ public class UserController {
     }
 
     // 회원가입
-
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> signup(
 	        @RequestPart("user") User user,
@@ -296,5 +295,23 @@ public class UserController {
 	            .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
 	            .body(resource);
 	}
+	
+	@GetMapping("/profile/{username}")
+	public ResponseEntity<?> getDesignerProfile(
+			@PathVariable("username") String username) {
 
+	    User user = userService.getUserByUsername(username);
+
+	    if (user == null) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    Map<String, Object> profile = new HashMap<>();
+	    profile.put("username", user.getUsername());
+	    profile.put("name", user.getName());
+	    profile.put("usertype", user.getUsertype());
+	    profile.put("profileImageUrl", user.getProfileImageUrl());
+
+	    return ResponseEntity.ok(profile);
+	}
 }
