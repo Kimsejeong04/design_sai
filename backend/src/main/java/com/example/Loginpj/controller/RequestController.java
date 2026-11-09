@@ -3,8 +3,11 @@ package com.example.Loginpj.controller;
 import com.example.Loginpj.model.Request;
 import com.example.Loginpj.service.RequestService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +39,18 @@ public class RequestController {
     }
 
     @PostMapping("/draft")
-    public ResponseEntity<String> createDraft(@RequestBody Request request) {
+    public ResponseEntity<?> createDraft(
+            @RequestBody Request request,
+            HttpSession session
+    ) {
+        String username = (String) session.getAttribute("username");
+
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "로그인이 필요합니다."));
+        }
+
+        request.setUsername(username);
 
         int result = service.createDraft(request);
 
@@ -44,15 +58,22 @@ public class RequestController {
             return ResponseEntity.ok("Draft saved successfully");
         }
 
-        return ResponseEntity.status(500)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Failed to save draft");
     }
     
     @GetMapping("/drafts")
-    public ResponseEntity<List<Request>> getDrafts(
-            @RequestParam String username) {
+    public ResponseEntity<?> getDrafts(HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "로그인이 필요합니다."));
+        }
 
         List<Request> drafts = service.getDraftsByUsername(username);
+
         return ResponseEntity.ok(drafts);
     }
     
@@ -80,9 +101,16 @@ public class RequestController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable Long id, @RequestBody Request request) {
         request.setRequestId(id);
+        request.setStatus("SUBMITTED");
+
         int result = service.update(request);
-        if (result == 1) return ResponseEntity.ok("Request updated successfully");
-        else return ResponseEntity.status(500).body("Failed to update request");
+
+        if (result == 1) {
+            return ResponseEntity.ok("Request submitted successfully");
+        }
+
+        return ResponseEntity.status(500)
+                .body("Failed to submit request");
     }
 
     @DeleteMapping("/{id}")

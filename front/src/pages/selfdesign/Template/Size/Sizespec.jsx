@@ -150,7 +150,14 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
 
   return (
     <div className="table-container">
-      <div id="capture-target" style={{ backgroundColor: "#ffffff", padding: "10px" }}>
+      <div
+        id="capture-target"
+        style={{
+          backgroundColor: "#ffffff",
+          padding: "10px",
+          boxSizing: "border-box"
+        }}
+      >   
         <ClothesTest
           clothingType={clothingType}
           neckY={neckY} setNeckY={setNeckY}
@@ -166,51 +173,53 @@ const Sizespec = forwardRef(({ selectedSize, setSelectedSize, clothingType = () 
         />
       </div>
 
-      <table className="sizespec-table">
-        <thead>
-          <tr>
-            <th style={{ width: "150px" }} colSpan={2}>(단위 : cm)</th>
-            {sizes.map((size, index) => (
-              <th
-                key={index}
-                onClick={() => handleCellClick(size.toLowerCase())}
-                className={selectedSize === size.toLowerCase() ? "active" : ""}
-                style={{ cursor: "pointer" }}
-              >
-                {size.toLowerCase()}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex} className={row.type}>
-              <td className="category">{row.category}</td>
-              <td>{row.label}</td>
-              {row.colspan ? (
-                <td colSpan={row.colspan} className="merged-cell">
-                  {row.values[0]}
-                </td>
-              ) : (
-                row.values.map((value, colIndex) => (
-                  <td key={colIndex}>
-                    {colIndex === 0 ? (
-                      <input
-                        type="text"
-                        value={value}
-                        onChange={(event) => handleInputChange(rowIndex, event)}
-                        style={{ width: "20px" }}
-                      />
-                    ) : (
-                      typeof value === "number" ? value.toFixed(1) : value
-                    )}
-                  </td>
-                ))
-              )}
+      <div className="sizespec-table-wrapper">
+        <table className="sizespec-table">
+          <thead>
+            <tr>
+              <th style={{ width: "150px" }} colSpan={2}>(단위 : cm)</th>
+              {sizes.map((size, index) => (
+                <th
+                  key={index}
+                  onClick={() => handleCellClick(size.toLowerCase())}
+                  className={selectedSize === size.toLowerCase() ? "active" : ""}
+                  style={{ cursor: "pointer" }}
+                >
+                  {size.toLowerCase()}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={rowIndex} className={row.type}>
+                <td className="category">{row.category}</td>
+                <td>{row.label}</td>
+                {row.colspan ? (
+                  <td colSpan={row.colspan} className="merged-cell">
+                    {row.values[0]}
+                  </td>
+                ) : (
+                  row.values.map((value, colIndex) => (
+                    <td key={colIndex}>
+                      {colIndex === 0 ? (
+                        <input
+                          type="text"
+                          value={value}
+                          onChange={(event) => handleInputChange(rowIndex, event)}
+                          style={{ width: "20px" }}
+                        />
+                      ) : (
+                        typeof value === "number" ? value.toFixed(1) : value
+                      )}
+                    </td>
+                  ))
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 });

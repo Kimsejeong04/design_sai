@@ -11,7 +11,7 @@ const TabsWrapper = styled.ul`
   text-align: center;
 
   li {
-    width: 13.75rem;
+    width: 17.75rem;
     padding: 0.625rem 0.9375rem;
     cursor: pointer;
     border-radius: 0.9375rem 0.9375rem 0 0; 

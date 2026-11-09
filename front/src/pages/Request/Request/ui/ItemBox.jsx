@@ -180,23 +180,23 @@ export default function ItemBox({ children,data = {} }) {
           )}
         </TagContainer>
         <Text>{data?.title || "청바지 잘하시는 디자이너 찾습니다."} </Text>
-                <Profile>
-          <Circle>
-            <ProfileImage
-              src={
-                data?.requesterProfileImageUrl
-                  ? `http://localhost:8081${data.requesterProfileImageUrl}`
-                  : designerImage
-              }
-              alt="의뢰인 프로필"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = designerImage;
-              }}
-            />
-          </Circle>
-          {data.requesterName || "홍길동"}
-        </Profile>
+          <Profile>
+            <Circle>
+              <ProfileImage
+                src={
+                  data?.requesterProfileImageUrl
+                    ? `http://localhost:8081${data.requesterProfileImageUrl}`
+                    : designerImage
+                }
+                alt="의뢰인 프로필"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = designerImage;
+                }}
+              />
+            </Circle>
+            {data.requesterName || "홍길동"}
+          </Profile>
         <Text2>{data?.amount || "10000원"}</Text2>
         <Text2>{data?.deadline ? `희망기한 ${data.deadline}` : "희망기한 2주"}</Text2>
       </DescriptionContainer>

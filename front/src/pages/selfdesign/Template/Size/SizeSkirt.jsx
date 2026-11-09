@@ -98,7 +98,7 @@ function SizeSkirt({ selectedSize, setSelectedSize, actionRef, clothingType}) {
           resetValues={resetValues}
         />
       </div>
-
+      <div className="sizespec-table-wrapper">
         <table className="sizespec-table">
           <thead>
             <tr>
@@ -129,6 +129,7 @@ function SizeSkirt({ selectedSize, setSelectedSize, actionRef, clothingType}) {
           </tbody>
         </table>
       </div>
+    </div>
   );
 }
 

@@ -78,7 +78,8 @@
       description = #{description, jdbcType=VARCHAR},
       image1_url = #{image1Url, jdbcType=VARCHAR},
       image2_url = #{image2Url, jdbcType=VARCHAR},
-      image3_url = #{image3Url, jdbcType=VARCHAR}
+      image3_url = #{image3Url, jdbcType=VARCHAR},
+      status = #{status, jdbcType=VARCHAR}
     WHERE request_id = #{requestId, jdbcType=NUMERIC}
   </update>
 

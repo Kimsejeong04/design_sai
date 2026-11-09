@@ -47,7 +47,7 @@ export default function Request({headerText = "의뢰 등록하기"}) {
         setLoading(false);
       });
   }, []);
-const filteredItems = requestItems.filter((item) =>
+    const filteredItems = requestItems.filter((item) =>
     item.title && item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
