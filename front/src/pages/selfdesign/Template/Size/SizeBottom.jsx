@@ -137,7 +137,7 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
           resetValues={resetValues}
         />
       </div>
-
+      <div className="sizespec-table-wrapper">
         <table className="sizespec-table">
           <thead>
             <tr>
@@ -182,6 +182,7 @@ function SizeBottom({ selectedSize, setSelectedSize, actionRef }) {
           </tbody>
         </table>
       </div>
+    </div>
   );
 }
 

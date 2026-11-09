@@ -2,9 +2,9 @@
 
 .sidebar {
   padding: 0.9375rem; /* 15px */
-  margin: 0.625rem; /* 10px */
+  /* margin: 0.625rem; */ /* 10px */
   width: 15.625rem; /* 250px */
-  height: 95rem; /* 1300px (원하는 길이로 조절) */
+  /* height: 95rem; */ /* 1300px */
   background-color: white;
   border-radius: 0.625rem; /* 10px */
   margin-top: 0.625rem; /* 10px */
